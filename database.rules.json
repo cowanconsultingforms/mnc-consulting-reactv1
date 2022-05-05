@@ -1,0 +1,19 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": true,
+    "Accounts": {
+      ".indexOn": [
+        "Username"
+      ]
+    },
+    "Listings": {
+      ".indexOn": [
+        "Recommended",
+        "Status",
+        "Location/Address",
+        "Location/City"
+      ]
+    }
+  }
+}

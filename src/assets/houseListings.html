@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <link rel="stylesheet" href="css/global.css" type="text/css" />
+  <link rel="stylesheet" href="css/houselisting.css" type="text/css" />
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <script src="https://kit.fontawesome.com/95dc93da07.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-storage.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-analytics.js"></script>
+  <script src="./components/header.js"></script>
+  <script src="./components/footer.js"></script>
+  <script src="js/accountSetup.js"></script>
+  <script src="js/global.js"></script>
+  <script src="js/errorCheck.js"></script>
+  <script src="js/houseListings.js"></script>
+</head>
+
+<body>
+  <div id="page-container">
+   
+    <header-component></header-component>
+    <main>
+      <div class="listing-page-grid-container">
+        <div style="display: flex; height: 100%; ">
+          <div style="width: 80%; height: 100%;">
+            <form id="search-listing-form">
+              <div id="listing-content-div">
+                  <p id="listing-type-p">
+                      <label id="get-data-type-label">Type:</label>
+                      <input placeholder="Enter Listing Type (For_Sale,For_Rent,Sold)" id="listing-type-input"
+                          class="input account-input"></input>
+                      <label id="error-msg-add-listing-type" class="error-msg" style="padding-top: 10px;">Must specify For_Sale,For_Rent,or Sold</label>
+                  </p>
+                  <p id="listing-price-p">
+                      <label id="add-data-price-label">Price:</label>
+                      <input placeholder="Enter Listing Price" id="listing-price-input"
+                          class="input account-input"></input>
+                      <label id="error-msg-add-listing-price" class="error-msg" style="padding-top: 10px;">Can
+                          only contain , or numbers</label>
+                  </p>
+                  <p id="listing-address-p">
+                      <label>Address:</label>
+                      <input placeholder="Enter Listing Address" id="listing-address-input"
+                          class="input account-input"></input>
+                  </p>
+                  <p>
+                      <label>City:</label>
+                      <input placeholder="Enter Listing City" id="listing-city-input"
+                          class="input account-input"></input>
+                  </p>
+                  <p>
+                      <label>Zip Code:</label>
+                      <input placeholder="Enter Listing Zip Code" id="listing-zip-code-input"
+                          class="input account-input"></input>
+                  </p>
+                  <p>
+                      <label>State:</label>
+                      <input placeholder="Enter Listing State" id="listing-state-input"
+                          class="input account-input"></input>
+                  </p>
+                  <p>
+                      <label>Bedrooms:</label>
+                      <input placeholder="Enter # Bedrooms" id="listing-bedrooms-input"
+                          class="input account-input"></input>
+                  </p>
+                  <p>
+                      <label>Bathroom:</label>
+                      <input placeholder="Enter # of Bathroom" id="listing-bathrooms-input"
+                          class="input account-input"></input>
+                  </p>
+                  <p>
+                      <label>Description:</label>
+                      <textarea placeholder="Enter Listing Description" id="listing-description-input"
+                          class="input account-text-area"></textarea>
+                  </p>
+              </div>
+          </div>
+
+          <div class="right-side">
+            <div class="filter-header">
+              <button class="filter-item filter-btn" id="filterBtn" onclick="openFilter()">Filter</button>
+              <input class="filter-item filter-btn" id="min-price" type="text" placeholder="$ Min Price"
+                onkeyup="showSave()">
+              <span style="margin: 0px 8px;">-</span>
+              <input class="filter-item filter-btn" id="max-price" type="text" placeholder="$ Max Price"
+                onkeyup="showSave()">
+            </div>
+            <div>
+              <label id="error-msg-price" class="error-msg" style="margin-bottom: 10px; font-size: 18px;">Only numbers
+                are allowed</label>
+            </div>
+            <div id="filter-container" style="display: none;">
+              <div class="room-filter-container">
+                <div>
+                  <legend>Bedrooms</legend>
+                  <input class="filter-item" id="min-bedrooms" type="text" placeholder="Min Bedrooms">
+                  <span style="margin: 0px 8px;">-</span>
+                  <input class="filter-item" id="max-bedrooms" type="text" placeholder="Max Bedrooms">
+                </div>
+                <div>
+                  <legend>Bathrooms</legend>
+                  <input class="filter-item" id="min-bathrooms" type="text" placeholder="Min Bathrooms">
+                  <span style="margin: 0px 8px;">-</span>
+                  <input class="filter-item" id="max-bathrooms" type="text" placeholder="Max Bathrooms">
+                </div>
+              </div>
+            </div>
+            <div class="submit-filter-div" style="display: none;">
+              <button class="apply-filter-btn" onclick="applyFilters()">
+                Apply Filters
+              </button>
+            </div>
+            <div id='houses-container'>
+
+            </div>
+          </div>
+        </div>
+    </main>
+    
+  </div>
+ <!-- <footer-component></footer-component> --> 
+</body>
+
+</html>
