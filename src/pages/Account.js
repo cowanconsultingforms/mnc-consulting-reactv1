@@ -240,73 +240,9 @@ const AccountPage = () => {
 
     return <AccountPageContainer>
         <AccountHeader />
-     
-        <AccountPagePWChangeBox />
-        <AccountPageDeleteProfileBox />
-      
-    
-      
-       
     </AccountPageContainer>
 }
-const AccountPagePWChangeBox = () => {
-    const [error, setError] = useState(false);
-    const user = sessionStorage.getItem('user');
 
-
-
-    const handlePWChange = () => {
-        let oldPw = document.getElementById('old-password');
-        let newPw = document.getElementById('new-password');
-       const docRef= async() => await getDoc(db,"users")
-
-    }
-    return (
-      <AccountPwContainer>
-        <h4>Change Password</h4>
-        <p>
-          <AccountLabel>Old Password</AccountLabel>
-          <AccountInput
-            id="old-password"
-            placeholder="Enter Old Password"
-            
-          ></AccountInput>
-          <ErrorMessage id="error-msg-old-password" >
-            Incorrect Password
-          </ErrorMessage>
-        </p>
-        <p>
-          <AccountLabel>New Password</AccountLabel>
-          <AccountInput
-            id="new-password"
-            placeholder="Enter New Password"
-            
-            type="password"
-          ></AccountInput>
-          <ErrorMessage id="error-msg-change-password" >
-            Password must be at least 8 characters long
-          </ErrorMessage>
-          <ErrorMessage id="error-msg-same-password" >
-            Must be a new password
-          </ErrorMessage>
-        </p>
-        <p>
-          <AccountLabel>Confirm New Password</AccountLabel>
-          <AccountInput
-            id="new-confirm-password"
-            placeholder="Confirm New Password"
-            type="password"
-          ></AccountInput>
-          <ErrorMessage id="error-msg-change-password-confirm" >
-            Passwords must match
-          </ErrorMessage>
-        </p>
-        <ProfileButton onClick={handlePWChange} >
-          Change
-        </ProfileButton>
-      </AccountPwContainer>
-    );
-}
 
 const APSignOutContainer = styled.div`
 `

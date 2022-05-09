@@ -2,12 +2,12 @@ import { useState } from 'react'
 import styled from 'styled-components';
 import { db, userSignOut, auth } from "../firebase";
 import { doc, getDoc, deleteDoc } from "firebase/firestore";
-import TextField from '../components/Textfield';
+import TextField from '../components/TextField';
+import { ProfileButton } from "../components/Buttons";
 
 const AccountPageProfile = styled.div`
   height: 100%;
-  grid-column: 1 / span 2;
-  grid-row: 2 / span 2;
+  display:flex;
   position: relative;
   text-align: left;
   background-color: rgb(238, 238, 238);
@@ -16,10 +16,6 @@ const AccountPageProfile = styled.div`
   width: 90%;
   left: 5%;
   position: relative;
-`;
-
-const AccountLabel = styled.label`
-  font-size: 20px;
 `;
 
 const AccountInput = styled.input`
@@ -44,25 +40,19 @@ const ProfileNoEdit = styled.input`
   font-size: 17px;
   width: 87%;
 `;
-const ProfileButton = styled.button`
-  margin-bottom: 20px;
-  padding: 15px;
-  font-size: 17px;
-  color: white;
-  border: 2px black;
-  cursor: pointer;
-  border-radius: 5px;
-  background-color: #4193ff;
-  left: 10%;
-`;
+
 const ErrorMessage = styled.label`
   color: red;
   display: none;
 `;
 
-const Profile = () => {
+const Profile = ({userId,accountType,Email,userName}) => {
 
-  const [username, setUsername] = useState('')
+  const [userName, setUserName] = useState('')
+  const retrieveUser = () => {
+    const user = JSON.stringify(localStorage.getItem('user'));
+    console.log(user);
+  }
   const handleProfileChange = (e) => {
     let userName = e.target.value;
     let docRef = doc(db, "users", userName);
@@ -73,29 +63,33 @@ const Profile = () => {
   };
 
   return (
-    <AccountPageProfile>
-      <h4>Profile</h4>
-        <p>
+        <AccountPageProfile>
+          <h4>Profile</h4>
+          <p>
+            <TextField
+          label="User ID:"
+          value={userId}
+              />  
+          </p>
+          <p>
           <TextField
-            label="User ID:"               
-          />  
-      </p>
-      <p>
-              <TextField
-                  label="Account Type:"
+          label="Account Type:"
+          value={accountType}
               />
-      </p>
-      <p>
-              <TextField
-                  label="Email"
-              />
-      </p>
+          </p>
+          <p>
+          <TextField
+          label="Email"
+          value={Email}
+            />
+          </p>
       <p>
               <TextField 
                   label="Username"
                   value={username}
                   canEdit
-                  onChange={e => setUsername(e.target.value)}
+          onChange={e => setUsername(e.target.value)}
+          required
               />
         <ErrorMessage id="error-msg-change-username">
           Usernames can only use letters, numbers, underscores and periods

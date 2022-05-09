@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import Textfield from '../components/Textfield';
+import TextField from '../components/TextField';
+import { ProfileButton } from '../components/Buttons';
 
 
 
@@ -23,7 +24,7 @@ const ChangePassword = () => {
       <AccountPwContainer>
         <h4>Change Password</h4>
         <p>
-                <Textfield
+                <TextField
                     label="Change Password: "
                     canEdit
                     onChange={e => setNewPassword(e.target.value)}
@@ -34,7 +35,7 @@ const ChangePassword = () => {
           </ErrorMessage>
         </p>
         <p>
-                <Textfield
+                <TextField
                     label="Old Password :"
                     canEdit
                     onChange={e => setOldPassword(e.target.value)}
@@ -48,7 +49,7 @@ const ChangePassword = () => {
           </ErrorMessage>
         </p>
         <p>
-                <Textfield
+                <TextField
                     label="Confirm Password"
                     canEdit
                     onChange={e => confirmPassword(e.target.value)}
