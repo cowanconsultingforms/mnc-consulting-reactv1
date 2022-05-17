@@ -1,19 +1,15 @@
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import {
-  getFirestore,
+  createUserWithEmailAndPassword, getAuth,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword, signOut,signInWithPopup,sendPasswordResetEmail
+} from "firebase/auth";
+import { getDatabase } from "firebase/database";
+import {
   addDoc,
-  collection,
-  serverTimestamp,
+  collection, getDocs, getFirestore, query, serverTimestamp, where
 } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { getDatabase } from "firebase/database";
 
 //Contains all the firebase configuration
 
@@ -84,5 +80,34 @@ export const userSignOut = async () => {
     return false;
   }
 };
+export const googleProvider = new GoogleAuthProvider();
+export const signInWithGoogle = async () => {
+  try {
+    const res = await signInWithPopup(auth, googleProvider);
+    const user = res.user;
+    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    const docs = await getDocs(q);
+    if (docs.docs.length === 0) {
+      await addDoc(collection(db, "users"), {
+        uid: user.uid,
+        name: user.displayName,
+        authProvider: "google",
+        email: user.email,
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  }
+};
 
+export const sendPasswordReset = async (email) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    alert("Password reset link sent!");
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  }
+};
 export default app;

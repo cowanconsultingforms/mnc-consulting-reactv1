@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import styled from 'styled-components';
-import { db, userSignOut, auth } from "../firebase";
+import { db, userSignOut, auth } from "../../firebase";
 import { doc, getDoc, deleteDoc } from "firebase/firestore";
-import TextField from '../components/TextField';
-import { ProfileButton } from "../components/Buttons";
+import TextField from '../../components/TextField';
+import { ProfileButton } from "../../components/Buttons";
 
 const AccountPageProfile = styled.div`
   height: 100%;
@@ -46,12 +46,15 @@ const ErrorMessage = styled.label`
   display: none;
 `;
 
-const Profile = ({userId,accountType,Email,userName}) => {
+const Profile = ({userId,accountType,Email,user}) => {
 
   const [userName, setUserName] = useState('')
   const retrieveUser = () => {
     const user = JSON.stringify(localStorage.getItem('user'));
     console.log(user);
+    if (user) {
+      setUserName(user);
+    }
   }
   const handleProfileChange = (e) => {
     let userName = e.target.value;
@@ -86,15 +89,15 @@ const Profile = ({userId,accountType,Email,userName}) => {
       <p>
               <TextField 
                   label="Username"
-                  value={username}
+                  value={userName}
                   canEdit
-          onChange={e => setUsername(e.target.value)}
+          onChange={e => e.target.value}
           required
               />
-        <ErrorMessage id="error-msg-change-username">
+        <label id="error-msg-change-username">
           Usernames can only use letters, numbers, underscores and periods
           between 3-16 characters.
-        </ErrorMessage>
+        </label>
       </p>
       <ProfileButton onClick={handleProfileChange}>Save</ProfileButton>
     </AccountPageProfile>

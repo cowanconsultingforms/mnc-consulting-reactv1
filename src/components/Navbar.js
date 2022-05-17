@@ -2,7 +2,8 @@ import styled from "styled-components";
 import { FaHome } from 'react-icons/fa';
 import {  useNavigate } from "react-router-dom";
 import { useState } from "react";
-import LoginModal from './Modals';
+import Login from '../pages/Login';
+import { Dropdown } from "rsuite";
 
 const LeftSection = styled.div`
 font-weight: bold;
@@ -53,13 +54,26 @@ const LoginNavItem = styled.button`
   cursor: pointer;
   background-color: #686868;
 `;
+const CustomDropdown = ({ ...props }) => (
+  <Dropdown {...props}>
+    <Dropdown.Item>New File</Dropdown.Item>
+    <Dropdown.Item>New File with Current Profile</Dropdown.Item>
+    <Dropdown.Item>Download As...</Dropdown.Item>
+    <Dropdown.Item>Export PDF</Dropdown.Item>
+    <Dropdown.Item>Export HTML</Dropdown.Item>
+    <Dropdown.Item>Settings</Dropdown.Item>
+    <Dropdown.Item>About</Dropdown.Item>
+  </Dropdown>
+);
 
 const Navbar = () => {
 
   const [open, setOpen] = useState(false);
   const user = sessionStorage.getItem('user');
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const renderDropdown = () => { 
 
+  }
     const pages = [
       {
         page: "/contact",
@@ -86,9 +100,9 @@ const Navbar = () => {
        
       },
       {
-        page: () => navigate("/"),
+        page: "/login",
         text: "Login/Register",
-        onClickFunc: () => setOpen("LoginModal"),
+        onClickFunc: () => navigate("/login"),
       
       },
     ];

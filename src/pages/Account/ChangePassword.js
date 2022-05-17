@@ -1,31 +1,32 @@
 import styled from 'styled-components';
-import TextField from '../components/TextField';
-import { ProfileButton } from '../components/Buttons';
+import TextField from '../../components/TextField';
+import { ProfileButton } from '../../components/Buttons';
+import { useForm } from 'react-hook-form';
 
 
 
 const ChangePassword = () => {
     
     
-    const [error, setError] = useState(false);
-    const user = sessionStorage.getItem('user');
-    const [oldPassword, setOldPassword] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState(false);
+  const { register, formState: { errors }, handleSubmit } = useForm();
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
 
 
-    const handlePWChange = () => {
+  const handlePWChange = () => {
  
-       const docRef= async() => await getDoc(db,"users")
+    const docRef= async() => await getDoc(db,"users")
 
-    }
-    return (
-      <AccountPwContainer>
-        <h4>Change Password</h4>
+  }
+  return (
+    <AccountPwContainer>
+      <h4>Change Password</h4>
         <p>
-                <TextField
-                    label="Change Password: "
+        <TextField
+            label="Change Password: "
                     canEdit
                     onChange={e => setNewPassword(e.target.value)}
                     value={newPassword}
@@ -65,3 +66,5 @@ const ChangePassword = () => {
       </AccountPwContainer>
     )
 }
+
+export default ChangePassword;

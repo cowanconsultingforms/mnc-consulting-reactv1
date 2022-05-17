@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import TextField from '../components/TextField';
-import { useState } from 'react';
+import React,{ useState } from 'react';
 import { useForm } from 'react-hook-form';
-import './public/images/mncdevelopmentlogo.jpg';
-import { TextArea } from '../components/TextField';
+
+import { Form ,Input} from 'rsuite';
+import { useNavigate } from 'react-router-dom';
 
 const ContactDiv = styled.div`
   display: flex;
@@ -54,12 +55,20 @@ const ContactButton = styled.button`
     outline: none;
     cursor: pointer;
     transition: .3s;`
+const Textarea = React.forwardRef((props, ref) => (
+  <Input {...props} as="textarea" ref={ref} />
+));
 
 
 const Contact = () => {
-  const { register, handleSubmit } = useForm();
+  
   const [data, setData] = useState('');
-
+    const navigate = useNavigate();
+    const [formValue, setFormValue] = useState({
+      name: "",
+      email: "",
+      password: "",
+    });
   const sendEmail = (name, email, phone, message) => {
     email = document.getElementById('email').value;
     phone = document.getElementById('phone').value;
@@ -67,31 +76,54 @@ const Contact = () => {
     name = document.getElementById('name').value;
 
   }
+  const onSubmit = (data) => {
+    setData(data);
+    sendEmail(data.name, data.email, data.phone, data.message);
+  }
  
   return (
-      <ContactDiv>
-        <ContactTop>
-          <ContactImg
-            src="./public/images/mncdevelopmentlogo.jpg"
-            style="width:80%;"
-            alt="default.jpg"
-          ></ContactImg>
-        </ContactTop>
-        <ContactBottom>
-          <h2>Contact Us</h2>
-          <form
-            onSubmit={handleSubmit((data) => setData(JSON.stringify(data)))&& sendEmail()}
-          >
-          <TextField placeholder={'Name'} value={(e) => e.target.value} canEdit id="name" {...register(value)}/>
-            <TextField placeholder={'Email'} value={(e) => e.target.value} canEdit type="email" id="email" {...register(value)} />
-            <TextField placeholder={'Phone Number(Recommended)'} value={(e) => e.target.value} canEdit type="text" {...register(phone)} />
-            <TextArea placeholder={'Message'} value={(e) => e.target.value} onChange={(e)=> e.target.value} id="message" {...register(message)} />
-            <ContactButton type="submit">Send</ContactButton>
-          </form>
-          <script src="https://smtpjs.com/v3/smtp.js"></script>
-        </ContactBottom>
-      </ContactDiv>
-    );
+    <ContactDiv>
+      <ContactTop>
+        <ContactImg
+          src="../public/images/mncdevelopmentlogo.jpg"
+          style="width:80%;"
+          alt="default.jpg"
+        ></ContactImg>
+      </ContactTop>
+      <ContactBottom>
+        <h2>Contact Us</h2>
+          <Form fluid onChange={setFormValue} formValue={formValue}>
+            <Form.Group controlId="name-9">
+              <Form.ControlLabel>Name</Form.ControlLabel>
+              <Form.Control name="name" />
+              <Form.HelpText>Required</Form.HelpText>
+            </Form.Group>
+            <Form.Group controlId="email-9">
+              <Form.ControlLabel>Email</Form.ControlLabel>
+              <Form.Control name="email" type="email" />
+              <Form.HelpText>Required</Form.HelpText>
+            </Form.Group>
+            <Form.Group controlId="password-9">
+              <Form.ControlLabel>Password</Form.ControlLabel>
+              <Form.Control
+                name="phone
+                "
+                type="number"
+                autoComplete="off"
+              />
+            </Form.Group>
+            <Form.Group controlId="textarea-9">
+              <Form.ControlLabel>Textarea</Form.ControlLabel>
+              <Form.Control rows={5} name="textarea" accepter={Textarea} />
+            </Form.Group>
+
+          </Form>
+          <ContactButton type="submit">Send</ContactButton>
+      
+        <script src="https://smtpjs.com/v3/smtp.js"></script>
+      </ContactBottom>
+    </ContactDiv>
+  );
 }
 
 export default Contact;

@@ -1,12 +1,37 @@
+import React from "react";
+import "./ErrorMessage.css";
 
-import styled from "styled-components";
-const ErrorMessage = styled.label`
-  color: red;
-`;
-const ErrorMessageComponent = () => {
-    return (
-      <ErrorMessage id="error-msg-change-password">
-        Password must be at least 8 characters long
-      </ErrorMessage>
-    );
+function ErrorMessage(props) {
+  const { errorCode } = props;
+
+  function getErrorMessage() {
+    switch (errorCode) {
+      case "login-failed":
+        return "Login failed";
+      case "email-already-in-use":
+        return "Email is linked to another account. Contact support if this is an error.";
+      case "field-empty":
+        return "Field is Required";
+      case "add-list-item-error":
+        return "Failed to add grocery item to list. Try again.";
+      case "create-list-error":
+        return "Failed to create the grocery list. Try again.";
+      case "add-user-to-list-error":
+        return "Failed to add user to the grocery list. Try again.";
+      case "grocery-item-desc-req":
+        return "grocery item description required";
+      case "duplicate-item-error":
+        return "grocery item on list already";
+      case "user-name-required":
+        return "your name is required";
+      case "grocery-list-item-get-fail":
+        return "failed to get grocery list items";
+      default:
+        return "Oops, something went wrong.";
+    }
+  }
+
+  return errorCode ? <p className="error">{getErrorMessage()}</p> : null;
 }
+
+export default ErrorMessage;
