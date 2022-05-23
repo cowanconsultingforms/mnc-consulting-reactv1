@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { auth, db } from '../../firebase';
+import { auth, db,userSignOut } from '../../firebase';
 import { ProfileButton } from '../../components/AccountStyles';
-
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { deleteDoc } from 'firebase/firestore';
+import React, { useEffect } from 'react';
+import { StyledProfileLabel } from '../../components/AccountStyles';
 const AccountPageDeleteProfile = styled.div`
   height: 100%;
   grid-column: 3;
@@ -15,11 +18,8 @@ const AccountPageDeleteProfile = styled.div`
   width: 100%;
 `;
 
-const AccountPageDeleteProfileBox = ({ user }) => {
-  if (user !== null) {
-    user = auth.currentUser;
-    return auth.currentUser;
-  }
+const AccountPageDeleteProfileBox = () => {
+  const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
 
   const deleteUser = () => {
@@ -28,7 +28,11 @@ const AccountPageDeleteProfileBox = ({ user }) => {
     deleteDoc(docRef).then(() => userSignOut());
     navigate("/");
   };
-
+  useEffect(() => {
+    if (user === null) {
+      navigate("/login");
+    }
+  })
   return (
     <AccountPageDeleteProfile>
       <h4>Delete Account</h4>

@@ -118,15 +118,15 @@ export const AccountPagePortfolio = styled.div`
 `;
 
 export const AccountPageSignOut = styled.div`
+display:flex;
+flex-direction:row;
   height: 100%;
-  grid-column: 3;
-  grid-row: 3 / span 2;
   position: relative;
   text-align: left;
   background-color: #eeeeee;
   color: rgb(128, 128, 128);
   font-size: 20px;
-  width: 100%;
+  width: 50%;
 `;
 
 export default {AccountInput,AccountLabel,AccountPageSignOut,AccountPageContainer,AccountPageHeader,AccountPagePortfolio,AccGridInfo,ProfileNoEdit,ProfileButton,ErrorMessage,AccountPwContainer,StyledProfileLabel,StyledInput};

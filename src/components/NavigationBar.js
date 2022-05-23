@@ -1,4 +1,5 @@
 import { Nav, Navbar } from "rsuite";
+
 import React,{useState} from "react";
 import { FaHome } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +21,21 @@ const MainNavBar = styled.div`
   padding: 19px 20px;
   text-decoration: none;
 `;
-
+const LeftSection = styled.div`
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
+  justify-content: space-between;
+  text-decoration: none;
+`;
+const RightSection = styled.div`
+  font-size: 20px;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 19px 20px;
+  text-decoration: none;
+`;
 const CustomDropdown = ({ ...props }) => (
   <Dropdown {...props}>
     <Dropdown.Item>New File</Dropdown.Item>
@@ -91,11 +106,30 @@ export const NavigationBar = ({ onSelect, activeKey, ...props }) => {
       pages.map((page, idx) => {
         return (
           <React.Fragment>
-            <div className="NavLinkItem" id={idx} style={{}}>
-              <Nav.Item as="a" key={idx} onClick={page.onClickFunc} >
-                {page.text}
-              </Nav.Item>
-            </div>
+            <RightSection style={{ flexDirection: "row-reverse" }}>
+              <div
+                className="NavLinkItem"
+                id={idx}
+                style={{
+                  border: "none",
+                  backgroundColor: "rgb(196, 196, 196)",
+                  cursor: "pointer",
+                  color: "white",
+                  fontSize: "20px",
+                  padding: "19px 20px",
+                  textDecoration: "none",
+                  textAlign: "left",
+                  display: 'flex',
+                  flexDirection:'row-reverse'
+                
+                }}
+              >
+                <Nav.Item as="a" key={idx} onClick={page.onClickFunc} vertical style={{
+                  display:'block'}}>
+                  {page.text}
+                </Nav.Item>
+              </div>
+            </RightSection>
           </React.Fragment>
         );
       })
@@ -106,17 +140,15 @@ export const NavigationBar = ({ onSelect, activeKey, ...props }) => {
 
   return (
     <MainNavBar>
-      <Navbar appearance="default">
-        <Navbar.Brand>
-          <FaHome size={25} />
-        </Navbar.Brand>
-      
-          <Nav pullRight>
-        
-              {renderDropdown(pages)}
-     
-          </Nav>
- 
+      <Navbar appearance="default" as="div">
+        <LeftSection>
+          <Navbar.Brand>
+            <FaHome size={25} />
+          </Navbar.Brand>
+        </LeftSection>
+        <RightSection>
+          <Nav pullRight>{renderDropdown(pages)}</Nav>
+        </RightSection>
       </Navbar>
     </MainNavBar>
   );
