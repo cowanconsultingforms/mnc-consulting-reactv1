@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import TextField from '../components/TextField';
+import TextField from '../../components/TextField';
 import React,{ useState } from 'react';
-import { useForm } from 'react-hook-form';
 
 import { Form ,Input} from 'rsuite';
 import { useNavigate } from 'react-router-dom';

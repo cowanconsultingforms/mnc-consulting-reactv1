@@ -10,16 +10,22 @@ import {
 import { AccountHeader } from "./AccountHeader";
 import { ProfileButton } from '../../components/Buttons';
 import { auth, db, userSignOut } from "../../firebase";
-const AccountPage = () => {
-  const user = sessionStorage.getItem('user');
+import { useAuthState } from "react-firebase-hooks/auth";
+import { Container } from "rsuite";
 
+const AccountPage = () => {
+  const currentUser = useAuthState(auth);
+  const [admin, setAdmin] = useState(true);
+  
 
 
 
   return (
     <AccountPageContainer>
-      <AccountHeader />
-      <AccGridInfo />
+      <Container>
+        <AccountHeader />
+        <AccGridInfo />
+      </Container>
     </AccountPageContainer>
   );
 

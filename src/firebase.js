@@ -110,4 +110,6 @@ export const sendPasswordReset = async (email) => {
     alert(err.message);
   }
 };
+
+
 export default app;

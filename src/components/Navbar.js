@@ -2,9 +2,12 @@ import styled from "styled-components";
 import { FaHome } from 'react-icons/fa';
 import {  useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Login from '../pages/Login';
+import Login from '../pages/Login/Login';
 import { Dropdown } from "rsuite";
-
+import { auth, db, userSignOut } from '../firebase';
+import { useAuthState } from "react-firebase-hooks/auth";
+import React from 'react';
+import {Container,Nav,Navbar,Header} from 'rsuite';
 const LeftSection = styled.div`
 font-weight: bold;
 font-size:20px;
@@ -18,7 +21,12 @@ const StyledButton = styled.button`
 text-decoration:none`
 
 const RightSection = styled.div`
-  
+  font-size: 20px;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 19px 20px;
+  text-decoration: none;
 `;
 
 const MainNavBar = styled.div`
@@ -66,14 +74,11 @@ const CustomDropdown = ({ ...props }) => (
   </Dropdown>
 );
 
-const Navbar = () => {
+const NavBar = () => {
 
-  const [open, setOpen] = useState(false);
-  const user = sessionStorage.getItem('user');
+  const[user,loading,error] = useAuthState(auth);
   const navigate = useNavigate();
-  const renderDropdown = () => { 
 
-  }
     const pages = [
       {
         page: "/contact",
@@ -103,27 +108,98 @@ const Navbar = () => {
         page: "/login",
         text: "Login/Register",
         onClickFunc: () => navigate("/login"),
-      
+       
       },
-    ];
+  ];
+  const renderNavBarItems = () => { 
+    if (user) {
+      sessionStorage.setItem("user", JSON.stringify(user));
+      console.log(user);
+      pages.pop();
+      
+      return (
+        <React.Fragment>
+          <RightSection>
+            {pages.map((page, idx) => (
+              <NavBarItem key={idx} onClick={page.onClickFunc}>
+                {page.text}
+              </NavBarItem>
+            ))}
+          </RightSection>
+        </React.Fragment>
+      );
+    }
+  }
   return (
-    <MainNavBar>
+    <MainNavBar className="MainNavBar">
       <LeftSection>
         <NavBarItem href="/">MNC Development 3.20</NavBarItem>
         <FaHome size={25} padding="2"/>
       </LeftSection>
       <RightSection>
-        {pages.map((page, idx) => (
-          <NavBarItem key={idx} onClick={page.onClickFunc} >
-            {page.text}
-          </NavBarItem>
-        ))}
+        {
+          pages.map((page, idx) => (
+            <Nav.Item key={idx} onClick={page.onClickFunc}>
+              {page.text}
+            </Nav.Item>
+            ))}
         
       </RightSection>
     </MainNavBar>
   );
 };
 
+export const NavigationBar = () => {
+  const navigate = useNavigate();
+  const [user, loading, error] = useAuthState(auth);
+      const pages = [
+        {
+          page: "/contact",
+          text: "Contact",
+          onClickFunc: () => navigate("/contact"),
+        },
+        {
+          page: "/account",
+          text: "Account",
+          onClickFunc: () => navigate("/account"),
+        },
+        {
+          page: "/listings",
+          text: "Sales and Rentals",
+          onClickFunc: () => navigate("/listings"),
+        },
+        {
+          page: "/admin",
+          text: "Administrator",
+          onClickFunc: () => navigate("/admin"),
+        },
+        {
+          page: "/login",
+          text: "Login/Register",
+          onClickFunc: () => navigate("/login"),
+        },
+      ];
+  return (
+    <MainNavBar>
+      <Navbar appearance="inverse">
+          <Navbar.Brand>
+          <FaHome size={ 25 } />
+        </Navbar.Brand>
+          <Nav>
+          {pages.map((page, idx) => (
+          
+            <Nav.Item key={idx} onClick={page.onClickFunc}  >
+            {pages.text}
+              </Nav.Item>
+          ))}
+              </Nav>
+          <Nav pullRight>
+            <Nav.Item>Settings</Nav.Item>
+          </Nav>
+      
+        </Navbar>
+  </MainNavBar>
+  )
+}
 
-
-export default Navbar;
+export default NavBar;

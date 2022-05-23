@@ -2,32 +2,25 @@ import styled from 'styled-components';
 import Modal from "rsuite/Modal";
 import { Button,RadioGroup,ButtonToolbar,Form} from 'rsuite';
 import React,{useState} from 'react';
-import TextField from '../components/TextField';
-import ModalContainer from '../components/Modals';
-import { db, auth } from '../firebase';
-import { useForm } from 'react-hook-form';
-import { LoginButton } from './FullPageLogin';
+import { db, auth ,app} from '../../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { ref, getDownloadURL, getStorage } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
+import { GetImage } from './FullPageLogin';
+import { useDownloadURL } from 'react-firebase-hooks/storage';
 
+
+const storage = getStorage(app);
 export const Login = () => {
-  const storage = getStorage();
-  const pathRef = ref(storage, "images/mncdevelopmentlogo.jpg");
-  const [logo, setLogo] = useState("");
-  const [open, setOpen] = useState(false);
+  
+  const reference = ref(storage, "images/mncdevelopmentlogo.jpg");
   const navigate = useNavigate();
   const [formValue, setFormValue] = useState({
     email: "",
     password: "",
   });
   const [user, loading, error] = useAuthState(auth);
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleOpen = () => {
-    setOpen(true);
-  };
+
   const handleSignIn = async (formValue) => {
     const { email, password } = formValue;
     try {
@@ -41,40 +34,27 @@ export const Login = () => {
           })
         });
       });
-      handleClose();
+      
     } catch (error) {
       console.log(error);
     }
   }
-  const getImage = () => {
-    getDownloadURL(pathRef)
-      .then((url) => {
-        setLogo(url);
-        const img = document.getElementById("logo");
-        img.setAttribute("src", url);
-      })
-      .catch((error) => {
-        console.log(error);
-        switch (error.code) {
-          case "storage/object-not-found":
-            // File doesn't exist
-            break;
-          case "storage/unauthorized":
-            // User doesn't have permission to access the object
-            break;
-          case "storage/canceled":
-            // User canceled the upload
-            break;
-
-          // ...
-
-          case "storage/unknown":
-            // Unknown error occurred, inspect the server response
-            break;
-        }
+    const GetImage = async () => {
+      const reference = ref(storage, "images/mncdevelopmentlogo.jpg");
+      const [downloadUrl, loading, error] = useDownloadURL(reference);
+      await downloadUrl(reference).then(() => {
+        return (
+          <React.Fragment>
+            <img src={downloadUrl} alt="logo" />
+          </React.Fragment>
+        );
       });
-  };
-    
+    };
+  const handleNavigate = () => { 
+    navigate('/register');
+  }
+
+ /*   
   return (
     <React.Fragment>
       <Modal open={open} onClose={handleClose} size="xs">
@@ -82,7 +62,7 @@ export const Login = () => {
           <Modal.Title>Log In</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {getImage()}
+          {GetImage()}
           <Form fluid onChange={setFormValue} formValue={formValue}>
             <Form.Group controlId="email">
               <Form.ControlLabel>Email</Form.ControlLabel>
@@ -103,13 +83,30 @@ export const Login = () => {
           <Button onClick={handleSignIn} appearance="primary">
             Login
           </Button>
-          <Button onClick={handleClose} appearance="subtle">
+          <Button
+            onClick={HandleNavigate()}
+            appearance="subtle"
+            style={{
+              color: "white",
+              padding: "14px 20px",
+              width: "100%",
+              margin: "8px 0",
+              border: "none",
+              cursor: "pointer",
+              backgroundColor: "#686868",
+            }}
+          >
             Cancel
           </Button>
         </Modal.Footer>
       </Modal>
     </React.Fragment>
   );
+  */
+  return (
+    <React.Fragment>
+      </React.Fragment>
+  )
 }
 
 export default Login;

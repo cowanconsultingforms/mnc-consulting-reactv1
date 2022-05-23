@@ -1,28 +1,42 @@
 import React, { useState,useEffect } from "react";
 import styled from "styled-components";
-import { db, auth, } from "../../firebase";
-import { query, getDocs,where,collection } from 'firebase/firestore';
+import { db, auth, app} from "../../firebase";
+import { query, getDocs,where,collection ,doc,addDoc} from 'firebase/firestore';
+import { useCollection, useCollectionData } from 'react-firebase-hooks/firestore';
+import { useAuthState } from "react-firebase-hooks/auth";
 
 
-
-const ViewAuditLog = ({ onCLick, isAdmin }) => {
+const ViewAuditLog = () => {
     
-    const [admin, setAdmin] = useState(false);
-    const auditLog = db.collection('auditLog');
-    const AdminCheck = () => {
-        const user = sessionStorage.getItem('user');
-        getDocs(db, 'users', where('userName', '==', user)).then((doc) => {
-            console.log(doc.data());
-        })
-        
-
-    return;
-    }
+   
+  const auditLog = collection("auditLog");
+  const docRef = auditLog.doc();
+  const q = query()
+  
+  
+  const renderAuditLog = () => {
+    const [values,loading,error,snapshot ] = useCollectionData(doc(db), 'auditLog', docRef,
+    {
+      snapshotListenOptions: { includeMetadataChanges: true }
+    });
+    return values.map((snapshot) => {
+      doc = snapshot.data()
+      return (
+        <React.Fragment>
+          <div className="AuditLog">
+            <p>{doc.action}</p>
+            <p>{doc.userName}</p>
+            <p>{doc.timestamp}</p>
+          </div>
+        </React.Fragment>
+      );
+    });
+  }
 
 
     return (
         <div>
-        <button onClick={AdminCheck}></button>
+        <button onClick={()=>renderAuditLog()}></button>
         </div>
     )
 }

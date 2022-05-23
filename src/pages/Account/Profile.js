@@ -50,7 +50,7 @@ const Profile = ({userId,accountType,Email,user}) => {
 
   const [userName, setUserName] = useState('')
   const retrieveUser = () => {
-    const user = JSON.stringify(localStorage.getItem('user'));
+    const user = JSON.stringify(sessionStorage.getItem('user'));
     console.log(user);
     if (user) {
       setUserName(user);

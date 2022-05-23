@@ -1,0 +1,8 @@
+div#rs-navbar-navbar-default{
+   display:flex;
+   flex-direction: row-reverse;
+}
+nav rs-navbar-navbar-default{
+   display:flex;
+   flex-direction: row-reverse;
+}

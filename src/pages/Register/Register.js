@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Modal } from 'rsuite';
-import ModalDiv from '../components/Modals';
-import TextField from '../components/TextField';
+import ModalDiv from '../../components/Modals';
+import TextField from '../../components/TextField';
 import { getStorage,ref,getDownloadURL } from 'firebase/storage';
 
 export const Register = () => {

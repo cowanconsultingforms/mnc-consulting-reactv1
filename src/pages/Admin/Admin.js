@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import AdminFlex from '../../components/Containers';
 import  SearchUser  from './SearchUser';
-import { FlexboxGrid } from 'rsuite';
+import { FlexboxGrid ,Container,Header,} from 'rsuite';
 
 const Heading = styled.h1`
   font-family: Garamond;
@@ -14,12 +14,10 @@ const Heading = styled.h1`
 const AdminPage = () => {
 
     return (
-      
-        <FlexboxGrid>
-          <Heading> Administrator Page</Heading>
-          <SearchUser />
-        </FlexboxGrid>
-     
+      <AdminFlex>
+        <Heading> Administrator Page</Heading>
+      <SearchUser />
+      </AdminFlex>
     );
 }
 

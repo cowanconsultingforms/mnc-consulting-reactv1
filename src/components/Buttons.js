@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-
+import { Link } from "react-router-dom";
 export const ProfileButton = styled.button`
   margin-bottom: 20px;
   padding: 15px;
@@ -13,11 +13,22 @@ export const ProfileButton = styled.button`
 `;
 
 export const SearchButton = styled.button`
-  background-color: rgb(83, 83, 83);
-  color: white;
-  width: 55px;
-  height: 55px;
-  font-size: 17px;
+
 `;
+
+
+//const NavLink = React.forwardRef(({ href, children, ...rest }, ref)) => {
+  //  return (
+    //<Link ref={ref} to={href} {...rest}>
+      //{children}
+    //</Link>)
+//}
+
+
+//return (
+  //<Nav.Item as={NavLink} href="/">
+    //Home
+  //</Nav.Item>
+//);
 
 export default ProfileButton;
