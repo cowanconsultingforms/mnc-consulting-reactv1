@@ -12,9 +12,7 @@ export const ProfileButton = styled.button`
   left: 10%;
 `;
 
-export const SearchButton = styled.button`
 
-`;
 
 
 //const NavLink = React.forwardRef(({ href, children, ...rest }, ref)) => {

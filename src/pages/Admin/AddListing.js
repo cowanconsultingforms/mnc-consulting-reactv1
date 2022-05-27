@@ -14,7 +14,9 @@ import {
   UploadResult,
   UploadTaskSnapshot,
 } from "firebase/storage";
-import { useMemo} from "react";
+import { useMemo } from "react";
+
+
 
 const UploadFile = () => {
   const [uploadFile, uploading, snapshot, error] = useUploadFile();
@@ -84,4 +86,28 @@ export const AddListing = () => {
   );
 }
 
+export const NewListing = () => {
+  
+
+  return
+  (
+    <div>
+    
+    </div>
+
+  )
+}
+
+const listingStyles = [{
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '10px',
+  margin: '15%',
+  border: '1px solid black',
+  borderRadius: '5px',
+  
+
+}]
 export default AddListing;

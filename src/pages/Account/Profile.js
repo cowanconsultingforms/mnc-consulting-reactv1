@@ -1,9 +1,13 @@
 import { useState } from 'react'
 import styled from 'styled-components';
 import { db, userSignOut, auth } from "../../firebase";
-import { doc, getDoc, deleteDoc } from "firebase/firestore";
+import { doc, getDoc, deleteDoc ,query,collection,where} from "firebase/firestore";
 import TextField from '../../components/TextField';
 import { ProfileButton } from "../../components/Buttons";
+import { useAuthState, } from 'react-firebase-hooks/auth';
+import { useDocumentDataOnce ,useCollectionData} from 'react-firebase-hooks/firestore';
+import { Form,Schema } from 'rsuite';
+import React ,{useEffect} from 'react';
 
 const AccountPageProfile = styled.div`
   height: 100%;
@@ -45,63 +49,127 @@ const ErrorMessage = styled.label`
   color: red;
   display: none;
 `;
+const TextFieldProfile = React.forwardRef((props, ref) => {
+  const { user, label, accepter, ...rest } = props;
+  return (
+    <Form.Group controlId={`${user}-4`} ref={ref}>
+      <Form.ControlLabel>{label} </Form.ControlLabel>
+      <Form.Control name={user} accepter={accepter} {...rest} />
+    </Form.Group>
+  );
+});
+const model = Schema.Model({
+  uid: Schema.Types.StringType(),
+  role: Schema.Types.StringType(),
+  email: Schema.Types.StringType().isEmail("Incorrect Email Format"),
+  isAdmin:Schema.Types.BooleanType(),
 
-const Profile = ({userId,accountType,Email,user}) => {
+})
+const LoadProfile = () => {
+ 
+  const formRef = React.useRef();
+  const [formError, setFormError] = React.useState({});
+  const [formValue, setFormValue] = React.useState({
+    email: formValue,
+  });
 
-  const [userName, setUserName] = useState('')
-  const retrieveUser = () => {
-    const user = JSON.stringify(sessionStorage.getItem('user'));
-    console.log(user);
-    if (user) {
-      setUserName(user);
-    }
-  }
+  const [user, loading, error] = useAuthState(auth);
+
+  
+
   const handleProfileChange = (e) => {
-    let userName = e.target.value;
-    let docRef = doc(db, "users", userName);
+    const userName = e.target.value;
+    const docRef = doc(db, "users", userName).where('email','===',formValue.email);
+
     const docSnap = async () => await getDoc(docRef);
     if (docSnap.exists()) {
       console.log(docSnap.data());
     }
   };
+  
+    useEffect = (() => {
+
+      return () => {
+        
+      };
+    }, [])
+
+  
 
   return (
-        <AccountPageProfile>
-          <h4>Profile</h4>
-          <p>
-            <TextField
-          label="User ID:"
-          value={userId}
-              />  
-          </p>
-          <p>
-          <TextField
-          label="Account Type:"
-          value={accountType}
-              />
-          </p>
-          <p>
-          <TextField
-          label="Email"
-          value={Email}
+    <AccountPageProfile>
+      <h4>Profile</h4>
+      <Form
+        ref={formRef}
+        onChange={setFormValue}
+        onCheck={setFormError}
+        formValue={formValue}
+        model={model}
+      >
+        <Form.Group controlId="profile-lookup">
+          <Form.Control checkAsync>
+            <TextFieldProfile
+              id="email-field"
+              label="User Email :"
+              value={formValue}
+              canEdit
+              onChange={setFormValue((e) => e.target.value)}
+              required
             />
-          </p>
-      <p>
-              <TextField 
-                  label="Username"
-                  value={userName}
-                  canEdit
-          onChange={e => e.target.value}
-          required
-              />
-        <label id="error-msg-change-username">
-          Usernames can only use letters, numbers, underscores and periods
-          between 3-16 characters.
-        </label>
-      </p>
-      <ProfileButton onClick={handleProfileChange}>Save</ProfileButton>
+            <ProfileButton onClick={handleProfileChange}>Save</ProfileButton>
+          </Form.Control>
+        </Form.Group>
+      </Form>
     </AccountPageProfile>
   );
-};
+  }
 
-export default Profile;
+
+
+//  const retrieveUser = () => {
+ //   user = localStorage.getItem("user");
+
+  //  if (!error && !loading && user) {
+  //    setUserName(user);
+  //  }
+// };
+//const LoadProfile = () => {
+  //  const user = sessionStorage.getItem("user");
+  //  const [value, snapshot, loading, error] = useDocumentDataOnce(
+  //    doc(db, "users", user.email)
+ //   );
+ /*  if (!user) {
+    value = null;
+    snapshot = null;
+    loading = false;
+    error = null;
+  } else {
+    const ref = doc(db, "users", user.uid).withConverter(userConverter);
+    const [data, loading, error] = useCollectionData(ref);
+  }
+      return (
+        <React.Fragment>
+          <div>
+            <TextFieldProfile
+              id="uid-field"
+              label="User ID:"
+              value={user.uid}
+              ref={formRef}
+            />
+
+            <TextFieldProfile
+              id="role-field"
+              label="Role :"
+              value={user.role}
+            />
+
+            <TextFieldProfile
+              id="admin-field"
+              label="Admin ? :"
+              value={user.email}
+            />
+          </div>
+        </React.Fragment>
+      );
+    } */
+export default LoadProfile;

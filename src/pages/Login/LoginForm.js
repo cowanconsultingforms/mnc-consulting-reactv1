@@ -1,15 +1,14 @@
-import { async } from '@firebase/util';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { addDoc, query, Timestamp, whereEqualTo } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import React, { useEffect, useState } from 'react';
 import { useAuthState, useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
-import{useStorage,useDownloadURL} from 'react-firebase-hooks/storage';
+import { useDownloadURL, useStorage } from 'react-firebase-hooks/storage';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, ButtonToolbar, Divider,  FlexboxGrid, Form, Schema } from 'rsuite';
+import { Button, ButtonToolbar, Divider, FlexboxGrid, Form, Loader, Schema } from 'rsuite';
 import styled from 'styled-components';
 import app, { auth, db, signIn, signUp, userSignOut } from '../../firebase';
-import {GetImage} from '../../hooks/useDownloadUrl';
+import './styles.css';
 export const LoginDiv = styled.div`
     display: flex;
     flex-direction: column;
@@ -30,9 +29,14 @@ export const LoginButton = styled.button`
     background-color: #686868;
     font-size: 18px;
     text-decoration: none;`
-    const storage = getStorage(app);
+const LoginButtonRef = React.forwardRef((props, ref) => {
+  return <LoginButton ref={ref} {...props} />;
 
-const LoginForm = () => {
+});
+const storage = getStorage(app);
+
+
+export const LoginForm = () => {
    const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
   const navigate = useNavigate();
@@ -40,29 +44,32 @@ const LoginForm = () => {
    const [formError, setFormError] = React.useState({});
    const [formValue, setFormValue] = React.useState({
      email: "",
-     password: "",
+     password: ""
+  
    });
     const HandleSubmit = () => {
       if (!formRef.current.check()) {
         console.error("Form Error");
       }
 
-      const {
-        name,
-        email,
-        role = "User",
-        isAdmin = false,
-        created_at = Timestamp.now(),
-      } = formValue;
-      const user = {
-        name,
-        email,
-        role,
-        isAdmin,
-      };
-      signInWithEmailAndPassword(formValue.name, formValue.password).then(
-        (user) => {
-          sessionStorage.setItem("user", JSON.stringify(user));
+      const {email,password} = formValue;
+     
+      signInWithEmailAndPassword(formValue.email, formValue.password).then(
+        (res) => {
+          const { uid = res.uid, role='regular', isAdmin=false, userName =  res.data().displayName()} = user;
+          console.log(user);
+          const loggedInUser = sessionStorage.setItem('user', JSON.stringify(res));
+   
+          localStorage.setItem('user', JSON.stringify(user));
+          return (
+            <React.Fragment>
+              <div>
+                <p>
+                  Welcome {user.email}
+                </p>
+              </div>
+            </React.Fragment>
+          )
         }
       );
     };
@@ -73,8 +80,14 @@ const LoginForm = () => {
 
     useEffect( () => {
       if (loading) {
-        // maybe trigger a loading screen
-        return;
+      
+        return (
+          <React.Fragment>
+            <div>
+              <Loader />
+            </div>
+          </React.Fragment>
+        );
       }
       if (user) navigate("/");
       else if (error) {
@@ -83,34 +96,25 @@ const LoginForm = () => {
       }
     }, [user, loading, error, navigate]);
   return (
-    <React.Fragment>
+    <div className="LoginForm">
       <Form
         ref={formRef}
         onChange={setFormValue}
         onCheck={setFormError}
         formValue={formValue}
         model={model}
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          width:'50%',
+        }}
       >
-        <TextFieldLogin
-          name="name"
-          label="Username"
-          style={{
-            width: " 100%",
-            padding: "12px 20px",
-            margin: "8px 0",
-            fontSize: "16px",
-            border: "1px solid #ccc",
-            boxSizing: "border-box",
-            color: "white",
-            backgroundColor: "rgba(0, 0, 0, 0.2)",
-            outline: "none",
-          }}
-        />
         <TextFieldLogin
           name="email"
           label="Email"
+          ref={formRef}
           style={{
-            width: " 100%",
+         
             padding: "12px 20px",
             margin: "8px 0",
             fontSize: "16px",
@@ -119,6 +123,8 @@ const LoginForm = () => {
             color: "white",
             backgroundColor: "rgba(0, 0, 0, 0.2)",
             outline: "none",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         />
 
@@ -126,9 +132,10 @@ const LoginForm = () => {
           name="password"
           label="Password"
           type="password"
-          autoComplete="off"
+          ref={formRef}
+          value={formValue}
           style={{
-            width: " 100%",
+       
             padding: "12px 20px",
             margin: "8px 0",
             fontSize: "16px",
@@ -137,73 +144,76 @@ const LoginForm = () => {
             color: "white",
             backgroundColor: "rgba(0, 0, 0, 0.2)",
             outline: "none",
+            textDecoration: "bold",
           }}
         />
-        <TextFieldLogin
-          name="verifyPassword"
-          label="Verify password"
-          type="password"
-          autoComplete="off"
-          autoFill="on"
-          style={{
-            width: " 100%",
-            padding: "12px 20px",
-            margin: "8px 0",
-            fontSize: "16px",
-            border: "1px solid #ccc",
-            boxSizing: "border-box",
-            color: "white",
-            backgroundColor: "rgba(0, 0, 0, 0.2)",
-            outline: "none",
-          }}
-        />
-        <ButtonToolbar>
-          <Button
-            appearance="primary"
+        <ButtonToolbar alignItems="center" justifyContent="center">
+          <LoginButtonRef
             onClick={HandleSubmit}
             style={{
               color: "white",
               padding: "14px 20px",
-              width: "100%",
+            
               margin: "8px 0",
               border: "none",
               cursor: "pointer",
               backgroundColor: "#686868",
+              
             }}
           >
-            Submit
-          </Button>
-          <Divider vertical />
-          <Button onClick={handleNavigate}>Sign Up</Button>
+            Sign in
+          </LoginButtonRef>
+          <Divider />
+          <LoginButtonRef onClick={handleNavigate} ref={formRef}>
+            Register Here
+          </LoginButtonRef>
         </ButtonToolbar>
       </Form>
-    </React.Fragment>
+    </div>
   );
 }
 export const FullPageLogin = () => {
   
-  
-  
-  const [logo, setLogo] = useState(null);
-  const [signInWithEmailAndPassword,user, loading, error] = useSignInWithEmailAndPassword(auth);
-  const formRef = React.useRef();
-  const [formError, setFormError] = React.useState({});
-  const [formValue, setFormValue] = React.useState({
-
-    email: "",
-    password: "",
-  
-  });
+  const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
-
-
+  const DownloadURL = () => {
+    const reference = ref(storage, "images/mncdevelopmentlogo.jpg");
+    const [value, loading, error] = useDownloadURL(reference);
+    const navigate = useNavigate();
+    return (
+      <div>
+        <p>
+          {error && <strong>Error: {error}</strong>}
+          {loading && <span>Download URL: Loading...</span>}
+          {!loading && value && (
+            <React.Fragment>
+              <img src={value} alt="logo"></img>
+            </React.Fragment>
+          )}
+        </p>
+      </div>
+    ), [value, loading, error]}; 
+  const RenderLogin = () => {
+    return (
+      <React.Fragment>
+      <LoginForm />
+      </React.Fragment>
+    )
+  }
+  useEffect = (() => {
+ 
+    if (!loading && user && !error) {
+      navigate("/");
+    }
+  },[user,loading,error])
+  
   return (
       <LoginDiv>
-        {GetImage}
+      {<DownloadURL />}
         <img id="logo"></img>
         <FlexboxGrid classPrefix="flexbox-grid-start">
           <FlexboxGrid.Item colspan={12}>
-           {<LoginForm />}
+           {RenderLogin}
           </FlexboxGrid.Item>
           <FlexboxGrid.Item colspan={12}></FlexboxGrid.Item>
       </FlexboxGrid>
@@ -244,4 +254,4 @@ const TextFieldLogin = React.forwardRef((props, ref) => {
 
 
 
-export default FullPageLogin;
+export default LoginForm;

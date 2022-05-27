@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import TextField from '../../components/TextField';
 import React,{ useState } from 'react';
-
+import { DownloadURL } from '../../hooks/useDownloadUrl';
 import { Form ,Input} from 'rsuite';
 import { useNavigate } from 'react-router-dom';
-
+import { TextFieldLogin } from '../../components/TextField';
 const ContactDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -18,7 +18,17 @@ const ContactDiv = styled.div`
   box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.19);
   z-index:2;
 `;
-
+const ContactBox = styled.div`
+  box-sizing: border-box;
+  margin: auto;
+  max-width: 40%;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #fff;
+  box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.19);
+`;
 const ContactTop = styled.div`
 background-size:cover;
 box-sizing:border-box;
@@ -66,7 +76,7 @@ const Contact = () => {
     const [formValue, setFormValue] = useState({
       name: "",
       email: "",
-      password: "",
+      
     });
   const sendEmail = (name, email, phone, message) => {
     email = document.getElementById('email').value;
@@ -90,20 +100,21 @@ const Contact = () => {
         ></ContactImg>
       </ContactTop>
       <ContactBottom>
-        <h2>Contact Us</h2>
+        <ContactBox>
+          <h2>Contact Us</h2>
           <Form fluid onChange={setFormValue} formValue={formValue}>
-            <Form.Group controlId="name-9">
+            <Form.Group controlId="contact-form">
               <Form.ControlLabel>Name</Form.ControlLabel>
-              <Form.Control name="name" />
+              <Form.Control name="contact-name" />
               <Form.HelpText>Required</Form.HelpText>
             </Form.Group>
-            <Form.Group controlId="email-9">
+            <Form.Group controlId="contact-email">
               <Form.ControlLabel>Email</Form.ControlLabel>
               <Form.Control name="email" type="email" />
               <Form.HelpText>Required</Form.HelpText>
             </Form.Group>
-            <Form.Group controlId="password-9">
-              <Form.ControlLabel>Password</Form.ControlLabel>
+            <Form.Group controlId="contact-phone">
+              <Form.ControlLabel>Phone Number</Form.ControlLabel>
               <Form.Control
                 name="phone
                 "
@@ -111,18 +122,24 @@ const Contact = () => {
                 autoComplete="off"
               />
             </Form.Group>
-            <Form.Group controlId="textarea-9">
-              <Form.ControlLabel>Textarea</Form.ControlLabel>
+            <Form.Group controlId="contact-textarea">
+              <Form.ControlLabel>Message</Form.ControlLabel>
               <Form.Control rows={5} name="textarea" accepter={Textarea} />
             </Form.Group>
-
           </Form>
           <ContactButton type="submit">Send</ContactButton>
-      
+        </ContactBox>
         <script src="https://smtpjs.com/v3/smtp.js"></script>
       </ContactBottom>
     </ContactDiv>
   );
 }
-
+const ContactForm = () => {
+  
+  return (
+    <ContactDiv>
+      
+      </ContactDiv>
+  )
+}
 export default Contact;

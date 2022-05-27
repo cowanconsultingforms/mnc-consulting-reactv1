@@ -1,26 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { db, auth, userSignOut, signIn, signUp, storage } from "../../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import TextField from "../../components/TextField";
-import { FlexboxGrid,Schema, } from "rsuite";
-import { LoginDiv, LoginButton } from "../Login/FullPageLogin";
-import { getDownloadURL, ref } from "firebase/storage";
 import {
-  collection,
-  getDocs,
-  querySnapshot,
-  query,
-  getFirestore,
-  DocumentReference,
-  setDoc,
-  serverTimestamp,
-  addDoc,
-  Timestamp,
+  addDoc, collection, setDoc, Timestamp
 } from "firebase/firestore";
-import { useAuthState,useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { useNavigate } from "react-router-dom";
-import { Form, Button, ButtonToolbar } from "rsuite";
+import { ref } from "firebase/storage";
+import React from "react";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useDownloadURL } from "react-firebase-hooks/storage";
+import { useNavigate } from "react-router-dom";
+import { Button, ButtonToolbar, Container, FlexboxGrid, Form, Schema } from "rsuite";
+import { auth, db, storage } from "../../firebase";
+import { LoginDiv } from "../Login/LoginForm";
 
 
 const { StringType } = Schema.Types;
@@ -47,7 +35,6 @@ const model = Schema.Model({
 export const FullPageRegister = () => {
   
   const collRef = collection(db, "users");
-  
   const [createUserWithEmailAndPassword,user, loading, error] = useCreateUserWithEmailAndPassword(auth);
   const navigate = useNavigate();
   const formRef = React.useRef();
@@ -60,13 +47,13 @@ export const FullPageRegister = () => {
   });
   
   
-  const auditLogger = (user) => {
+  const auditLogger = () => {
     const action = "Created Account";
     const userName = user.displayName;
     const uid = user.uid;
     const timestamp = Timestamp.now();
-    const docRef = getFirestore().collection("auditLogs").doc();
-    setDoc(docRef, { action, userName,uid, timestamp }).then(() => {
+    const docRef = collection("auditLogs").doc(uid);
+    setDoc(docRef, { action, userName,uid ,timestamp }).then(() => {
       console.log("Audit Log Created");
       console.log(JSON.stringify(docRef));
     });
@@ -78,7 +65,7 @@ export const FullPageRegister = () => {
   
   const HandleSubmit = () => {
     if (!formRef.current.check()) {
-      console.error("Form Error");
+      console.error(formError);
     } else {
       console.log(formValue);
       const {  email, role= 'User' , isAdmin =false,created_at = Timestamp.now(),uid} = formValue;
@@ -86,7 +73,8 @@ export const FullPageRegister = () => {
         email,
         role,
         isAdmin,
-        uid
+        uid,
+        created_at
       };
       createUserWithEmailAndPassword(auth, formValue.name, formValue.password).then((newUser) => {
 
@@ -117,11 +105,6 @@ export const FullPageRegister = () => {
       </div>
     )
   };
-  const handleCheckEmail = () => {
-    formRef.current.checkForField("email", (checkResult) => {
-      console.log(checkResult);
-    });
-  };
 
   
 
@@ -130,8 +113,11 @@ export const FullPageRegister = () => {
 
   return (
     <React.Fragment>
-        {DownloadURL()}
-        <img id="logo"></img>
+      <div className="LoginForm">
+        <Container>
+          {DownloadURL()}
+          <img id="logo" alt="logo"></img>
+        </Container>
         <FlexboxGrid classPrefix="flexbox-grid-start">
           <FlexboxGrid.Item colspan={12}>
             <Form
@@ -141,10 +127,10 @@ export const FullPageRegister = () => {
               formValue={formValue}
               model={model}
             >
-
               <TextFieldLogin
                 name="email"
                 label="Email"
+                value={formValue}
                 style={{
                   width: " 100%",
                   padding: "12px 20px",
@@ -195,13 +181,11 @@ export const FullPageRegister = () => {
               />
               <ButtonToolbar>
                 <Button
-                  appearance="primary"
                   onClick={HandleSubmit}
-                style={{
-                  
+                  style={{
                     color: "gray",
                     padding: "14px 20px",
-                    width: "100%",
+                    width: "50%",
                     margin: "8px 0",
                     border: "none",
                     cursor: "pointer",
@@ -211,12 +195,15 @@ export const FullPageRegister = () => {
                   Submit
                 </Button>
 
-                <Button onClick={handleCheckEmail}>Check Email</Button>
+                <Button onClick={() => navigate("/register")}>
+                  Forgot Password?
+                </Button>
               </ButtonToolbar>
             </Form>
           </FlexboxGrid.Item>
           <FlexboxGrid.Item colspan={12}></FlexboxGrid.Item>
         </FlexboxGrid>
+      </div>
     </React.Fragment>
   );
 };
@@ -233,7 +220,7 @@ export const RegisterPage = () => {
 const TextFieldLogin = React.forwardRef((props, ref) => {
   const { name, label, accepter, ...rest } = props;
   return (
-    <Form.Group controlId={`${name}-4`} ref={ref}>
+    <Form.Group controlId={`${name}`} ref={ref}>
       <Form.ControlLabel>{label} </Form.ControlLabel>
       <Form.Control name={name} accepter={accepter} {...rest} />
     </Form.Group>

@@ -1,53 +1,35 @@
-rs-navbar rs-navbar-inverse{
 
-}
-div#NavLinkItem{
-        font-size: 20px;
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 19px 20px;
-    text-decoration: none;
 
-    
+button#login-page {
+  border: none;
+  background-color: rgb(196, 196, 196);
+  cursor: pointer;
+  color: white;
+  font-size: 20px;
+  padding: 19px 20px;
+  text-decoration: none;
+  text-align:left;
 }
-div#NavLinkItem:hover{
-    background-color: #ddd;
-    color: black;
-}
-.rs-navbar rs-navbar-default{
-        box-shadow: 0px 5px 10px 2px #888888;
-    background-color: rgb(196, 196, 196);
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    z-index: 2;
-}
-.rs-flex-box-grid-item {
-    font-size: 20px;
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 19px 20px;
-    text-decoration: none;
+ button#login-page :hover{
+    opacity: 0.8;
+ }
+ div#rs-btn-toolbar{
+   justify-content: center;
+   align-items: center;
+   width:60%;
+ }
+ .input{
+     width:50%;
+ }
+ div#rs-form-control .rs-form-control-wrapper{
 
-}
-div rs-flex-box-grid-item-4:hover{
-    background-color: #ddd;
-}
-.rs-navbar-item{
-        -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-box-flex: 1;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex: auto;
-    flex: auto;
-    -ms-flex-direction: column;
-    flex-direction: column;
-}
+ }
+ a:hover{
+     opacity:0.8;
+ }
+ div#rs-form-control .rs-form-control-wrapper{
+     width:50%;
+ }
+ div#rs-form-group .rs-form-control-wrapper{
+     width:50%;
+ }

@@ -7,7 +7,7 @@ import { Dropdown } from "rsuite";
 import { auth, db, userSignOut } from '../firebase';
 import { useAuthState } from "react-firebase-hooks/auth";
 import React from 'react';
-import {Container,Nav,Navbar,Header} from 'rsuite';
+import {Container,Nav,Navbar,Header,Divider} from 'rsuite';
 const LeftSection = styled.div`
 font-weight: bold;
 font-size:20px;
@@ -34,12 +34,14 @@ const MainNavBar = styled.div`
   height: 60px;
   width: 100%;
   display: flex;
+  flex-direction:row;
   justify-content: space-between;
   align-items: center;
   font-size: 20px;
   font-color: white;
   box-shadow: 0px 5px 10px 2px #888888;
   text-decoration:none;
+  overflow:hidden;
 `;
 
 const NavBarItem = styled.button`
@@ -62,21 +64,10 @@ const LoginNavItem = styled.button`
   cursor: pointer;
   background-color: #686868;
 `;
-const CustomDropdown = ({ ...props }) => (
-  <Dropdown {...props}>
-    <Dropdown.Item>New File</Dropdown.Item>
-    <Dropdown.Item>New File with Current Profile</Dropdown.Item>
-    <Dropdown.Item>Download As...</Dropdown.Item>
-    <Dropdown.Item>Export PDF</Dropdown.Item>
-    <Dropdown.Item>Export HTML</Dropdown.Item>
-    <Dropdown.Item>Settings</Dropdown.Item>
-    <Dropdown.Item>About</Dropdown.Item>
-  </Dropdown>
-);
 
-const NavBar = () => {
+export const NavBar = () => {
 
-  const[user,loading,error] = useAuthState(auth);
+ 
   const navigate = useNavigate();
 
     const pages = [
@@ -84,52 +75,54 @@ const NavBar = () => {
         page: "/contact",
         text: "Contact",
         onClickFunc: () => navigate("/contact"),
-       
+        id: "contact-page",
       },
       {
         page: "/account",
         text: "Account",
         onClickFunc: () => navigate("/account"),
-        
+        id: "account-page",
       },
       {
         page: "/listings",
         text: "Sales and Rentals",
         onClickFunc: () => navigate("/listings"),
-      
+        id: "listing-page",
       },
       {
         page: "/admin",
         text: "Administrator",
         onClickFunc: () => navigate("/admin"),
-       
+        id: "admin-page",
       },
       {
         page: "/login",
         text: "Login/Register",
         onClickFunc: () => navigate("/login"),
-       
+        id: "login-page"
       },
-  ];
+    ];
   const renderNavBarItems = () => { 
-    if (user) {
-      sessionStorage.setItem("user", JSON.stringify(user));
-      console.log(user);
-      pages.pop();
       
       return (
         <React.Fragment>
-          <RightSection>
-            {pages.map((page, idx) => (
+          {
+            pages.map((page, idx) => (
               <NavBarItem key={idx} onClick={page.onClickFunc}>
                 {page.text}
               </NavBarItem>
             ))}
-          </RightSection>
+
+          {pages.map((page, idx) => (
+            <NavBarItem key={idx} onClick={page.onClickFunc}>
+              {page.text}
+              <Divider vertical />
+            </NavBarItem>
+          ))}
         </React.Fragment>
       );
     }
-  }
+  
   return (
     <MainNavBar className="MainNavBar">
       <LeftSection>
@@ -139,9 +132,9 @@ const NavBar = () => {
       <RightSection>
         {
           pages.map((page, idx) => (
-            <Nav.Item key={idx} onClick={page.onClickFunc}>
+            <NavBarItem id={page.id} key={idx} onClick={page.onClickFunc}>
               {page.text}
-            </Nav.Item>
+            </NavBarItem>
             ))}
         
       </RightSection>
@@ -149,57 +142,6 @@ const NavBar = () => {
   );
 };
 
-export const NavigationBar = () => {
-  const navigate = useNavigate();
-  const [user, loading, error] = useAuthState(auth);
-      const pages = [
-        {
-          page: "/contact",
-          text: "Contact",
-          onClickFunc: () => navigate("/contact"),
-        },
-        {
-          page: "/account",
-          text: "Account",
-          onClickFunc: () => navigate("/account"),
-        },
-        {
-          page: "/listings",
-          text: "Sales and Rentals",
-          onClickFunc: () => navigate("/listings"),
-        },
-        {
-          page: "/admin",
-          text: "Administrator",
-          onClickFunc: () => navigate("/admin"),
-        },
-        {
-          page: "/login",
-          text: "Login/Register",
-          onClickFunc: () => navigate("/login"),
-        },
-      ];
-  return (
-    <MainNavBar>
-      <Navbar appearance="inverse">
-          <Navbar.Brand>
-          <FaHome size={ 25 } />
-        </Navbar.Brand>
-          <Nav>
-          {pages.map((page, idx) => (
-          
-            <Nav.Item key={idx} onClick={page.onClickFunc}  >
-            {pages.text}
-              </Nav.Item>
-          ))}
-              </Nav>
-          <Nav pullRight>
-            <Nav.Item>Settings</Nav.Item>
-          </Nav>
-      
-        </Navbar>
-  </MainNavBar>
-  )
-}
+
 
 export default NavBar;

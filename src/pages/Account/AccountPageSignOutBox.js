@@ -4,6 +4,7 @@ import { useState } from "react";
 import { userSignOut ,db,auth,} from "../../firebase";
 import ProfileButton from "../../components/Buttons";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { Container } from "rsuite";
 
 
 
@@ -16,18 +17,20 @@ export const AccountPageSignOutBox = () => {
       navigate("/")
  
     );
-        return <div></div>;
+    
   };
 
   return (
     <AccountPageSignOut>
-      <h4>Sign Out</h4>
-    
+      <Container className="SignOutBox">
+        <h4>Sign Out</h4>
+
         <StyledProfileLabel>
           Signing out? You can always log back in
         </StyledProfileLabel>
 
-      <ProfileButton onClick={handleSignOut}>Sign Out</ProfileButton>
+        <ProfileButton onClick={handleSignOut}>Sign Out</ProfileButton>
+      </Container>
     </AccountPageSignOut>
   );
 };

@@ -3,40 +3,16 @@ import styled from 'styled-components';
 import { db, auth, app } from '../../firebase';
 import { query, getDocs, where, collection, serverTimestamp } from 'firebase/firestore';
 import { useCollection } from 'react-firebase-hooks/firestore';
-import { Container, FlexboxGrid, Header, Content, Footer } from 'rsuite';
+import { Container, FlexboxGrid, Header, Content, Footer,Carousel } from 'rsuite';
 
-const ListingPage = () => {
-    
-    return (
-      <div>
-  
-          <Container>
-            <Header>Header</Header>
-            <Container>
-              <Content>Content</Content>
-              <Sidebar>Sidebar</Sidebar>
-            </Container>
-            <Footer>Footer</Footer>
-          </Container>
-    
-      </div>
-    );
-}
 
-const LoginPage = () => { 
+const ListingPage = () => { 
     
     return(
   <div className="login-page">
     <Container classPrefix="login-page-container">
-      <Header>
-        <Navbar appearance="inverse">
-          <Navbar.Header>
-            <a className="navbar-brand logo">MNC Development 3.20</a>
-          </Navbar.Header>
-        </Navbar>
-      </Header>
       <Content>
-        <FlexboxGrid justify="center">
+        <FlexboxGrid justify="center" align="center">
           <FlexboxGrid.Item colspan={12}>
             <Panel header={<h3>Login</h3>} bordered>
               <Form fluid>
@@ -65,7 +41,6 @@ const LoginPage = () => {
           </FlexboxGrid.Item>
         </FlexboxGrid>
       </Content>
-      <Footer>Footer</Footer>
     </Container>
   </div>
     )

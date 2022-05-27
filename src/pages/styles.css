@@ -6,3 +6,8 @@ nav rs-navbar-navbar-default{
    display:flex;
    flex-direction: row-reverse;
 }
+div#MainNavBar{
+    display:flex;
+    flex-direction: row-reverse;
+    list-style-type: none;
+}

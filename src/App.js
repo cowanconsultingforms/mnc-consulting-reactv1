@@ -1,36 +1,34 @@
-import { query,where ,getDoc,doc} from 'firebase/firestore';
 import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCollection, useCollectionOnce } from 'react-firebase-hooks/firestore';
 import { Route, Routes } from 'react-router-dom';
-import { Container, Header ,Content, Divider,Stack} from "rsuite";
 import './App.css';
-import{ NavigationBar } from './components/NavigationBar';
-import { auth, db } from './firebase';
+import { NavBar } from './components/Navbar';
+import { PrivateRoute } from './components/PrivateRoute';
+import { auth } from './firebase';
 import AccountPage from './pages/Account/Account';
 import ProfilePage from './pages/Account/Profile';
 import AdminPage from './pages/Admin/Admin';
 import Contact from './pages/Contact/Contact';
 import Landing from './pages/Home/Landing';
-import FullPageLogin from './pages/Login/FullPageLogin';
+import FullPageLogin from './pages/Login/LoginForm';
 import FullPageRegister from './pages/Register/FullPageRegister';
-import { collection } from 'firebase/firestore';
-import { FaHome } from 'react-icons/fa';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Container, FlexboxGrid } from 'rsuite';
+
 
 export const App = () => {
 
  // const queryRef = query(collRef, query => query.where('Role', '==', 'Administrator'));
-  const [user] = useAuthState(auth);
-  
+ 
   
 
   return (
     <div className="App">
-      
-        <NavigationBar />
-        <Divider />
-   
-     
+      <Container fluid="true" classPrefix='container'>
+        <NavBar />
+      </Container>
+
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/contact" element={<Contact />} />

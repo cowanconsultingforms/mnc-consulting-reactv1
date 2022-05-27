@@ -6,7 +6,7 @@ import { db, auth ,app} from '../../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { ref, getDownloadURL, getStorage } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
-import { GetImage } from './FullPageLogin';
+import { GetImage } from './LoginForm';
 import { useDownloadURL } from 'react-firebase-hooks/storage';
 
 

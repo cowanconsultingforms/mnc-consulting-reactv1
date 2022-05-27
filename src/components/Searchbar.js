@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { FaSearch } from "react-icons/fa";
-import { SearchButton } from "./Buttons";
 const NOOP = () => { }
 
 const SearchBar = styled.input`
@@ -12,6 +11,9 @@ const SearchBar = styled.input`
 
 const SearchBarContainer = styled.div`
   display: flex;
+`
+const SearchButton = styled.button`
+
 `
 
 
