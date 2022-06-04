@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { auth, db, app, } from '../firebase';
+import { auth, db, app, } from '../../firebase';
 import { Modal } from 'rsuite';
 
 

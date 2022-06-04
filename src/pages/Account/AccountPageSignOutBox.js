@@ -1,8 +1,8 @@
-import { StyledProfileLabel ,AccountPageSignOut} from "../../components/AccountStyles";
+import { StyledProfileLabel ,AccountPageSignOut} from "../../components/Custom/AccountStyles";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { userSignOut ,db,auth,} from "../../firebase";
-import ProfileButton from "../../components/Buttons";
+import ProfileButton from "../../components/Custom/Buttons";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Container } from "rsuite";
 

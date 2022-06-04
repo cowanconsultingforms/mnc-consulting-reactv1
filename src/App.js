@@ -12,10 +12,11 @@ import Contact from './pages/Contact/Contact';
 import Landing from './pages/Home/Landing';
 import FullPageLogin from './pages/Login/LoginForm';
 import FullPageRegister from './pages/Register/FullPageRegister';
+import {ListingPage} from './pages/Listings/Listings';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, FlexboxGrid } from 'rsuite';
-
+import './App.css';
 
 export const App = () => {
 
@@ -37,6 +38,7 @@ export const App = () => {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/login" element={<FullPageLogin />} />
         <Route path="/register" element={<FullPageRegister />} />
+        <Route path="/listings" element={<ListingPage />} />
       </Routes>
     </div>
   );}

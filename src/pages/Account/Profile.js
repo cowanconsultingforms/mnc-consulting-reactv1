@@ -2,8 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components';
 import { db, userSignOut, auth } from "../../firebase";
 import { doc, getDoc, deleteDoc ,query,collection,where} from "firebase/firestore";
-import TextField from '../../components/TextField';
-import { ProfileButton } from "../../components/Buttons";
+import { ProfileButton } from "../../components/Custom/Buttons";
 import { useAuthState, } from 'react-firebase-hooks/auth';
 import { useDocumentDataOnce ,useCollectionData} from 'react-firebase-hooks/firestore';
 import { Form,Schema } from 'rsuite';

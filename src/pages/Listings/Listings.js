@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { db, auth, app } from '../../firebase';
 import { query, getDocs, where, collection, serverTimestamp } from 'firebase/firestore';
 import { useCollection } from 'react-firebase-hooks/firestore';
-import { Container, FlexboxGrid, Header, Content, Footer,Carousel } from 'rsuite';
+import { Container, FlexboxGrid, Header, Content, Footer,Carousel,Form,Panel,Uploader,Button,ButtonToolbar } from 'rsuite';
+import {Docs} from '../../components/Firestore/Docs';
 
-
-const ListingPage = () => { 
+export const ListingPage = () => { 
     
     return(
   <div className="login-page">
@@ -72,3 +72,5 @@ const instance = (
     }}
   />
 );
+
+export default ListingPage;

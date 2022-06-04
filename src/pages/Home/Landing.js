@@ -1,14 +1,14 @@
 import React,{ useState ,useEffect} from 'react';
 import styled from "styled-components";
 import Searchbar from '../../components/Searchbar';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDownloadURL } from 'react-firebase-hooks/storage';
 import { storage,auth } from '../../firebase';
-import { ref } from 'firebase/storage';
-import { Container, Header, Content, Footer,Sidebar ,Nav,Divider} from 'rsuite';
+import { ref,getDownloadURL } from 'firebase/storage';
+import { Container,Divider,Button} from 'rsuite';
 import './styles.css';
 import { Loader, Dropdown, ButtonToolbar, FlexboxGrid } from "rsuite";
-import { NavBar } from '../../components/Navbar';
+import { Footer } from './Footer';
+import { ImageBox } from '../../components/Custom/Containers';
 const SearchboxModule = styled.div`
   height: 300px;
   display: flex;
@@ -24,37 +24,47 @@ const Main = styled.div`
   height: 100%;
   margin-top: 100px;
 `
-const ImageBox = styled.img`
-  justify-content:center;
-  align-items:center;`
 
 
 
 const Landing = () => {
   const [searchQuery, setSearchQuery] = useState('');
-
-  const DownloadURL = () => {
-      const reference = ref(storage, "images/mncdevelopmentlogo.jpg");
-      const [value, loading, error] = useDownloadURL(reference);
-
+  const images = [
+    {
+      id: "1",
+      reference: ref(storage, "images/mncthumbnail1.jpg"),
+    },
+    {
+      id: "2",
+      reference: ref(storage, "images/mncthumbnail2.jpg"),
+    },
+    {
+      id: "3",
+      reference: ref(storage, "images/mncthumbnail3.jpg"),
+    },
+  ];
+  const renderFooter = ({images}) => {
+    
+  }
+  const DownloadURL = ({images}) => {
+    const reference = ref(storage, "images/mncdevelopmentlogo.jpg");
+    const { values } = images;
+      const [value, loading, error] = useDownloadURL(values.reference);
       return (
         (
           <React.Fragment>
-           
-            
               { (
                 <React.Fragment>
-              
+                {loading && <Loader size="md" content="Loading..." />}
                     <ImageBox
                       id="logo"
                       src={value}
                       alt="logo"
-                      style="justify-content:center;"
+                      style={{justifyContent:'center',height:'100px',width:'69px'}}
                     ></ImageBox>
       
                 </React.Fragment>
               )}
-      
           </React.Fragment>
         ),
         [value, loading, error]
@@ -64,10 +74,16 @@ const Landing = () => {
 
   return (
     <Main>
-      <Container className="LandingContainer">
+      <Container className="home-page">
         <SearchboxModule>
           {<ImageBox src={DownloadURL()} alt="logo" />}
           <Divider />
+          <ButtonToolbar>
+            <Button className="buy-button">
+            </Button>
+            <Button className="rent-button"></Button>
+            <Button className="sold-button"></Button>
+          </ButtonToolbar>
           <Searchbar
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -75,22 +91,7 @@ const Landing = () => {
             type="search"
           />
         </SearchboxModule>
-      </Container>
-    </Main>
-  );
-}
-const HomePage = () => {
-  
-  return (
-    <Main>
-      
-      <Container>
-        <Header></Header>
-        <Container>
-          <Content>Content</Content>
-          <Sidebar>Sidebar</Sidebar>
-        </Container>
-        <Footer>Footer</Footer>
+        { <Footer />}
       </Container>
     </Main>
   );

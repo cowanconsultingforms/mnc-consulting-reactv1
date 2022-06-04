@@ -1,4 +1,4 @@
-import { AccountPageHeader } from "../../components/AccountStyles";
+import { AccountPageHeader } from "../../components/Custom/AccountStyles";
 
 export const AccountHeader = () => {
 

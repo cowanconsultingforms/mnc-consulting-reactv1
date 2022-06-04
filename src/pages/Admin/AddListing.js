@@ -1,10 +1,10 @@
-import { getDownloadURL, getStorage, storageRef } from 'firebase/storage';
-import React, { useState } from "react";
+import { getDownloadURL,  ref } from 'firebase/storage';
+import React, { useState,useRef } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useUploadFile } from 'react-firebase-hooks/storage';
 import { db } from "../../firebase";
 import { Timestamp,addDoc} from 'firebase/firestore';
-import { FlexboxGrid,Uploader } from 'rsuite';
+import { Container, FlexboxGrid,Uploader,DOMHelper,Schema } from 'rsuite';
 const storage = getStorage(firebaseApp);
 import {
   StorageError,
@@ -15,12 +15,26 @@ import {
   UploadTaskSnapshot,
 } from "firebase/storage";
 import { useMemo } from "react";
+import { map } from '@firebase/util';
 
+const model = Schema.Model({
+  type: StringType().isRequired("This field is required."),
+  street: StringType()
+    .isRequired("This field is required."),
+  city: StringType().isRequired("This field is required."),
+  state: StringType()
+    .isRequired("This field is required."),
+  zip: StringType().isRequired("This field is required."),
+  bedrooms: StringType().isRequired("This field is required."),
+  bathrooms: StringType().isRequired("This field is required."),
+  price: StringType().isRequired("This field is required."),
+  description: StringType().isRequired("This field is required."),
 
+});
 
 const UploadFile = () => {
   const [uploadFile, uploading, snapshot, error] = useUploadFile();
-  const ref = storageRef(storage, 'file.jpg');
+  const storageRef = ref(storage, 'file.jpg');
   const [selectedFile, setSelectedFile] = useState<File>(ref);
 
   const upload = async () => {
@@ -46,7 +60,24 @@ const UploadFile = () => {
     <React.Fragment>
       <p>
         {error && <strong>Error: {error.message}</strong>}
-        {uploading && <span>Uploading file...</span>}
+        {uploading && (
+          <span>
+            {" "}
+            <Uploader
+              listType="picture-text"
+              defaultFileList={fileList}
+              action="//jsonplaceholder.typicode.com/posts/"
+              renderFileInfo={(file, fileElement) => {
+                return (
+                  <div>
+                    <span>File Name: {file.name}</span>
+                    <p>File URL: {file.url}</p>
+                  </div>
+                );
+              }}
+            />
+          </span>
+        )}
         {snapshot && <span>Snapshot: {JSON.stringify(snapshot)}</span>}
         {selectedFile && <span>Selected file: {selectedFile.name}</span>}
         <input
@@ -56,33 +87,34 @@ const UploadFile = () => {
             setSelectedFile(file);
           }}
         />
-        <button onClick={upload} type="save" >Upload file</button>
+        <button onClick={upload} type="save">
+          Upload file
+        </button>
       </p>
     </React.Fragment>
-  )
+  );
 }
 
 export const AddListing = () => {
     
-    const [collection, loading, error] = useCollection(db, "listings");
+  const [formValue, setFormValue] = useState({
+    type: "",
+    street: "",
+    city: "",
+    state: "",
+    zip: "",
+    price: "",
+    bedrooms: "",
+    bathrooms: "",
+    description: "",
+  })
+  const [formError, setFormError] = useState({});
   return (
-    <React.Fragment>
+    <Container className="add-listing" style={{ display: 'flex',flexDirection:'column'}}>
       <FlexboxGrid>
-      <Uploader
-    listType="picture-text"
-    defaultFileList={fileList}
-    action="//jsonplaceholder.typicode.com/posts/"
-    renderFileInfo={(file, fileElement) => {
-      return (
-        <div>
-          <span>File Name: {file.name}</span>
-          <p>File URL: {file.url}</p>
-        </div>
-      );
-    }}
-  />
+
       </FlexboxGrid>
-    </React.Fragment>
+    </Container>
   );
 }
 
@@ -91,9 +123,9 @@ export const NewListing = () => {
 
   return
   (
-    <div>
+    <Container style={{listingStyles}}>
     
-    </div>
+    </Container>
 
   )
 }

@@ -20,16 +20,11 @@ button#login-page {
  }
  .input{
      width:50%;
- }
- div#rs-form-control .rs-form-control-wrapper{
-
+     color:white;
  }
  a:hover{
      opacity:0.8;
  }
  div#rs-form-control .rs-form-control-wrapper{
-     width:50%;
- }
- div#rs-form-group .rs-form-control-wrapper{
      width:50%;
  }

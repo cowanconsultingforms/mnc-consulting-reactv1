@@ -4,12 +4,15 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
-  AccGridInfo,  AccountPageContainer,
-  AccountPagePortfolio, AccountPageSignOut, StyledInput,
-} from "../../components/AccountStyles";
+  AccGridInfo,
+  AccountPageContainer,
+  AccountPagePortfolio,
+  AccountPageSignOut,
+  StyledInput,
+} from "../../components/Custom/AccountStyles";
 import {AccountPageSignOutBox} from './AccountPageSignOutBox'
 import { AccountHeader } from "./AccountHeader";
-import { ProfileButton } from '../../components/Buttons';
+import { ProfileButton } from '../../components/Custom/Buttons';
 import { auth, db, userSignOut } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Container } from "rsuite";

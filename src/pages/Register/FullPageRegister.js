@@ -11,7 +11,19 @@ import { auth, db, storage } from "../../firebase";
 import { LoginDiv } from "../Login/LoginForm";
 
 
-const { StringType } = Schema.Types;
+const { StringType} = Schema.Types;
+
+function asyncCheckUsername(name) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      if (name === "abc") {
+        resolve(false);
+      } else {
+        resolve(true);
+      }
+    }, 500);
+  });
+}
 
 const model = Schema.Model({
   name: StringType().isRequired("This field is required."),
@@ -68,11 +80,10 @@ export const FullPageRegister = () => {
       console.error(formError);
     } else {
       console.log(formValue);
-      const {  email, role= 'User' , isAdmin =false,created_at = Timestamp.now(),uid} = formValue;
+      const {  email, role= 'User' ,created_at = Timestamp.now(),uid} = formValue;
       const user = {
         email,
         role,
-        isAdmin,
         uid,
         created_at
       };
@@ -114,7 +125,7 @@ export const FullPageRegister = () => {
   return (
     <React.Fragment>
       <div className="LoginForm">
-        <Container>
+        <Container style={{display:'flex',flexDirection:'column'}}>
           {DownloadURL()}
           <img id="logo" alt="logo"></img>
         </Container>
@@ -126,6 +137,7 @@ export const FullPageRegister = () => {
               onCheck={setFormError}
               formValue={formValue}
               model={model}
+              onSubmit={HandleSubmit}
             >
               <TextFieldLogin
                 name="email"

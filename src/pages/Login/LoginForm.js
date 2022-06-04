@@ -7,7 +7,7 @@ import { useDownloadURL, useStorage } from 'react-firebase-hooks/storage';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, ButtonToolbar, Divider, FlexboxGrid, Form, Loader, Schema } from 'rsuite';
 import styled from 'styled-components';
-import app, { auth, db, signIn, signUp, userSignOut } from '../../firebase';
+import app, { auth, db, signIn, signUp, userSignOut ,storage} from '../../firebase';
 import './styles.css';
 export const LoginDiv = styled.div`
     display: flex;
@@ -33,9 +33,6 @@ const LoginButtonRef = React.forwardRef((props, ref) => {
   return <LoginButton ref={ref} {...props} />;
 
 });
-const storage = getStorage(app);
-
-
 export const LoginForm = () => {
    const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
@@ -150,6 +147,7 @@ export const LoginForm = () => {
         <ButtonToolbar alignItems="center" justifyContent="center">
           <LoginButtonRef
             onClick={HandleSubmit}
+            type="submit"
             style={{
               color: "white",
               padding: "14px 20px",

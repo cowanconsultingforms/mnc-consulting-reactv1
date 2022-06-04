@@ -77,3 +77,34 @@ button#login-page {
   
     }
   }
+
+  .docs-main{
+    text-align: center;
+  }
+
+  .add-listing{
+    height: 40px;
+    width: 200px;
+    background-color: #ffc107;
+    border: none;
+    cursor: pointer;
+}
+.header-modal{
+    border-radius: 10px;
+    color: rgb(78, 78, 78);
+    font-size: 20px;
+    margin: 5%;
+    padding: 5%;
+    border: rgb(73, 73, 73) 2px solid;
+}
+div#rs-container {
+    align-items: center;
+    justify-content: center;
+    margin-top: 200px;
+}
+form.rs-form {
+    display: flex;
+    flex-direction: column;
+    width:100%;
+ 
+}

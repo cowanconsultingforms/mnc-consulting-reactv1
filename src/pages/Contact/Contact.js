@@ -1,34 +1,16 @@
 import styled from 'styled-components';
-import TextField from '../../components/TextField';
-import React,{ useState } from 'react';
-import { DownloadURL } from '../../hooks/useDownloadUrl';
-import { Form ,Input} from 'rsuite';
+import TextField from '../../components/Custom/TextField';
+import React,{ useState,forwardRef } from 'react';
+import { useDownloadURL } from 'react-firebase-hooks/storage';
+import { Container, Form ,Input,Button,Loader} from 'rsuite';
 import { useNavigate } from 'react-router-dom';
-import { TextFieldLogin } from '../../components/TextField';
-const ContactDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  margin: auto;
-  max-width: 40%;
-  justify-content: center;
-  align-items: flex-start;
-  text-align: center;
-  background-color: #fff;
-  box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.19);
-  z-index:2;
-`;
-const ContactBox = styled.div`
-  box-sizing: border-box;
-  margin: auto;
-  max-width: 40%;
-  grid-template-columns: repeat(2, 1fr);
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  background-color: #fff;
-  box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.19);
-`;
+import { TextFieldLogin } from '../../components/Custom/TextField';
+import { ImageBox } from '../../components/Custom/Containers';
+import { storage } from '../../firebase';
+import { ref, downloadURL } from 'firebase/storage';
+
+
+
 const ContactTop = styled.div`
 background-size:cover;
 box-sizing:border-box;
@@ -76,7 +58,8 @@ const Contact = () => {
     const [formValue, setFormValue] = useState({
       name: "",
       email: "",
-      
+      message: "",
+      phone :""
     });
   const sendEmail = (name, email, phone, message) => {
     email = document.getElementById('email').value;
@@ -89,20 +72,39 @@ const Contact = () => {
     setData(data);
     sendEmail(data.name, data.email, data.phone, data.message);
   }
- 
+  const DownloadURL = () => {
+      const reference = ref(storage, "images/mncdevelopmentlogo.jpg");
+      const [value, loading, error] = useDownloadURL(reference);
+
+      return (
+        (
+          <React.Fragment>
+           
+            
+              { (
+                <React.Fragment>
+                {loading && <Loader size="md" content="Loading..." />}
+                    <ImageBox
+                      id="logo"
+                      src={value}
+                      alt="logo"
+                      style="justify-content:center;"
+                    ></ImageBox>
+      
+                </React.Fragment>
+              )}
+      
+          </React.Fragment>
+        ),
+        [value, loading, error]
+      );
+  };
   return (
-    <ContactDiv>
-      <ContactTop>
-        <ContactImg
-          src="../public/images/mncdevelopmentlogo.jpg"
-          style="width:80%;"
-          alt="default.jpg"
-        ></ContactImg>
-      </ContactTop>
-      <ContactBottom>
-        <ContactBox>
-          <h2>Contact Us</h2>
-          <Form fluid onChange={setFormValue} formValue={formValue}>
+    <Container className="contact-box" >
+      <Container className="contact-top">
+        
+          
+          <Form fluid onChange={setFormValue} formValue={formValue} className="main-contact-form" layout="horizontal">
             <Form.Group controlId="contact-form">
               <Form.ControlLabel>Name</Form.ControlLabel>
               <Form.Control name="contact-name" />
@@ -116,8 +118,7 @@ const Contact = () => {
             <Form.Group controlId="contact-phone">
               <Form.ControlLabel>Phone Number</Form.ControlLabel>
               <Form.Control
-                name="phone
-                "
+                name="phone"
                 type="number"
                 autoComplete="off"
               />
@@ -127,19 +128,24 @@ const Contact = () => {
               <Form.Control rows={5} name="textarea" accepter={Textarea} />
             </Form.Group>
           </Form>
-          <ContactButton type="submit">Send</ContactButton>
-        </ContactBox>
+          <Button type="submit">Send</Button>
+      
         <script src="https://smtpjs.com/v3/smtp.js"></script>
-      </ContactBottom>
-    </ContactDiv>
+      </Container>
+    </Container>
   );
 }
 const ContactForm = () => {
   
   return (
-    <ContactDiv>
-      
-      </ContactDiv>
-  )
+    <Container
+      className="contact-container"
+      fluid="true"
+      justify="center"
+      style={{ marginTop: "25%", width: "80%" }}
+    >
+      <h2>Contact Us</h2>
+    </Container>
+  );
 }
 export default Contact;

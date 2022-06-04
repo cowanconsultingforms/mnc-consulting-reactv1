@@ -1,13 +1,10 @@
-import styled from "styled-components";
+import React, { useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaHome } from 'react-icons/fa';
-import {  useNavigate } from "react-router-dom";
-import { useState } from "react";
-import Login from '../pages/Login/Login';
-import { Dropdown } from "rsuite";
-import { auth, db, userSignOut } from '../firebase';
-import { useAuthState } from "react-firebase-hooks/auth";
-import React from 'react';
-import {Container,Nav,Navbar,Header,Divider} from 'rsuite';
+import { useNavigate } from "react-router-dom";
+import { Divider } from 'rsuite';
+import styled from "styled-components";
+import { auth } from '../firebase';
 const LeftSection = styled.div`
 font-weight: bold;
 font-size:20px;
@@ -17,8 +14,6 @@ text-decoration:none;
 `;
 
 
-const StyledButton = styled.button`
-text-decoration:none`
 
 const RightSection = styled.div`
   font-size: 20px;
@@ -66,8 +61,14 @@ const LoginNavItem = styled.button`
 `;
 
 export const NavBar = () => {
-
- 
+  const [open,setOpen] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [user, loading, error] = useAuthState(auth);
+  const LoginCheck = () => {
+    if (user) {
+      setLoggedIn(true);
+    }
+  }
   const navigate = useNavigate();
 
     const pages = [
@@ -96,10 +97,10 @@ export const NavBar = () => {
         id: "admin-page",
       },
       {
-        page: "/login",
+        page: "/",
         text: "Login/Register",
-        onClickFunc: () => navigate("/login"),
-        id: "login-page"
+        onClickFunc: () => {},
+        id: "login-modal"
       },
     ];
   const renderNavBarItems = () => { 
@@ -126,10 +127,10 @@ export const NavBar = () => {
   return (
     <MainNavBar className="MainNavBar">
       <LeftSection>
-        <NavBarItem href="/">MNC Development 3.20</NavBarItem>
+        <NavBarItem href="/" onClick={()=>navigate('/')}>MNC Development 3.20</NavBarItem>
         <FaHome size={25} padding="2"/>
       </LeftSection>
-      <RightSection>
+      <RightSection className="RightNavbar">
         {
           pages.map((page, idx) => (
             <NavBarItem id={page.id} key={idx} onClick={page.onClickFunc}>

@@ -129,4 +129,7 @@ flex-direction:row;
   width: 50%;
 `;
 
-export default {AccountInput,AccountLabel,AccountPageSignOut,AccountPageContainer,AccountPageHeader,AccountPagePortfolio,AccGridInfo,ProfileNoEdit,ProfileButton,ErrorMessage,AccountPwContainer,StyledProfileLabel,StyledInput};
+export default {
+  AccountInput, AccountLabel, AccountPageSignOut, AccountPageContainer,
+  AccountPageHeader, AccountPagePortfolio, AccGridInfo, ProfileNoEdit, ProfileButton, ErrorMessage, AccountPwContainer, StyledProfileLabel, StyledInput
+};
