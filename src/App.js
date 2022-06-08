@@ -13,15 +13,23 @@ import Landing from './pages/Home/Landing';
 import FullPageLogin from './pages/Login/LoginForm';
 import FullPageRegister from './pages/Register/FullPageRegister';
 import {ListingPage} from './pages/Listings/Listings';
-import { useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, FlexboxGrid } from 'rsuite';
+import { Container } from 'rsuite';
 import './App.css';
 
 export const App = () => {
 
  // const queryRef = query(collRef, query => query.where('Role', '==', 'Administrator'));
- 
+  const [user,setUser] = useState(null);
+  useEffect(() => {
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        document.getElementById('login-modal').style.display = 'none';
+        console.log(user.email);
+      }
+    })
+  },[user])
   
 
   return (
@@ -48,7 +56,7 @@ export const App = () => {
 export default App;
 
 
- class ErrorBoundary extends React.Component {
+ export class ErrorBoundary extends React.Component {
    constructor(props) {
      super(props);
      this.state = { hasError: false };

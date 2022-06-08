@@ -4,8 +4,8 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { useUploadFile } from 'react-firebase-hooks/storage';
 import { db } from "../../firebase";
 import { Timestamp,addDoc} from 'firebase/firestore';
-import { Container, FlexboxGrid,Uploader,DOMHelper,Schema } from 'rsuite';
-const storage = getStorage(firebaseApp);
+import { Container, FlexboxGrid, Uploader, DOMHelper, Schema, Checkbox, Row,Form,Button,CheckPicker } from 'rsuite';
+import { StringType } from 'schema-typed';
 import {
   StorageError,
   StorageReference,
@@ -15,7 +15,6 @@ import {
   UploadTaskSnapshot,
 } from "firebase/storage";
 import { useMemo } from "react";
-import { map } from '@firebase/util';
 
 const model = Schema.Model({
   type: StringType().isRequired("This field is required."),
@@ -31,72 +30,40 @@ const model = Schema.Model({
   description: StringType().isRequired("This field is required."),
 
 });
-
-const UploadFile = () => {
-  const [uploadFile, uploading, snapshot, error] = useUploadFile();
-  const storageRef = ref(storage, 'file.jpg');
-  const [selectedFile, setSelectedFile] = useState<File>(ref);
-
-  const upload = async () => {
-    if (selectedFile) {
-      const result = await uploadFile(ref, selectedFile, {
-        contentType: 'image/jpeg'
-      }).then((snapshot) => 
-        getDownloadURL(snapshot.ref).then((url) => {
-             return (
-      <React.Fragment>
-        <div>
-        <img src={url} alt="file"/>
-        </div>
-      </React.Fragment>
-    )
-      }));
-      alert(`Result: ${JSON.stringify(result)}`);
-    }
- 
-  }
-
+const TextField = React.forwardRef((props, ref) => {
+  const { name, label, accepter, ...rest } = props;
   return (
-    <React.Fragment>
-      <p>
-        {error && <strong>Error: {error.message}</strong>}
-        {uploading && (
-          <span>
-            {" "}
-            <Uploader
-              listType="picture-text"
-              defaultFileList={fileList}
-              action="//jsonplaceholder.typicode.com/posts/"
-              renderFileInfo={(file, fileElement) => {
-                return (
-                  <div>
-                    <span>File Name: {file.name}</span>
-                    <p>File URL: {file.url}</p>
-                  </div>
-                );
-              }}
-            />
-          </span>
-        )}
-        {snapshot && <span>Snapshot: {JSON.stringify(snapshot)}</span>}
-        {selectedFile && <span>Selected file: {selectedFile.name}</span>}
-        <input
-          type="file"
-          onChange={(e) => {
-            const file = e.target.files ? e.target.files[0] : undefined;
-            setSelectedFile(file);
-          }}
-        />
-        <button onClick={upload} type="save">
-          Upload file
-        </button>
-      </p>
-    </React.Fragment>
+    <Form.Group controlId={`${name}-4`} ref={ref}>
+      <Form.ControlLabel>{label} </Form.ControlLabel>
+      <Form.Control name={name} accepter={accepter} {...rest} />
+    </Form.Group>
   );
-}
+});
 
+const TextArea = React.forwardRef((props, ref) => {
+  const { name, label, accepter, ...rest } = props;
+  return (
+    <Form.Group controlId={`${name}-4`} ref={ref}>
+      <Form.ControlLabel>{label} </Form.ControlLabel>
+      <Form.Control name={name} accepter={accepter} {...rest} />
+    </Form.Group>
+  );
+});
+const CheckBox = React.forwardRef((props, ref) => {
+  const { name, label, accepter, ...rest } = props;
+  return (
+    <Form.Group controlId={`${name}-4`} ref={ref}>
+      <Form.ControlLabel>{label} </Form.ControlLabel>
+      <Form.Control name={name} accepter={accepter} {...rest} />
+    </Form.Group>
+  );
+});
 export const AddListing = () => {
-    
+const types = [
+  { id: 1, type: "Sale", id: 2, type: "Rent", id: 3, type: "Sold" },
+];
+  const [type,setType] = useState("");
+  const formRef = React.useRef();
   const [formValue, setFormValue] = useState({
     type: "",
     street: "",
@@ -110,9 +77,183 @@ export const AddListing = () => {
   })
   const [formError, setFormError] = useState({});
   return (
-    <Container className="add-listing" style={{ display: 'flex',flexDirection:'column'}}>
-      <FlexboxGrid>
-
+    <Container
+      className="add-listing"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "10px",
+        margin: "15%",
+        border: "1px solid black",
+        borderRadius: "5px",
+      }}
+    >
+      <FlexboxGrid
+        className="listing-flexbox"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          backgroundColor: "gray",
+          width: "100%",
+          height: "100%",
+          float: "left",
+          fontSize: "20px",
+        }}
+      >
+        <FlexboxGrid.Item
+          colspan={12}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            backgroundColor: "gray",
+            width: "100%",
+            height: "100%",
+            float: "left",
+          }}
+        >
+          <Form
+            className="listing-form"
+            ref={formRef}
+            onChange={setFormValue}
+            onCheck={setFormError}
+            formValue={formValue}
+            model={model}
+          >
+            <Row
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                backgroundColor: "gray",
+                width: "100%",
+                height: "100%",
+                float: "left",
+                justifyContent: "center",
+              }}
+            >
+              <Checkbox
+                name="type"
+                label="For Sale"
+                accepter={Checkbox}
+                value={formValue.type}
+                onChange={(value) => {
+                  console.log(value);
+                  setFormValue({ ...formValue, type: value });
+                }}
+                style={{ fontSize: "20px" }}
+              />
+              <Checkbox
+                name="type"
+                label="Type"
+                accepter={Checkbox}
+                value={formValue.type}
+                onChange={(value) => {
+                  console.log(value);
+                  setFormValue({ ...formValue, type: value });
+                }}
+              />
+              <Checkbox
+                name="type"
+                label="Type"
+                accepter={Checkbox}
+                value={formValue.type}
+                onChange={(value) => {
+                  console.log(value);
+                  setFormValue({ ...formValue, type: value });
+                }}
+              />
+            </Row>
+            <TextField
+              name="street"
+              label="Street"
+              accepter={model.street}
+              value={formValue.street}
+              onChange={(value) => {
+                setFormValue({ ...formValue, street: value });
+              }}
+            />
+            <TextField
+              name="city"
+              label="City"
+              accepter={model.city}
+              value={formValue.city}
+              onChange={(value) => {
+                setFormValue({ ...formValue, city: value });
+              }}
+            />
+            <TextField
+              name="state"
+              label="State"
+              accepter={model.state}
+              value={formValue.state}
+              onChange={(value) => {
+                setFormValue({ ...formValue, state: value });
+              }}
+            />
+            <TextField
+              name="zip"
+              label="Zip"
+              accepter={model.zip}
+              value={formValue.zip}
+              onChange={(value) => {
+                setFormValue({ ...formValue, zip: value });
+              }}
+            />
+            <TextField
+              name="price"
+              label="Price"
+              accepter={model.price}
+              value={formValue.price}
+              onChange={(value) => {
+                setFormValue({ ...formValue, price: value });
+              }}
+            />
+            <TextField
+              name="bedrooms"
+              label="Bedrooms"
+              accepter={model.bedrooms}
+              value={formValue.bedrooms}
+              onChange={(value) => {
+                setFormValue({ ...formValue, bedrooms: value });
+              }}
+            />
+            <TextField
+              name="bathrooms"
+              label="Bathrooms"
+              accepter={model.bathrooms}
+              value={formValue.bathrooms}
+              onChange={(value) => {
+                setFormValue({ ...formValue, bathrooms: value });
+              }}
+            />
+            <TextArea
+              name="description"
+              label="Description"
+              accepter={model.description}
+              value={formValue.description}
+              width="100%"
+              onChange={(value) => {
+                setFormValue({ ...formValue, description: value });
+              }}
+            />
+            <Button
+              onClick={() => {
+                const errors = model.validate(formValue);
+                setFormError(errors);
+                if (Object.keys(errors).length === 0) {
+                  const listing = {
+                    ...formValue,
+                    createdAt: new Date(),
+                  };
+                  addDoc(db.collection("listings"), listing);
+                }
+              }}
+            >
+              Submit
+            </Button>
+          </Form>
+        </FlexboxGrid.Item>
       </FlexboxGrid>
     </Container>
   );

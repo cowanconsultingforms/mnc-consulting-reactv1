@@ -2,42 +2,10 @@ import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaHome } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
-import { Divider } from 'rsuite';
+import { Divider,Modal } from 'rsuite';
 import styled from "styled-components";
 import { auth } from '../firebase';
-const LeftSection = styled.div`
-font-weight: bold;
-font-size:20px;
-color:white;
-justify-content:space-between;
-text-decoration:none;
-`;
 
-
-
-const RightSection = styled.div`
-  font-size: 20px;
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 19px 20px;
-  text-decoration: none;
-`;
-
-const MainNavBar = styled.div`
-  background-color: rgb(196, 196, 196);
-  height: 60px;
-  width: 100%;
-  display: flex;
-  flex-direction:row;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 20px;
-  font-color: white;
-  box-shadow: 0px 5px 10px 2px #888888;
-  text-decoration:none;
-  overflow:hidden;
-`;
 
 const NavBarItem = styled.button`
   border: none;
@@ -49,18 +17,9 @@ const NavBarItem = styled.button`
   text-decoration: none;
   text-align:left;
 `;
-const LoginNavItem = styled.button`
-
-  color: white;
-  padding: 14px 20px;
-  width: 100%;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  background-color: #686868;
-`;
 
 export const NavBar = () => {
+  //logic for the navbar modal
   const [open,setOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, loading, error] = useAuthState(auth);
@@ -86,7 +45,7 @@ export const NavBar = () => {
       },
       {
         page: "/listings",
-        text: "Sales and Rentals",
+        text: "Properties",
         onClickFunc: () => navigate("/listings"),
         id: "listing-page",
       },
@@ -99,7 +58,7 @@ export const NavBar = () => {
       {
         page: "/",
         text: "Login/Register",
-        onClickFunc: () => {},
+        onClickFunc: () => navigate("/login"),
         id: "login-modal"
       },
     ];
@@ -123,14 +82,17 @@ export const NavBar = () => {
         </React.Fragment>
       );
     }
+  React.useEffect(() => {
+    LoginCheck();
   
+  },[])
   return (
-    <MainNavBar className="MainNavBar">
-      <LeftSection>
+    <div className="navigation-bar">
+      <div className="navigation-bar-left">
         <NavBarItem href="/" onClick={()=>navigate('/')}>MNC Development 3.20</NavBarItem>
         <FaHome size={25} padding="2"/>
-      </LeftSection>
-      <RightSection className="RightNavbar">
+      </div>
+      <div className="navigation-bar-right">
         {
           pages.map((page, idx) => (
             <NavBarItem id={page.id} key={idx} onClick={page.onClickFunc}>
@@ -138,8 +100,8 @@ export const NavBar = () => {
             </NavBarItem>
             ))}
         
-      </RightSection>
-    </MainNavBar>
+      </div>
+    </div>
   );
 };
 

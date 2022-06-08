@@ -1,5 +1,5 @@
 import {
-  addDoc, collection, setDoc, Timestamp
+  addDoc, collection, serverTimestamp, setDoc, Timestamp
 } from "firebase/firestore";
 import { ref } from "firebase/storage";
 import React from "react";
@@ -7,26 +7,14 @@ import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useDownloadURL } from "react-firebase-hooks/storage";
 import { useNavigate } from "react-router-dom";
 import { Button, ButtonToolbar, Container, FlexboxGrid, Form, Schema } from "rsuite";
-import { auth, db, storage } from "../../firebase";
+import { auth, db, storage,signUp } from "../../firebase";
 import { LoginDiv } from "../Login/LoginForm";
 
 
 const { StringType} = Schema.Types;
 
-function asyncCheckUsername(name) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      if (name === "abc") {
-        resolve(false);
-      } else {
-        resolve(true);
-      }
-    }, 500);
-  });
-}
 
 const model = Schema.Model({
-  name: StringType().isRequired("This field is required."),
   email: StringType()
     .isEmail("Please enter a valid email address.")
     .isRequired("This field is required."),
@@ -47,25 +35,24 @@ const model = Schema.Model({
 export const FullPageRegister = () => {
   
   const collRef = collection(db, "users");
-  const [createUserWithEmailAndPassword,user, loading, error] = useCreateUserWithEmailAndPassword(auth);
   const navigate = useNavigate();
   const formRef = React.useRef();
   const [formError, setFormError] = React.useState({});
   const [formValue, setFormValue] = React.useState({
-    name: "",
+   
     email: "",
     password: "",
     verifyPassword: "",
   });
   
   
-  const auditLogger = () => {
-    const action = "Created Account";
+  const auditLogger = async({action="Created Account"}) => {
+    const user = auth.currentUser;
     const userName = user.displayName;
     const uid = user.uid;
     const timestamp = Timestamp.now();
-    const docRef = collection("auditLogs").doc(uid);
-    setDoc(docRef, { action, userName,uid ,timestamp }).then(() => {
+    const docRef = collection("auditLogs").doc();
+    await setDoc(docRef, { action, userName,uid ,timestamp }).then(() => {
       console.log("Audit Log Created");
       console.log(JSON.stringify(docRef));
     });
@@ -80,22 +67,27 @@ export const FullPageRegister = () => {
       console.error(formError);
     } else {
       console.log(formValue);
-      const {  email, role= 'User' ,created_at = Timestamp.now(),uid} = formValue;
-      const user = {
-        email,
-        role,
-        uid,
-        created_at
-      };
-      createUserWithEmailAndPassword(auth, formValue.name, formValue.password).then((newUser) => {
-
-        user.uid =newUser.uid;
+      const {  email, password,verifyPassword} = formValue;
+   
+      signUp(formValue.email, formValue.password).then((userCredential) => {
+        const currentUser = userCredential.user;
+        
+           const user = {
+             email : currentUser.email,
+             role :'regular',
+             uid : currentUser.uid,
+             created_at : serverTimestamp(),
+        };
+        localStorage.setItem("user", JSON.stringify(user));
+        user.uid =currentUser.uid;
         addDoc(collRef, user).then((docRef) => {
           auditLogger(user);
           console.log(docRef);
-          sessionStorage.setItem("user", JSON.stringify(docRef));
+         
          });
-      },[user,loading,error]);
+      }, (error) => { 
+        console.log(error);
+      });
     }
   };
   const DownloadURL = () => {
@@ -125,12 +117,27 @@ export const FullPageRegister = () => {
   return (
     <React.Fragment>
       <div className="LoginForm">
-        <Container style={{display:'flex',flexDirection:'column'}}>
+        <Container
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           {DownloadURL()}
-          <img id="logo" alt="logo"></img>
         </Container>
-        <FlexboxGrid classPrefix="flexbox-grid-start">
-          <FlexboxGrid.Item colspan={12}>
+        <FlexboxGrid
+          classPrefix="login-flex"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
+          <FlexboxGrid.Item colspan={24} style={{alignItems:'stretch'}}>
             <Form
               ref={formRef}
               onChange={setFormValue}
@@ -142,9 +149,10 @@ export const FullPageRegister = () => {
               <TextFieldLogin
                 name="email"
                 label="Email"
-                value={formValue}
+                placeholder="Enter your email"
                 style={{
-                  width: " 100%",
+                  fontWeight: "bold",
+                  width: " 400px",
                   padding: "12px 20px",
                   margin: "8px 0",
                   fontSize: "16px",
@@ -153,15 +161,17 @@ export const FullPageRegister = () => {
                   color: "white",
                   backgroundColor: "rgba(0, 0, 0, 0.2)",
                   outline: "none",
+                  justifyContent: "center",
                 }}
               />
-
+                
               <TextFieldLogin
                 name="password"
                 label="Password"
                 type="password"
                 autoComplete="off"
                 style={{
+                  fontWeight: "bold",
                   width: " 100%",
                   padding: "12px 20px",
                   margin: "8px 0",
@@ -191,26 +201,39 @@ export const FullPageRegister = () => {
                   outline: "none",
                 }}
               />
-              <ButtonToolbar>
+              <Container style={{ display: "flex" }}>
                 <Button
                   onClick={HandleSubmit}
                   style={{
-                    color: "gray",
+                    color: "white",
+                    padding: "30px",
+                    width: "50%",
+
+                    border: "2px solid #ccc",
+                    cursor: "pointer",
+                    backgroundColor: "#686868",
+                    float: "left",
+                  }}
+                >
+                  Register
+                </Button>
+
+                <Button
+                  onClick={() => navigate("/register")}
+                  style={{
+                    color: "white",
                     padding: "14px 20px",
                     width: "50%",
-                    margin: "8px 0",
+
                     border: "none",
                     cursor: "pointer",
                     backgroundColor: "#686868",
+                    float: "right",
                   }}
                 >
-                  Submit
-                </Button>
-
-                <Button onClick={() => navigate("/register")}>
                   Forgot Password?
                 </Button>
-              </ButtonToolbar>
+              </Container>
             </Form>
           </FlexboxGrid.Item>
           <FlexboxGrid.Item colspan={12}></FlexboxGrid.Item>

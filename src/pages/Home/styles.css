@@ -25,6 +25,31 @@ button#login-page {
  a:hover{
      opacity:0.8;
  }
- div#rs-form-control .rs-form-control-wrapper{
-     width:50%;
+
+ div#rs-btn-toolbar{
+   display:flex;
+   width:auto;
+
  }
+ .footer-bottom{
+    font-size: 14px;
+    align-items: center;
+    display:flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    text-justify:auto;
+    justify-content: center;
+ }
+
+ .footer-bottom ::before{
+       
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    height: 4px;
+    width: 50px;
+    border-radius: 2px;
+    background-color: #818d86;
+ }
+ 

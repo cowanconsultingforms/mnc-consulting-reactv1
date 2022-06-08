@@ -17,8 +17,9 @@ export const GetImage =() => {
     });
 };
   
-export const DownloadURL = ({reference}) => {
-  const [value, loading, error] = useDownloadURL({reference});
+export const DownloadURL = ({ reference }) => {
+  const { reference } = imageURL;
+  const [value, loading, error] = useDownloadURL(storage,imageURL.reference);
 
   return (
     <div>

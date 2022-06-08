@@ -5,8 +5,11 @@ import { db } from "../../firebase";
 import { Form,Container,Button,Schema,FlexboxGrid, ButtonToolbar } from "rsuite";
 import './styles.css';
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
+import TextField from "../../components/Custom/TextField";
+import { async } from "@firebase/util";
 
-
+//This Component is used to search for a user by email
+// It uses a custom text field to send the form ref to react on submission
 
 const { StringType} = Schema.Types;
 const model = Schema.Model({
@@ -28,13 +31,13 @@ const Search = () => {
   const [formError, setFormError] = React.useState({});
   const [formValue, setFormValue] = React.useState({
     email: "",});
-  const HandleSubmit = () => {
+  const HandleSubmit = async() => {
     if (!formRef.current.check()) {
       return;
     }
     ;
     const q = query(collection(db, "cities"), where("capital", "==", true));
-    const docRef =doc(db, "users", "email", formValue.email).then((snap) => {
+    getDoc(db, "users", "email", formValue.email).then((snap) => {
       if (snap.exists) {
         console.log(snap.data());
         return (
@@ -57,7 +60,7 @@ const Search = () => {
 
 
   return (
-    <React.Fragment>
+    <Container>
       <h4>Look Up User</h4>
 
       <Form
@@ -67,13 +70,14 @@ const Search = () => {
         value={formValue}
         model={model}
         className="search-form"
+        checkTrigger={'change'}
+        onSubmit={HandleSubmit}
       >
         <TextFieldSearch
           name="email"
           label="User Email"
-          accepter={TextFieldSearch}
           ref={formRef}
-          onChange={setFormValue}
+          accepter={StringType()}
           placeholder="Search User By Email"
           className="user-input"
           style={{              
@@ -88,18 +92,18 @@ const Search = () => {
                   outline: "none",
                 }}
         />
-        <ButtonToolbar>
+
           <Button
-            type="submit"
-            onClick={HandleSubmit}
             className="search-button"
             value="Search"
+            type='submit'
           >
             Search
           </Button>
-        </ButtonToolbar>
+      
       </Form>
-    </React.Fragment>
+      {formValue}
+    </Container>
   );
 }
 

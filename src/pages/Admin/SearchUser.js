@@ -6,7 +6,6 @@ import { Button, Form, Loader, Schema, Container, Input, FlexboxGrid,ButtonToolb
 import styled from 'styled-components';
 import { auth, db } from '../../firebase';
 import { AccountInput } from '../../components/Custom/AccountStyles';
-import { useIsMounted } from 'rsuite/esm/utils';
 
 const SearchUserBox = styled.div`
   position: relative;
@@ -89,7 +88,7 @@ export const SearchUser = () => {
 
     
   return (
-    <AccountPageContainer>
+    <Container className="search-user-container">
       <SearchHeader>Search User</SearchHeader>
       <FlexboxGrid>
         <FlexboxGrid.Item colspan={18} style={{}}>
@@ -117,7 +116,7 @@ export const SearchUser = () => {
           </Form>
         </FlexboxGrid.Item>
       </FlexboxGrid>
-    </AccountPageContainer>
+    </Container>
   );
   }
 

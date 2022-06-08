@@ -5,6 +5,7 @@
   text-decoration:underline;
   -webkit-text-decoration: underline;
   align-items:center;
+  font-size:29px;
     
 }
 div#admin-flex-box  {
@@ -13,6 +14,13 @@ div#admin-flex-box  {
   align-items: center;
   justify-content: center;
   width:100%;
+}
+.add-listing{
+background-color: #72716d;
+font-size:20px;
+}
+.listing-form{
+  font-size: 20px;
 }
 .admin-container {
     display:flex;
@@ -26,6 +34,7 @@ div#admin-flex-box  {
   -webkit-text-decoration: underline;
   height: 100%;
   background-color: white;
+  margin-top:100px;
   
   
 }
@@ -33,7 +42,7 @@ div#admin-flex-box  {
   position: relative;
   text-align: center;
   background-color: #eeeeee;
-  color: rgb(128, 128, 128);
+  color: rgb(22, 22, 22);
   font-size: 20px;
   width: 80%;
   border: 3px solid rgb(197, 197, 197);
@@ -49,10 +58,28 @@ div#admin-flex-box  {
     cursor: pointer;
     border-radius: 5px;
     background-color: black;
+    width:80%;
+    justify-content: center;
+    align-items: center;
+    margin-left:10%;
+    margin-right:10%;
+    text-decoration: none;
+    font-weight: bold;
 }
 .search-button :hover{
-    opacity: 0.8;
+    opacity: 0.6;
 }
 .rs-form-group{
-  align-items: left;
+  align-items: center;
+}
+.search-user-container{
+    margin: auto;
+  padding-top: 10%;
+  display: flex;
+  width: 75%;
+  height: 100%;
+
+}
+.header-row{
+ 
 }

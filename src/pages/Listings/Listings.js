@@ -2,47 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import { db, auth, app } from '../../firebase';
 import { query, getDocs, where, collection, serverTimestamp } from 'firebase/firestore';
-import { useCollection } from 'react-firebase-hooks/firestore';
-import { Container, FlexboxGrid, Header, Content, Footer,Carousel,Form,Panel,Uploader,Button,ButtonToolbar } from 'rsuite';
-import {Docs} from '../../components/Firestore/Docs';
+import { useCollection ,useCollectionData} from 'react-firebase-hooks/firestore';
+import { Container, FlexboxGrid,Carousel,Form,Panel,Uploader,Button,ButtonToolbar } from 'rsuite';
 
 export const ListingPage = () => { 
-    
+    const [value,loading,snapshot,error] = useCollectionData(db,collection('listings'));
     return(
-  <div className="login-page">
+ 
     <Container classPrefix="login-page-container">
-      <Content>
-        <FlexboxGrid justify="center" align="center">
-          <FlexboxGrid.Item colspan={12}>
-            <Panel header={<h3>Login</h3>} bordered>
-              <Form fluid>
-                <Form.Group>
-                  <Form.ControlLabel>
-                    Username or email address
-                  </Form.ControlLabel>
-                  <Form.Control name="name" />
-                </Form.Group>
-                <Form.Group>
-                  <Form.ControlLabel>Password</Form.ControlLabel>
-                  <Form.Control
-                    name="password"
-                    type="password"
-                    autoComplete="off"
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <ButtonToolbar>
-                    <Button appearance="primary">Sign in</Button>
-                    <Button appearance="link">Forgot password?</Button>
-                  </ButtonToolbar>
-                </Form.Group>
-              </Form>
-            </Panel>
-          </FlexboxGrid.Item>
-        </FlexboxGrid>
-      </Content>
+
     </Container>
-  </div>
     )
 }
 const fileList = [

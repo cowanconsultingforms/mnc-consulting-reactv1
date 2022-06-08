@@ -19,8 +19,8 @@ import { Container } from "rsuite";
 import  AccountPageDeleteProfileBox  from './DeleteAccount';
 
 const AccountPage = () => {
-  const currentUser = useAuthState(auth);
-  const [admin, setAdmin] = useState(true);
+  const { currentUser } = useAuthState(auth);
+ 
   
 
 
@@ -38,5 +38,4 @@ const AccountPage = () => {
 
 };
 
-const APSignOutContainer = styled.div``;
 export default AccountPage;

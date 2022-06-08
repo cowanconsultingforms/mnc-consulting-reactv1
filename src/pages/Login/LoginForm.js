@@ -1,5 +1,5 @@
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { addDoc, query, Timestamp, whereEqualTo } from 'firebase/firestore';
+import { setDoc, query, Timestamp, whereEqualTo } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import React, { useEffect, useState } from 'react';
 import { useAuthState, useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
@@ -103,15 +103,15 @@ export const LoginForm = () => {
         style={{
           justifyContent: "center",
           alignItems: "center",
-          width:'50%',
+          width: "50%",
         }}
       >
         <TextFieldLogin
           name="email"
           label="Email"
+          type="email"
           ref={formRef}
           style={{
-         
             padding: "12px 20px",
             margin: "8px 0",
             fontSize: "16px",
@@ -132,7 +132,6 @@ export const LoginForm = () => {
           ref={formRef}
           value={formValue}
           style={{
-       
             padding: "12px 20px",
             margin: "8px 0",
             fontSize: "16px",
@@ -142,27 +141,44 @@ export const LoginForm = () => {
             backgroundColor: "rgba(0, 0, 0, 0.2)",
             outline: "none",
             textDecoration: "bold",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         />
         <ButtonToolbar alignItems="center" justifyContent="center">
           <LoginButtonRef
+            className="login-button"
             onClick={HandleSubmit}
             type="submit"
             style={{
               color: "white",
               padding: "14px 20px",
-            
+
               margin: "8px 0",
               border: "none",
               cursor: "pointer",
               backgroundColor: "#686868",
-              
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             Sign in
           </LoginButtonRef>
           <Divider />
-          <LoginButtonRef onClick={handleNavigate} ref={formRef}>
+          <LoginButtonRef
+            className="register-button"
+            onClick={handleNavigate}
+            ref={formRef}
+            style={{
+              color: "white",
+              padding: "14px 20px",
+              width:'50%',
+              margin: "8px 0",
+              border: "none",
+              cursor: "pointer",
+              backgroundColor: "#686868",
+            }}
+          >
             Register Here
           </LoginButtonRef>
         </ButtonToolbar>
@@ -198,22 +214,16 @@ export const FullPageLogin = () => {
       </React.Fragment>
     )
   }
-  useEffect = (() => {
- 
-    if (!loading && user && !error) {
-      navigate("/");
-    }
-  },[user,loading,error])
   
   return (
       <LoginDiv>
       {<DownloadURL />}
         <img id="logo"></img>
         <FlexboxGrid classPrefix="flexbox-grid-start">
-          <FlexboxGrid.Item colspan={12}>
+          <FlexboxGrid.Item colspan={6}>
            {RenderLogin}
           </FlexboxGrid.Item>
-          <FlexboxGrid.Item colspan={12}></FlexboxGrid.Item>
+         
       </FlexboxGrid>
       </LoginDiv>
   );

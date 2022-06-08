@@ -2,24 +2,21 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import AdminFlex from "../../components/Custom/Containers";
 import  Search  from './Search';
-import { FlexboxGrid ,Container,Header,} from 'rsuite';
+import { FlexboxGrid ,Container,Header,Row,Form,Schema} from 'rsuite';
 import './styles.css';
+import AddListing from './AddListing';
 
-const Heading = styled.h1`
-  font-family: Garamond;
-  color: rgb(128, 128, 128);
-  padding-top: 10%;
-  text-decoration:underline;
-  align-items:center;
-`;
+
 
 const AdminPage = () => {
 
   return (
     <Container fluid="true" className="admin-container">
-      <Heading> Administrator Page</Heading>
+      <Row className="header-row">
+        <h1> Administrator Page</h1>
+      </Row>
       <Container className="admin-search-container">
-        <Search />
+        <AddListing />
       </Container>
     </Container>
   );

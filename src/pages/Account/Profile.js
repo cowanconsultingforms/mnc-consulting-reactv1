@@ -86,12 +86,7 @@ const LoadProfile = () => {
     }
   };
   
-    useEffect = (() => {
 
-      return () => {
-        
-      };
-    }, [])
 
   
 
