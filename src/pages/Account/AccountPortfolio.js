@@ -1,11 +1,13 @@
-import { AccountPagePortfolio, StyledProfileLabel, StyledInput,AccGridInfo } from  ".components/AccountStyles";
+import { AccountPagePortfolio, StyledProfileLabel, StyledInput,AccGridInfo } from  "../../components/AccountStyles";
 import { auth, db } from "../../firebase";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import React, { useState, forwardRef, useRef } from "react";
+import { Form } from "rsuite";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export const AccountPagePortfolioBox = () => {
     const { register, formState: { errors },handleSubmit } = useForm();
-
+  const [user, loading, error] = useAuthState(auth);
 
   const handlePortfolioChange = (e) => {
     let userName = e.target.value;
@@ -13,7 +15,21 @@ export const AccountPagePortfolioBox = () => {
   };
   const getCurrentUser = () => {
     let user = auth.currentUser;
+    return (
+      <div>
+      <input></input>
+      </div>
+    )
   };
+  useEffect(() => {
+    if (user) {
+      setFormValue({
+        uid: user.uid,
+
+      })
+    }
+  })
+  
   return (
     <AccountPagePortfolio>
       <AccGridInfo>

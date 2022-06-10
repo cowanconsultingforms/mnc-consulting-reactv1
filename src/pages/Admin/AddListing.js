@@ -2,9 +2,9 @@ import { getDownloadURL,  ref } from 'firebase/storage';
 import React, { useState,useRef } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useUploadFile } from 'react-firebase-hooks/storage';
-import { db } from "../../firebase";
+import { db,auth } from "../../firebase";
 import { Timestamp,addDoc} from 'firebase/firestore';
-import { Container, FlexboxGrid, Uploader, DOMHelper, Schema, Checkbox, Row,Form,Button,CheckPicker } from 'rsuite';
+import { Container, FlexboxGrid, Uploader, DOMHelper, Schema, Checkbox, Row,Form,Button,RadioGroup,Radio, Input} from 'rsuite';
 import { StringType } from 'schema-typed';
 import {
   StorageError,
@@ -15,6 +15,7 @@ import {
   UploadTaskSnapshot,
 } from "firebase/storage";
 import { useMemo } from "react";
+import {addAuditLog} from '../../hooks/addAuditLog';
 
 const model = Schema.Model({
   type: StringType().isRequired("This field is required."),
@@ -49,13 +50,16 @@ const TextArea = React.forwardRef((props, ref) => {
     </Form.Group>
   );
 });
-const CheckBox = React.forwardRef((props, ref) => {
+const RadioPicker = React.forwardRef((props, ref) => {
   const { name, label, accepter, ...rest } = props;
   return (
-    <Form.Group controlId={`${name}-4`} ref={ref}>
-      <Form.ControlLabel>{label} </Form.ControlLabel>
-      <Form.Control name={name} accepter={accepter} {...rest} />
-    </Form.Group>
+  
+      <RadioGroup name={name} inline appearance="picker" defaultValue={'forSale'} ref={ref}>
+        <Radio value={this.state.type}>For Sale</Radio>
+        <Radio value={this.state.type}>Rental</Radio>
+        <Radio value={this.state.type}>Sold</Radio>
+      </RadioGroup>
+
   );
 });
 export const AddListing = () => {
@@ -76,6 +80,24 @@ const types = [
     description: "",
   })
   const [formError, setFormError] = useState({});
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    const { isValid, errors } = model.validate(formValue);
+    if (!isValid) {
+      setFormError(errors);
+      console.log(JSON.stringify(formError));
+    }
+    else {
+      setFormError({});
+      addDoc(db, "listings", formValue)
+        .then(
+          addAuditLog({
+            user: auth.currentUser, action: `Added ${formValue.type} listing`
+          }));
+    }
+
+  }
   return (
     <Container
       className="add-listing"
@@ -120,6 +142,7 @@ const types = [
             onCheck={setFormError}
             formValue={formValue}
             model={model}
+            onSubmit={handleSubmit}
           >
             <Row
               style={{
@@ -132,42 +155,27 @@ const types = [
                 justifyContent: "center",
               }}
             >
-              <Checkbox
+              <RadioPicker
                 name="type"
                 label="For Sale"
-                accepter={Checkbox}
-                value={formValue.type}
-                onChange={(value) => {
-                  console.log(value);
-                  setFormValue({ ...formValue, type: value });
+                accepter={RadioGroup}
+                value={type}
+                onChange={() => {
+                  setType("forSale");
+                  setFormValue({ ...formValue, type: type });
                 }}
-                style={{ fontSize: "20px" }}
-              />
-              <Checkbox
-                name="type"
-                label="Type"
-                accepter={Checkbox}
-                value={formValue.type}
-                onChange={(value) => {
-                  console.log(value);
-                  setFormValue({ ...formValue, type: value });
-                }}
-              />
-              <Checkbox
-                name="type"
-                label="Type"
-                accepter={Checkbox}
-                value={formValue.type}
-                onChange={(value) => {
-                  console.log(value);
-                  setFormValue({ ...formValue, type: value });
+                style={{
+                  fontSize: "20px",
+                  padding: "8px 2px 8px 10px",
+                  display: "inline-block",
+                  verticalAlign: "middle",
                 }}
               />
             </Row>
             <TextField
               name="street"
               label="Street"
-              accepter={model.street}
+              accepter={Input}
               value={formValue.street}
               onChange={(value) => {
                 setFormValue({ ...formValue, street: value });
@@ -176,7 +184,7 @@ const types = [
             <TextField
               name="city"
               label="City"
-              accepter={model.city}
+              accepter={Input}
               value={formValue.city}
               onChange={(value) => {
                 setFormValue({ ...formValue, city: value });
@@ -185,7 +193,7 @@ const types = [
             <TextField
               name="state"
               label="State"
-              accepter={model.state}
+              accepter={Input}
               value={formValue.state}
               onChange={(value) => {
                 setFormValue({ ...formValue, state: value });
@@ -194,7 +202,7 @@ const types = [
             <TextField
               name="zip"
               label="Zip"
-              accepter={model.zip}
+              accepter={Input}
               value={formValue.zip}
               onChange={(value) => {
                 setFormValue({ ...formValue, zip: value });
@@ -203,7 +211,7 @@ const types = [
             <TextField
               name="price"
               label="Price"
-              accepter={model.price}
+              accepter={Input}
               value={formValue.price}
               onChange={(value) => {
                 setFormValue({ ...formValue, price: value });
@@ -212,7 +220,7 @@ const types = [
             <TextField
               name="bedrooms"
               label="Bedrooms"
-              accepter={model.bedrooms}
+              accepter={Input}
               value={formValue.bedrooms}
               onChange={(value) => {
                 setFormValue({ ...formValue, bedrooms: value });
@@ -221,16 +229,19 @@ const types = [
             <TextField
               name="bathrooms"
               label="Bathrooms"
-              accepter={model.bathrooms}
+              accepter={Input}
               value={formValue.bathrooms}
               onChange={(value) => {
                 setFormValue({ ...formValue, bathrooms: value });
               }}
             />
+            <Uploader>
+            
+            </Uploader>
             <TextArea
               name="description"
               label="Description"
-              accepter={model.description}
+              accepter={Input}
               value={formValue.description}
               width="100%"
               onChange={(value) => {
@@ -245,6 +256,7 @@ const types = [
                   const listing = {
                     ...formValue,
                     createdAt: new Date(),
+                    createdBy: auth.credential,
                   };
                   addDoc(db.collection("listings"), listing);
                 }

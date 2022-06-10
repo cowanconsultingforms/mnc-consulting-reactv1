@@ -13,11 +13,12 @@ import './styles.css';
 
 
 
-
+//this is the home page
 
 export const Landing = () => {
   //react hooks, navigate to a new page, 
   const navigate = useNavigate();
+  //hooks to manage state of the searchbar
   const [searchQuery, setSearchQuery] = useState('');
   const [searchParams,setSearchParams] = useState('');
  

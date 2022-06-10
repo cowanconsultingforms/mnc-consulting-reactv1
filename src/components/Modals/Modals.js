@@ -29,7 +29,7 @@ export const ModalDiv = styled.div`
 `
 */
 
-
+//experimental code to put login container into a popup rather than a full page
 const ModalContainer = ({ isOpen, onChange, className, }) => {
   const handleOnChange = (e) => {
     onChange(e=>e.target.value);

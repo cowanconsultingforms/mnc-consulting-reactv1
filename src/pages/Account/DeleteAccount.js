@@ -19,15 +19,18 @@ const AccountPageDeleteProfile = styled.div`
 `;
 
 const AccountPageDeleteProfileBox = () => {
+  //custom hook from library to check user auth status
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
-
-  const deleteUser = () => {
+  //function to delete the user's account
+  const deleteUser = async(e) => {
+    e.preventDefault();
     const user = auth.currentUser;
     let docRef = db.collection("users").doc(db, user);
     deleteDoc(docRef).then(() => userSignOut());
     navigate("/");
   };
+  //useEffect hook that will navigate back to the home page if on the account page and not logged in
   useEffect(() => {
     if (user === null) {
       navigate("/");

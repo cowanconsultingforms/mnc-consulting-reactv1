@@ -9,7 +9,7 @@ export const ListingPage = () => {
     const [value,loading,snapshot,error] = useCollectionData(db,collection('listings'));
     return(
  
-    <Container classPrefix="login-page-container">
+    <Container className="listing-page-container">
 
     </Container>
     )

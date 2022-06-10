@@ -19,17 +19,19 @@ const NavBarItem = styled.button`
 `;
 
 export const NavBar = () => {
-  //logic for the navbar modal
+  //logic for the navbar modal opener to login 
   const [open,setOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  //custom hook to read the user's auth state
   const [user, loading, error] = useAuthState(auth);
   const LoginCheck = () => {
     if (user) {
       setLoggedIn(true);
     }
   }
+  //standard react hook to navigate to a new page
   const navigate = useNavigate();
-
+  //objects for the navbar and their props
     const pages = [
       {
         page: "/contact",
@@ -61,7 +63,8 @@ export const NavBar = () => {
         onClickFunc: () => navigate("/login"),
         id: "login-modal"
       },
-    ];
+  ];
+  //function to render nav bar items (coded into the navbar object)
   const renderNavBarItems = () => { 
       
       return (
@@ -81,11 +84,14 @@ export const NavBar = () => {
           ))}
         </React.Fragment>
       );
-    }
+  }
+  // on loading, performs a check to see if the user is logged in
   React.useEffect(() => {
     LoginCheck();
   
-  },[])
+  }, [user])
+  
+  //renders the navbar, divided into 2 sections, the left side and the right side
   return (
     <div className="navigation-bar">
       <div className="navigation-bar-left">

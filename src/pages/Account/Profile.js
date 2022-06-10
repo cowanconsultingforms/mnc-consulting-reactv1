@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React,{ useState ,useEffect} from 'react'
 import styled from 'styled-components';
 import { db, userSignOut, auth } from "../../firebase";
 import { doc, getDoc, deleteDoc ,query,collection,where} from "firebase/firestore";
@@ -6,8 +6,7 @@ import { ProfileButton } from "../../components/Custom/Buttons";
 import { useAuthState, } from 'react-firebase-hooks/auth';
 import { useDocumentDataOnce ,useCollectionData} from 'react-firebase-hooks/firestore';
 import { Form,Schema } from 'rsuite';
-import React ,{useEffect} from 'react';
-
+//styled components, can be replaced in css file
 const AccountPageProfile = styled.div`
   height: 100%;
   display:flex;
@@ -57,14 +56,16 @@ const TextFieldProfile = React.forwardRef((props, ref) => {
     </Form.Group>
   );
 });
+//model for the rsuite form based on user in firebase
 const model = Schema.Model({
   uid: Schema.Types.StringType(),
   role: Schema.Types.StringType(),
   email: Schema.Types.StringType().isEmail("Incorrect Email Format"),
-  isAdmin:Schema.Types.BooleanType(),
+  isAdmin: Schema.Types.BooleanType(),
 
-})
-const LoadProfile = () => {
+});
+//portion of Account page that loads current user's profile
+export const LoadProfile = () => {
  
   const formRef = React.useRef();
   const [formError, setFormError] = React.useState({});
@@ -87,9 +88,15 @@ const LoadProfile = () => {
   };
   
 
-
+  useEffect(() => {
+    if (user) {
+      setFormValue({
+        uid: user.uid,
+      })
+    }
+  })
   
-
+    //returns the heading of the profile page box using Rsuite Form Validation to validate the input
   return (
     <AccountPageProfile>
       <h4>Profile</h4>

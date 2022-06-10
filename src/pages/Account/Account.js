@@ -18,7 +18,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { Container } from "rsuite";
 import  AccountPageDeleteProfileBox  from './DeleteAccount';
 
-const AccountPage = () => {
+export const AccountPage = () => {
+  //hook to get current user
   const { currentUser } = useAuthState(auth);
  
   

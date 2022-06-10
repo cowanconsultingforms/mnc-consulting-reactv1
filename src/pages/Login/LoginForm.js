@@ -33,6 +33,9 @@ const LoginButtonRef = React.forwardRef((props, ref) => {
   return <LoginButton ref={ref} {...props} />;
 
 });
+
+
+//Login Form used by code
 export const LoginForm = () => {
    const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
@@ -44,7 +47,8 @@ export const LoginForm = () => {
      password: ""
   
    });
-    const HandleSubmit = () => {
+  const HandleSubmit = async(e) => {
+    e.preventDefault();
       if (!formRef.current.check()) {
         console.error("Form Error");
       }
@@ -54,7 +58,7 @@ export const LoginForm = () => {
       signInWithEmailAndPassword(formValue.email, formValue.password).then(
         (res) => {
           const { uid = res.uid, role='regular', isAdmin=false, userName =  res.data().displayName()} = user;
-          console.log(user);
+          console.log(JSON.stringify(user));
           const loggedInUser = sessionStorage.setItem('user', JSON.stringify(res));
    
           localStorage.setItem('user', JSON.stringify(user));
@@ -91,7 +95,7 @@ export const LoginForm = () => {
         alert = error.message;
         alert.call();
       }
-    }, [user, loading, error, navigate]);
+    }, [user, loading, error]);
   return (
     <div className="LoginForm">
       <Form
@@ -186,6 +190,8 @@ export const LoginForm = () => {
     </div>
   );
 }
+
+//a different version of the same form, not configured
 export const FullPageLogin = () => {
   
   const [user, loading, error] = useAuthState(auth);
@@ -216,7 +222,7 @@ export const FullPageLogin = () => {
   }
   
   return (
-      <LoginDiv>
+      <div className="login-div">
       {<DownloadURL />}
         <img id="logo"></img>
         <FlexboxGrid classPrefix="flexbox-grid-start">
@@ -225,31 +231,23 @@ export const FullPageLogin = () => {
           </FlexboxGrid.Item>
          
       </FlexboxGrid>
-      </LoginDiv>
+      </div>
   );
 }
+
+//model for Form Schema - check rsuite documentation for more info
 const { StringType} = Schema.Types;
 
 const model = Schema.Model({
-  name: StringType().isRequired("This field is required."),
   email: StringType()
     .isEmail("Please enter a valid email address.")
     .isRequired("This field is required.")
   ,
   password: StringType().isRequired("This field is required."),
-  verifyPassword: StringType()
-    .addRule((value, data) => {
-      console.log(data);
-
-      if (value !== data.password) {
-        return false;
-      }
-
-      return true;
-    }, "The two passwords do not match")
-    .isRequired("This field is required."),
 });
 
+
+//custom ref forwarding object for form logic
 const TextFieldLogin = React.forwardRef((props, ref) => {
   const { name, label, accepter, ...rest } = props;
   return (

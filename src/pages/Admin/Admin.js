@@ -5,11 +5,13 @@ import  Search  from './Search';
 import { FlexboxGrid ,Container,Header,Row,Form,Schema} from 'rsuite';
 import './styles.css';
 import AddListing from './AddListing';
+import { auth, db } from '../../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 
 
 const AdminPage = () => {
-
+  const [user,loading,error] = useAuthState(auth)
   return (
     <Container fluid="true" className="admin-container">
       <Row className="header-row">

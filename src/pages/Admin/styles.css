@@ -73,13 +73,22 @@ font-size:20px;
   align-items: center;
 }
 .search-user-container{
-    margin: auto;
-  padding-top: 10%;
-  display: flex;
-  width: 75%;
-  height: 100%;
+  display:flex;
+  position: relative;
+  text-align: center;
+  background-color: #eeeeee;
+  color: rgb(128, 128, 128);
+  font-size: 20px;
+  width: 80%;
+  border: 1px solid rgb(197, 197, 197);
 
 }
 .header-row{
- 
+ display:flex;
+}
+.audit-log-frame{
+  display:block;
+  background-color: black;
+  z-index: 2;
+  font-size: medium;
 }

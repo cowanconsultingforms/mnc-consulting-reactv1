@@ -1,7 +1,7 @@
 import React,{forwardRef} from "react";
 import { useNavigate } from "react-router-dom";
-import { doc, getDoc, onSnapshot,collection, DocumentSnapshot ,query,where} from "firebase/firestore";
-import { db } from "../../firebase";
+import { doc, getDoc, onSnapshot,collection, DocumentSnapshot ,query,where, serverTimestamp,setDoc} from "firebase/firestore";
+import { db ,auth} from "../../firebase";
 import { Form,Container,Button,Schema,FlexboxGrid, ButtonToolbar } from "rsuite";
 import './styles.css';
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
@@ -15,6 +15,7 @@ const { StringType} = Schema.Types;
 const model = Schema.Model({
   name: StringType().isRequired(),
 });
+
 const TextFieldSearch= forwardRef((props, ref) => {
   const { name, label, accepter, ...rest } = props;
   return (
@@ -24,19 +25,33 @@ const TextFieldSearch= forwardRef((props, ref) => {
     </Form.Group>
   );
 });
+
+//code to render search user from the admin page
 const Search = () => {
   const collectionRef = collection(db, "users");
   const navigate = useNavigate();
   const formRef = React.useRef();
   const [formError, setFormError] = React.useState({});
   const [formValue, setFormValue] = React.useState({
-    email: "",});
+    email: "",
+  });
+  const auditLogger = async ({ action = "Modified User Account" }) => {
+    const user = auth.currentUser;
+    const userName = user.displayName;
+    const uid = user.uid;
+    const timestamp = serverTimestamp();
+    const docRef = collection("auditLogs").doc();
+    await setDoc(docRef, { action, userName, uid, timestamp }).then(() => {
+      console.log("Audit Log Created");
+      console.log(JSON.stringify(docRef));
+    });
+  };
   const HandleSubmit = async() => {
     if (!formRef.current.check()) {
       return;
     }
-    ;
-    const q = query(collection(db, "cities"), where("capital", "==", true));
+    
+    const q = query(collection(db, "users"), where("email", "==", formValue.email));
     getDoc(db, "users", "email", formValue.email).then((snap) => {
       if (snap.exists) {
         console.log(snap.data());
