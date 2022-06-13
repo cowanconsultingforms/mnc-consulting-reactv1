@@ -1,10 +1,8 @@
 import React from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import { NavBar } from './components/Navbar';
-import { PrivateRoute } from './components/PrivateRoute';
-import { auth } from './firebase';
+import { auth,db } from './firebase';
 import AccountPage from './pages/Account/Account';
 import ProfilePage from './pages/Account/Profile';
 import AdminPage from './pages/Admin/Admin';
@@ -17,19 +15,24 @@ import { useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container } from 'rsuite';
 import './App.css';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { query,where } from 'firebase/firestore';
 
 export const App = () => {
 
  // const queryRef = query(collRef, query => query.where('Role', '==', 'Administrator'));
-  const [user,setUser] = useState(null);
+  //hook to check for current user
+  const user = auth.currentUser;
   useEffect(() => {
-    auth.onAuthStateChanged(user => {
+   
       if (user) {
-        document.getElementById('login-modal').style.display = 'none';
+    
+          document.getElementById('login-modal').style.display = 'none';
+        
         console.log(user.email);
       }
     })
-  },[user])
+  
   
 
   return (

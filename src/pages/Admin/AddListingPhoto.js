@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useUploadFile } from "react-firebase-hooks/storage";
-import { ref, getDownloadURL, getStorage } from "firebase/storage";
+import { ref, getDownloadURL } from "firebase/storage";
+import { storage } from "../../firebase";
 const UploadFile = () => {
   const [uploadFile, uploading, snapshot, error] = useUploadFile();
-  const storageRef = ref(storage, "file.jpg");
+  const [fileRef, setFileRef] = useState('');
+  const storageRef = ref(storage, selectedFile.name);
   const [selectedFile, setSelectedFile] = useState < File > ref;
 
   const upload = async () => {
@@ -35,7 +37,7 @@ const UploadFile = () => {
             <Uploader
               listType="picture-text"
               defaultFileList={fileList}
-              action="//jsonplaceholder.typicode.com/posts/"
+              action={upload}
               renderFileInfo={(file, fileElement) => {
                 return (
                   <div>

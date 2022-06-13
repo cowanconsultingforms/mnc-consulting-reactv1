@@ -1,15 +1,16 @@
 import { ref } from 'firebase/storage';
 import React, { useState } from 'react';
 import { useDownloadURL } from 'react-firebase-hooks/storage';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import { Button, Container, Divider, FlexboxGrid, Loader } from 'rsuite';
+import { Button, Container, Divider, FlexboxGrid, Loader,Input, IconButton } from 'rsuite';
 import { ImageBox } from '../../components/Custom/Containers';
 import Searchbar from '../../components/Searchbar';
-import { storage,db } from '../../firebase';
+import { storage,db,auth } from '../../firebase';
 import { LandingFooter } from './Footer';
-import { collection } from 'firebase/firestore';
+import { collection, getDoc } from 'firebase/firestore';
 import './styles.css';
-
+import { FaSearch } from "react-icons/fa";
 
 
 
@@ -20,8 +21,8 @@ export const Landing = () => {
   const navigate = useNavigate();
   //hooks to manage state of the searchbar
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchParams,setSearchParams] = useState('');
- 
+  const [type,setType] = useState('');
+  const [user] = useAuthState(auth);
   const images = [
     {
       id: "1",
@@ -64,10 +65,18 @@ export const Landing = () => {
         [value, loading, error]
       );
   };
-  const handleSearch = () => { 
+  const handleSearch = async(type,searchQuery) => { 
 
-    const collRef = collection(db,'listings')
-    const query = collRef.where('address','==',searchQuery)
+    const collRef = collection(db, type);
+    const q = collRef.where(searchQuery, '==', 'zip');
+    await getDoc(q).then(async (doc) => {
+      if (doc.exists) {
+        console.log(doc.data());
+        navigate(`/${type}/${doc.data().id}`);
+      } else {
+        console.log("No such document!");
+      }
+    })
   }
   return (
     <Container
@@ -95,7 +104,7 @@ export const Landing = () => {
                 color: "white",
                 backgroundColor: "black",
               }}
-              onClick={()=>setSearchParams('forSale')}
+              onClick={()=>setType('forSale')}
             >
               Buy
             </Button>
@@ -116,7 +125,7 @@ export const Landing = () => {
                 borderRadius: "1px",
               }}
               type="submit"
-              onClick={() =>setSearchParams('forRent')}
+              onClick={() =>setType('forRent')}
             >
               Rent
             </Button>
@@ -135,19 +144,22 @@ export const Landing = () => {
                 borderRadius: "0px",
                 
               }}
-              onClick={()=>setSearchParams('sold')}
+              onClick={()=>setType('sold')}
             >
               Sold
             </Button>
           </FlexboxGrid.Item>
         </FlexboxGrid>
-        <Searchbar
+        <div className="search-input">
+        <Input className="home-search-bar"
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={setSearchQuery}
           placeholder="Enter an address, city, or zip code"
           type="search"
           onClick={handleSearch}
         />
+      <IconButton className="search-icon" icon={<FaSearch />} onClick={handleSearch} />
+      </div>
       </div>
       <div className="landing-bottom">
         <LandingFooter className="footer" />

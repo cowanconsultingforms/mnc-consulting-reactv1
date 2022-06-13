@@ -53,3 +53,20 @@ button#login-page {
     background-color: #818d86;
  }
  
+.home-search-bar{
+   
+  font-size: 17px;
+  float: left;
+  width: 80%;
+  border: none;
+  height: 55px;
+  background: white;
+  border-radius: 0;
+  border: black solid 1px;
+}
+.search-icon{
+  height:55px;  
+  background-color: black;
+  color:white;
+  width:55px;
+}

@@ -1,10 +1,11 @@
+import { getDoc } from 'firebase/firestore';
 import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaHome } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import { Divider,Modal } from 'rsuite';
 import styled from "styled-components";
-import { auth } from '../firebase';
+import { auth,db } from '../firebase';
 
 
 const NavBarItem = styled.button`
@@ -24,11 +25,20 @@ export const NavBar = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   //custom hook to read the user's auth state
   const [user, loading, error] = useAuthState(auth);
-  const LoginCheck = () => {
+  const [userData,setUserData] = useState({})
+  const LoginCheck = async () => {
+    
     if (user) {
       setLoggedIn(true);
+      await getDoc(db, 'users', user.uid).then(doc => {
+        setUserData(doc.data());
+        document.getElementById('admin-page').style.display = 'none';
+      })
     }
   }
+      
+    
+  
   //standard react hook to navigate to a new page
   const navigate = useNavigate();
   //objects for the navbar and their props
@@ -64,6 +74,9 @@ export const NavBar = () => {
         id: "login-modal"
       },
   ];
+  const adminPages = [{
+
+  }]
   //function to render nav bar items (coded into the navbar object)
   const renderNavBarItems = () => { 
       
@@ -89,7 +102,7 @@ export const NavBar = () => {
   React.useEffect(() => {
     LoginCheck();
   
-  }, [user])
+  }, [])
   
   //renders the navbar, divided into 2 sections, the left side and the right side
   return (

@@ -1,9 +1,9 @@
 import { getDownloadURL,  ref } from 'firebase/storage';
-import React, { useState,useRef } from "react";
+import React, { useState,useRef,forwardRef } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useUploadFile } from 'react-firebase-hooks/storage';
-import { db,auth } from "../../firebase";
-import { Timestamp,addDoc} from 'firebase/firestore';
+import { db,auth,storage } from "../../firebase";
+import { serverTimestamp,addDoc,collection,setDoc} from 'firebase/firestore';
 import { Container, FlexboxGrid, Uploader, DOMHelper, Schema, Checkbox, Row,Form,Button,RadioGroup,Radio, Input} from 'rsuite';
 import { StringType } from 'schema-typed';
 import {
@@ -31,7 +31,7 @@ const model = Schema.Model({
   description: StringType().isRequired("This field is required."),
 
 });
-const TextField = React.forwardRef((props, ref) => {
+const TextField = forwardRef((props, ref) => {
   const { name, label, accepter, ...rest } = props;
   return (
     <Form.Group controlId={`${name}-4`} ref={ref}>
@@ -41,7 +41,7 @@ const TextField = React.forwardRef((props, ref) => {
   );
 });
 
-const TextArea = React.forwardRef((props, ref) => {
+const TextAreaRef = forwardRef((props, ref) => {
   const { name, label, accepter, ...rest } = props;
   return (
     <Form.Group controlId={`${name}-4`} ref={ref}>
@@ -50,23 +50,29 @@ const TextArea = React.forwardRef((props, ref) => {
     </Form.Group>
   );
 });
-const RadioPicker = React.forwardRef((props, ref) => {
+const Textarea = forwardRef((props, ref) => (
+  <Input {...props} as="textarea" ref={ref} />
+));
+const RadioPicker = forwardRef((props, ref) => {
   const { name, label, accepter, ...rest } = props;
   return (
   
       <RadioGroup name={name} inline appearance="picker" defaultValue={'forSale'} ref={ref}>
-        <Radio value={this.state.type}>For Sale</Radio>
-        <Radio value={this.state.type}>Rental</Radio>
-        <Radio value={this.state.type}>Sold</Radio>
+      <Radio value={'forSale'}>For Sale</Radio>
+        <Radio value={'forRent'}>Rental</Radio>
+        <Radio value={'sold'}>Sold</Radio>
       </RadioGroup>
 
   );
 });
+
+
 export const AddListing = () => {
-const types = [
-  { id: 1, type: "Sale", id: 2, type: "Rent", id: 3, type: "Sold" },
-];
-  const [type,setType] = useState("");
+  const { fileList } = useState([]);
+  const types = [
+    { id: 1, type: "Sale", id: 2, type: "Rent", id: 3, type: "Sold" },
+  ];
+  const [type, setType] = useState("");
   const formRef = React.useRef();
   const [formValue, setFormValue] = useState({
     type: "",
@@ -78,10 +84,20 @@ const types = [
     bedrooms: "",
     bathrooms: "",
     description: "",
+    
   })
   const [formError, setFormError] = useState({});
+  const RenderFileInfo = (file, fileElement) => {
+fileList = [{fileElement:fileElement,file:file}];
+    return (
+        <div>
+          <span>File Name: {file.name}</span>
+          <p>File URL: {file.url}</p>
+        </div>
+      );
+    }
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { isValid, errors } = model.validate(formValue);
     if (!isValid) {
@@ -90,14 +106,45 @@ const types = [
     }
     else {
       setFormError({});
-      addDoc(db, "listings", formValue)
-        .then(
-          addAuditLog({
-            user: auth.currentUser, action: `Added ${formValue.type} listing`
-          }));
-    }
+      
 
+    
+      
+  // Register three observers:
+  // 1. 'state_changed' observer, called any time the state changes
+  // 2. Error observer, called on failure
+  // 3. Completion observer, called on successful completion
+      const auditLogger = async ({ action = "Added Listing" }) => {
+        const user = auth.currentUser;
+        const userName = user.displayName;
+        const uid = user.uid;
+        const timestamp = serverTimestamp();
+        const docRef = collection("auditLogs").doc();
+        await setDoc(docRef, { action, userName, uid, timestamp }).then(() => {
+          console.log("Audit Log Created");
+          console.log(JSON.stringify(docRef));
+        });
+      };
+
+        const listing = {
+          ...formValue,
+          createdAt: new Date(),
+          createdBy: auth.currentUser.email,
+        };
+        await addDoc(db, "listings", listing).then(
+          await addAuditLog({
+            user: auth.currentUser,
+            action: `Added ${formValue.type} listing`,
+          })
+        );
+      
+    }
   }
+
+  
+
+
+  
   return (
     <Container
       className="add-listing"
@@ -107,21 +154,24 @@ const types = [
         alignItems: "center",
         justifyContent: "center",
         padding: "10px",
-        margin: "15%",
+        margin:'20%',
         border: "1px solid black",
         borderRadius: "5px",
+        width: "80%",
       }}
     >
+     
       <FlexboxGrid
         className="listing-flexbox"
         style={{
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "gray",
+          justifyContent:'center',
           width: "100%",
           height: "100%",
-          float: "left",
+          float: "center",
           fontSize: "20px",
+          alignItems: "center",
         }}
       >
         <FlexboxGrid.Item
@@ -129,10 +179,12 @@ const types = [
           style={{
             display: "flex",
             flexDirection: "column",
-            backgroundColor: "gray",
+            justifyContent:'center',
             width: "100%",
             height: "100%",
             float: "left",
+            fontSize: "20px",
+            margin:"100px"
           }}
         >
           <Form
@@ -144,34 +196,23 @@ const types = [
             model={model}
             onSubmit={handleSubmit}
           >
-            <Row
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                backgroundColor: "gray",
-                width: "100%",
-                height: "100%",
-                float: "left",
-                justifyContent: "center",
+            <RadioPicker
+              name="type"
+              label="For Sale"
+              accepter={RadioGroup}
+              value={type}
+              onChange={() => {
+                setType("forSale");
+                setFormValue({ ...formValue, type: type });
               }}
-            >
-              <RadioPicker
-                name="type"
-                label="For Sale"
-                accepter={RadioGroup}
-                value={type}
-                onChange={() => {
-                  setType("forSale");
-                  setFormValue({ ...formValue, type: type });
-                }}
-                style={{
-                  fontSize: "20px",
-                  padding: "8px 2px 8px 10px",
-                  display: "inline-block",
-                  verticalAlign: "middle",
-                }}
-              />
-            </Row>
+              style={{
+                fontSize: "20px",
+                padding: "8px 2px 8px 10px",
+                display: "inline-block",
+                verticalAlign: "middle",
+              }}
+            />
+
             <TextField
               name="street"
               label="Street"
@@ -180,6 +221,7 @@ const types = [
               onChange={(value) => {
                 setFormValue({ ...formValue, street: value });
               }}
+              style={{ fontSize: "20px", width: "100%" }}
             />
             <TextField
               name="city"
@@ -189,6 +231,7 @@ const types = [
               onChange={(value) => {
                 setFormValue({ ...formValue, city: value });
               }}
+              style={{ fontSize: "20px", width: "80%" }}
             />
             <TextField
               name="state"
@@ -198,6 +241,7 @@ const types = [
               onChange={(value) => {
                 setFormValue({ ...formValue, state: value });
               }}
+              style={{ fontSize: "20px", width: "80%" }}
             />
             <TextField
               name="zip"
@@ -207,6 +251,7 @@ const types = [
               onChange={(value) => {
                 setFormValue({ ...formValue, zip: value });
               }}
+              style={{ fontSize: "20px", width: "80%" }}
             />
             <TextField
               name="price"
@@ -216,6 +261,7 @@ const types = [
               onChange={(value) => {
                 setFormValue({ ...formValue, price: value });
               }}
+              style={{ fontSize: "20px", width: "80%" }}
             />
             <TextField
               name="bedrooms"
@@ -225,6 +271,7 @@ const types = [
               onChange={(value) => {
                 setFormValue({ ...formValue, bedrooms: value });
               }}
+              style={{ fontSize: "20px", width: "80%" }}
             />
             <TextField
               name="bathrooms"
@@ -234,11 +281,10 @@ const types = [
               onChange={(value) => {
                 setFormValue({ ...formValue, bathrooms: value });
               }}
+              style={{ fontSize: "20px", width: "80%" }}
             />
-            <Uploader>
-            
-            </Uploader>
-            <TextArea
+   
+            <Textarea
               name="description"
               label="Description"
               accepter={Input}
@@ -247,23 +293,9 @@ const types = [
               onChange={(value) => {
                 setFormValue({ ...formValue, description: value });
               }}
+              style={{ fontSize: "20px", width: "80%",height:'200px' }}
             />
-            <Button
-              onClick={() => {
-                const errors = model.validate(formValue);
-                setFormError(errors);
-                if (Object.keys(errors).length === 0) {
-                  const listing = {
-                    ...formValue,
-                    createdAt: new Date(),
-                    createdBy: auth.credential,
-                  };
-                  addDoc(db.collection("listings"), listing);
-                }
-              }}
-            >
-              Submit
-            </Button>
+            <Button style={{height:'20px',width:'100%', color:'white',backgroundColor:"black"}} type="submit">Submit</Button>
           </Form>
         </FlexboxGrid.Item>
       </FlexboxGrid>

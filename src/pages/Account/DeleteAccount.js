@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth, db,userSignOut } from '../../firebase';
 import { ProfileButton } from "../../components/Custom/AccountStyles";
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { deleteDoc } from 'firebase/firestore';
+import { deleteDoc,collection,doc,query } from 'firebase/firestore';
 import React, { useEffect } from 'react';
 import { StyledProfileLabel } from '../../components/Custom/AccountStyles';
 const AccountPageDeleteProfile = styled.div`
@@ -26,7 +26,7 @@ const AccountPageDeleteProfileBox = () => {
   const deleteUser = async(e) => {
     e.preventDefault();
     const user = auth.currentUser;
-    let docRef = db.collection("users").doc(db, user);
+    let docRef = collection(db,"users").doc(user.uid);
     deleteDoc(docRef).then(() => userSignOut());
     navigate("/");
   };
@@ -37,7 +37,7 @@ const AccountPageDeleteProfileBox = () => {
     }
   })
   return (
-    <AccountPageDeleteProfile>
+    <div className="delete-profile-box">
       <h4>Delete Account</h4>
       <p>
         <StyledProfileLabel>
@@ -47,7 +47,7 @@ const AccountPageDeleteProfileBox = () => {
       <ProfileButton id="delete-account" onClick={deleteUser}>
         Delete
       </ProfileButton>
-    </AccountPageDeleteProfile>
+    </div>
   );
 };
 

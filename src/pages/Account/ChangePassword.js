@@ -1,30 +1,38 @@
 import styled from 'styled-components';
 import TextField from '../../components/TextField';
 import { ProfileButton } from '../../components/Buttons';
-import { useForm } from 'react-hook-form';
+import { Form, Schema, FlexboxGridbrea } from 'rsuite';
+import { sendPasswordReset ,auth} from '../../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 
 
-const ChangePassword = () => {
+
+export const ChangePassword = () => {
     
-    
-  const [error, setError] = useState(false);
-  const { register, formState: { errors }, handleSubmit } = useForm();
+  const [user, loading, error] = useAuthState(auth);
+  const [errors, setErrors] = useState(false);
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [formValue, setFormValue] = useState({
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+
+  });
 
 
-
-  const handlePWChange = () => {
+  const handlePWChange = (e) => {
+    e.preventDefault();
  
     const docRef= async() => await getDoc(db,"users")
 
   }
   return (
-    <AccountPwContainer>
+    <div className="account-password-container">
       <h4>Change Password</h4>
-        <p>
+      
         <TextField
             label="Change Password: "
                     canEdit
@@ -34,7 +42,7 @@ const ChangePassword = () => {
           <ErrorMessage id="error-msg-old-password" >
             Incorrect Password
           </ErrorMessage>
-        </p>
+       
         <p>
                 <TextField
                     label="Old Password :"
@@ -63,7 +71,7 @@ const ChangePassword = () => {
         <ProfileButton  >
           Change
         </ProfileButton>
-      </AccountPwContainer>
+      </div>
     )
 }
 

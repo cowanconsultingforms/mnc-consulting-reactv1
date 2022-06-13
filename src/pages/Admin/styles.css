@@ -15,12 +15,12 @@ div#admin-flex-box  {
   justify-content: center;
   width:100%;
 }
-.add-listing{
-background-color: #72716d;
-font-size:20px;
-}
+
 .listing-form{
   font-size: 20px;
+}
+.listing-flexbox{
+  display:flex;
 }
 .admin-container {
     display:flex;
@@ -39,15 +39,16 @@ font-size:20px;
   
 }
 .admin-search-container{
-  position: relative;
+  position: absolute;
   text-align: center;
   background-color: #eeeeee;
   color: rgb(22, 22, 22);
   font-size: 20px;
   width: 80%;
+  height:100px;
   border: 3px solid rgb(197, 197, 197);
   align-items: center;
-  justify-content:flex-start;
+  
 }
 .search-button{
     margin-bottom: 20px;
@@ -83,9 +84,7 @@ font-size:20px;
   border: 1px solid rgb(197, 197, 197);
 
 }
-.header-row{
- display:flex;
-}
+
 .audit-log-frame{
   display:block;
   background-color: black;

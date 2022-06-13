@@ -20,7 +20,8 @@ import  AccountPageDeleteProfileBox  from './DeleteAccount';
 
 export const AccountPage = () => {
   //hook to get current user
-  const { currentUser } = useAuthState(auth);
+ 
+  const user = auth.currentUser;
  
   
 

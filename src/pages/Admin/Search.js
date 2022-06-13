@@ -29,7 +29,7 @@ const TextFieldSearch= forwardRef((props, ref) => {
 //code to render search user from the admin page
 const Search = () => {
   const collectionRef = collection(db, "users");
-  const navigate = useNavigate();
+  
   const formRef = React.useRef();
   const [formError, setFormError] = React.useState({});
   const [formValue, setFormValue] = React.useState({
@@ -40,7 +40,7 @@ const Search = () => {
     const userName = user.displayName;
     const uid = user.uid;
     const timestamp = serverTimestamp();
-    const docRef = collection("auditLogs").doc();
+    const docRef = collection("auditLogs")
     await setDoc(docRef, { action, userName, uid, timestamp }).then(() => {
       console.log("Audit Log Created");
       console.log(JSON.stringify(docRef));
@@ -75,7 +75,7 @@ const Search = () => {
 
 
   return (
-    <Container>
+    <Container className="admin-search-container">
       <h4>Look Up User</h4>
 
       <Form

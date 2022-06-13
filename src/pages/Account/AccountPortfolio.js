@@ -6,18 +6,27 @@ import { Form } from "rsuite";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 export const AccountPagePortfolioBox = () => {
-    const { register, formState: { errors },handleSubmit } = useForm();
+  const [formValue, setFormValue] = useState({
+    uid: user.uid,
+    email: user.email,
+    displayName: user.displayName,
+
+  });
+  const formRef = useRef();
+  const [formError, setFormError] = useState({});
   const [user, loading, error] = useAuthState(auth);
 
   const handlePortfolioChange = (e) => {
     let userName = e.target.value;
     let userCollection = db.collection("users").doc();
   };
-  const getCurrentUser = () => {
+  const getPortfolio = async() => {
     let user = auth.currentUser;
+    user.displayName = formValue.userName;
     return (
       <div>
-      <input></input>
+        <Form ref={formRef}>
+        </Form>
       </div>
     )
   };

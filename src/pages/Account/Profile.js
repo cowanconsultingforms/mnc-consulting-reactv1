@@ -1,58 +1,19 @@
-import React,{ useState ,useEffect} from 'react'
+import React,{ useState ,useEffect,forwardRef} from 'react'
 import styled from 'styled-components';
-import { db, userSignOut, auth } from "../../firebase";
-import { doc, getDoc, deleteDoc ,query,collection,where} from "firebase/firestore";
+import { db, auth } from "../../firebase";
+import { doc, getDoc ,query,collection,where} from "firebase/firestore";
 import { ProfileButton } from "../../components/Custom/Buttons";
 import { useAuthState, } from 'react-firebase-hooks/auth';
 import { useDocumentDataOnce ,useCollectionData} from 'react-firebase-hooks/firestore';
-import { Form,Schema } from 'rsuite';
-//styled components, can be replaced in css file
-const AccountPageProfile = styled.div`
-  height: 100%;
-  display:flex;
-  position: relative;
-  text-align: left;
-  background-color: rgb(238, 238, 238);
-  color: rgb(128, 128, 128);
-  font-size: 20px;
-  width: 90%;
-  left: 5%;
-  position: relative;
-`;
+import { Form,Schema,Button,Input, FlexboxGrid } from 'rsuite';
+import FlexboxGridItem from 'rsuite/esm/FlexboxGrid/FlexboxGridItem';
 
-const AccountInput = styled.input`
-  display: block;
-  margin-top: 10px;
-  padding: 10px;
-  font-size: 17px;
-  width: 87%;
-  border: 1px solid rgb(197, 197, 197);
-  height: 28px;
-  left: 5%;
-`;
-const ProfileNoEdit = styled.input`
-  pointer-events: none;
-  color: white;
-  background-color: rgb(158, 158, 158);
-  border: 1px solid rgb(197, 197, 197);
-  height: 28px;
-  display: block;
-  margin-top: 10px;
-  padding: 10px;
-  font-size: 17px;
-  width: 87%;
-`;
-
-const ErrorMessage = styled.label`
-  color: red;
-  display: none;
-`;
-const TextFieldProfile = React.forwardRef((props, ref) => {
-  const { user, label, accepter, ...rest } = props;
+const TextFieldProfile = forwardRef((props, ref) => {
+  const { uid,userName,role,email, label, accepter, ...rest } = props;
   return (
-    <Form.Group controlId={`${user}-4`} ref={ref}>
+    <Form.Group controlId={`${userName}`} ref={ref}>
       <Form.ControlLabel>{label} </Form.ControlLabel>
-      <Form.Control name={user} accepter={accepter} {...rest} />
+      <Form.Control name={userName} accepter={accepter} {...rest} />
     </Form.Group>
   );
 });
@@ -61,7 +22,7 @@ const model = Schema.Model({
   uid: Schema.Types.StringType(),
   role: Schema.Types.StringType(),
   email: Schema.Types.StringType().isEmail("Incorrect Email Format"),
-  isAdmin: Schema.Types.BooleanType(),
+  role:Schema.Types.StringType(),
 
 });
 //portion of Account page that loads current user's profile
@@ -70,12 +31,43 @@ export const LoadProfile = () => {
   const formRef = React.useRef();
   const [formError, setFormError] = React.useState({});
   const [formValue, setFormValue] = React.useState({
-    email: formValue,
+    email: '',
+    role: '',
+    uid: '',
+    userName:''
   });
 
   const [user, loading, error] = useAuthState(auth);
-
-  
+  const handleSubmit = () => {
+    
+  }
+  const renderProfile = () => {
+    const q = query(collection('users')).where('uid', '==', user.uid);
+    getDoc(q).then((doc) => {
+      if (doc.exists) {
+        const data = doc.data();
+        setFormValue(data);
+        return (
+          <div className="profile-container">
+            <FlexboxGrid>
+            <FlexboxGridItem>
+            
+              </FlexboxGridItem>
+            </FlexboxGrid>
+            </div>
+        )
+      }
+    })
+    return (
+      <div className="account-page-profile">
+        <h1>Profile</h1>
+        <Form ref={formRef} model={model} onSubmit={handleSubmit}>
+          <TextFieldProfile
+          accepter={Input} />
+        </Form>
+        </div>
+    )
+  }
 
   const handleProfileChange = (e) => {
     const userName = e.target.value;
@@ -88,17 +80,18 @@ export const LoadProfile = () => {
   };
   
 
-  useEffect(() => {
-    if (user) {
+    useEffect(() => {
+      if (user) {
+      renderProfile(user);
       setFormValue({
         uid: user.uid,
       })
     }
-  })
+    },[user])
   
     //returns the heading of the profile page box using Rsuite Form Validation to validate the input
-  return (
-    <AccountPageProfile>
+    return (
+    <div className="account-page-profile">
       <h4>Profile</h4>
       <Form
         ref={formRef}
@@ -117,11 +110,11 @@ export const LoadProfile = () => {
               onChange={setFormValue((e) => e.target.value)}
               required
             />
-            <ProfileButton onClick={handleProfileChange}>Save</ProfileButton>
+            <Button onClick={handleProfileChange} type="submit">Save</Button>
           </Form.Control>
         </Form.Group>
       </Form>
-    </AccountPageProfile>
+    </div>
   );
   }
 

@@ -1,13 +1,12 @@
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { setDoc, query, Timestamp, whereEqualTo } from 'firebase/firestore';
-import { getDownloadURL, getStorage, ref } from 'firebase/storage';
-import React, { useEffect, useState } from 'react';
-import { useAuthState, useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { useDownloadURL, useStorage } from 'react-firebase-hooks/storage';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button, ButtonToolbar, Divider, FlexboxGrid, Form, Loader, Schema } from 'rsuite';
+import React, { useEffect, useState,useRef,forwardRef } from 'react';
+import { useAuthState, useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { useDownloadURL } from 'react-firebase-hooks/storage';
+import { useNavigate } from 'react-router-dom';
+import {  ButtonToolbar, Divider, FlexboxGrid, Form, Loader, Schema } from 'rsuite';
 import styled from 'styled-components';
-import app, { auth, db, signIn, signUp, userSignOut ,storage} from '../../firebase';
+import  { auth, storage } from '../../firebase';
+import { ref } from 'firebase/storage';
 import './styles.css';
 export const LoginDiv = styled.div`
     display: flex;
@@ -29,7 +28,7 @@ export const LoginButton = styled.button`
     background-color: #686868;
     font-size: 18px;
     text-decoration: none;`
-const LoginButtonRef = React.forwardRef((props, ref) => {
+const LoginButtonRef = forwardRef((props, ref) => {
   return <LoginButton ref={ref} {...props} />;
 
 });
@@ -37,12 +36,12 @@ const LoginButtonRef = React.forwardRef((props, ref) => {
 
 //Login Form used by code
 export const LoginForm = () => {
-   const [signInWithEmailAndPassword, user, loading, error] =
-    useSignInWithEmailAndPassword(auth);
+  const [signInWithEmailAndPassword, user, loading, error] =
+      useSignInWithEmailAndPassword(auth);
   const navigate = useNavigate();
-   const formRef = React.useRef();
-   const [formError, setFormError] = React.useState({});
-   const [formValue, setFormValue] = React.useState({
+  const formRef = useRef();
+  const [formError, setFormError] = useState({});
+  const [formValue, setFormValue] = useState({
      email: "",
      password: ""
   
@@ -55,25 +54,17 @@ export const LoginForm = () => {
 
       const {email,password} = formValue;
      
-      signInWithEmailAndPassword(formValue.email, formValue.password).then(
-        (res) => {
-          const { uid = res.uid, role='regular', isAdmin=false, userName =  res.data().displayName()} = user;
-          console.log(JSON.stringify(user));
-          const loggedInUser = sessionStorage.setItem('user', JSON.stringify(res));
-   
-          localStorage.setItem('user', JSON.stringify(user));
-          return (
-            <React.Fragment>
-              <div>
-                <p>
-                  Welcome {user.email}
-                </p>
-              </div>
-            </React.Fragment>
-          )
+    signInWithEmailAndPassword(formValue.email, formValue.password).then(
+      (res) => {
+        const user = res.data();
+        console.log(JSON.stringify(user));
+        sessionStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem('userToken', JSON.stringify(user));
+        navigate('/');
+      });
         }
-      );
-    };
+      
+    
 
     const handleNavigate = () => {
       navigate("/register");
@@ -95,7 +86,7 @@ export const LoginForm = () => {
         alert = error.message;
         alert.call();
       }
-    }, [user, loading, error]);
+    }, [user, loading, error,navigate]);
   return (
     <div className="LoginForm">
       <Form
@@ -149,7 +140,7 @@ export const LoginForm = () => {
             alignItems: "center",
           }}
         />
-        <ButtonToolbar alignItems="center" justifyContent="center">
+        <ButtonToolbar alignItems="center" justifyContent="center" style={{display:'flex',width:'80%',spaceBetween:'1px',padding:'5px',border:'5px'}}>
           <LoginButtonRef
             className="login-button"
             onClick={HandleSubmit}
@@ -157,13 +148,15 @@ export const LoginForm = () => {
             style={{
               color: "white",
               padding: "14px 20px",
-
+              border: '2px',
               margin: "8px 0",
               border: "none",
               cursor: "pointer",
-              backgroundColor: "#686868",
+              backgroundColor: "black",
               justifyContent: "center",
               alignItems: "center",
+            
+              
             }}
           >
             Sign in
@@ -199,7 +192,7 @@ export const FullPageLogin = () => {
   const DownloadURL = () => {
     const reference = ref(storage, "images/mncdevelopmentlogo.jpg");
     const [value, loading, error] = useDownloadURL(reference);
-    const navigate = useNavigate();
+    
     return (
       <div>
         <p>
@@ -224,7 +217,7 @@ export const FullPageLogin = () => {
   return (
       <div className="login-div">
       {<DownloadURL />}
-        <img id="logo"></img>
+        <img id="logo" alt="logo"></img>
         <FlexboxGrid classPrefix="flexbox-grid-start">
           <FlexboxGrid.Item colspan={6}>
            {RenderLogin}

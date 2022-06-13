@@ -20,3 +20,16 @@ nav#rs-navbar-navbar-default{
     background-color: rgb(141, 141, 141);
     color: white;
   }
+  .home-search-bar{
+     display: flex;
+  }
+  .search-input{
+      width: 80%;
+  font-size: 17px;
+  }
+
+  .home-search-button{
+    background-color: black;
+    color:white;
+    width:50px;
+  }

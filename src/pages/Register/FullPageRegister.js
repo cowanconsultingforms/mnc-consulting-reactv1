@@ -1,19 +1,17 @@
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import {
-  addDoc, collection, serverTimestamp, setDoc, Timestamp
+  addDoc, collection, serverTimestamp, setDoc, doc,toJson
 } from "firebase/firestore";
 import { ref } from "firebase/storage";
-import React from "react";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import React ,{useState,useEffect}from "react";
+import { useAuthState,useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useDownloadURL } from "react-firebase-hooks/storage";
 import { useNavigate } from "react-router-dom";
-import { Button, ButtonToolbar, Container, FlexboxGrid, Form, Schema } from "rsuite";
+import { Button,Container, FlexboxGrid, Form, Input, Schema } from "rsuite";
 import { auth, db, storage,signUp } from "../../firebase";
 import { LoginDiv } from "../Login/LoginForm";
 
-
 const { StringType} = Schema.Types;
-
-
 const model = Schema.Model({
   email: StringType()
     .isEmail("Please enter a valid email address.")
@@ -33,7 +31,7 @@ const model = Schema.Model({
 });
 
 export const FullPageRegister = () => {
-  
+ 
   const collRef = collection(db, "users");
   const navigate = useNavigate();
   const formRef = React.useRef();
@@ -45,42 +43,51 @@ export const FullPageRegister = () => {
     verifyPassword: "",
   });
   
-  
-  const auditLogger = async({action="Created Account"}) => {
-    const user = auth.currentUser;
-    const userName = user.displayName;
-    const uid = user.uid;
-    const timestamp = Timestamp.now();
-    const docRef = collection("auditLogs").doc();
-    await setDoc(docRef, { action, userName,uid ,timestamp }).then(() => {
+  const [user,loading,error] = useCreateUserWithEmailAndPassword(auth,formValue.email,formValue.password);
+  const auditLogger = async ({ action = "Created Account", user, userName, uid, timestamp }) => {
+    user = auth.currentUser;
+    
+    const docData = {
+      user: auth.currentUser.email.split("@")[0],
+      userName: auth.currentUser.displayName,
+      uid: auth.currentUser.uid,
+      timestamp: serverTimestamp(),
+      action,
+    }
+  const docRef = doc(db, "auditLogs");
+    await addDoc(docRef, docData).then(() => {
       console.log("Audit Log Created");
       console.log(JSON.stringify(docRef));
     });
     }
      
- 
+
 
     
   
-  const HandleSubmit = () => {
+  const HandleSubmit = async (e) => {
+    e.preventDefault();
     if (!formRef.current.check()) {
       console.error(formError);
     } else {
       console.log(formValue);
-      const {  email, password,verifyPassword} = formValue;
-   
-      signUp(formValue.email, formValue.password).then((userCredential) => {
-        const currentUser = userCredential.user;
-        
+      createUserWithEmailAndPassword(auth,formValue.email, formValue.password).then((userCredential) => {
+       
+        const currentUser = userCredential.user 
+        console.log(currentUser.toJSON())
            const user = {
-             email : currentUser.email,
+             email : userCredential.user.displayName(),
              role :'regular',
-             uid : currentUser.uid,
-             created_at : serverTimestamp(),
+             uid : userCredential.user.uid,
+             created_at: serverTimestamp(),
+             userName: userCredential.user.displayName().split("@")[0]
         };
-        localStorage.setItem("user", JSON.stringify(user));
-        user.uid =currentUser.uid;
-        addDoc(collRef, user).then((docRef) => {
+        const userRef = doc(db, "users", user.uid).withConverter(userConverter);
+        setDoc(userRef, new User(user.email,user.userName,user.uid,user.role,user.created_at)).withConverter().then(() => {
+          localStorage.setItem("user", JSON.stringify(user));
+        })
+        
+        addDoc(userRef,user).then((docRef) => {
           auditLogger(user);
           console.log(docRef);
          
@@ -109,7 +116,9 @@ export const FullPageRegister = () => {
     )
   };
 
-  
+  useEffect(() => {
+
+  })
 
 
 
@@ -137,7 +146,7 @@ export const FullPageRegister = () => {
             width: "100%",
           }}
         >
-          <FlexboxGrid.Item colspan={24} style={{alignItems:'stretch'}}>
+          <FlexboxGrid.Item colspan={24} style={{ alignItems: "stretch" }}>
             <Form
               ref={formRef}
               onChange={setFormValue}
@@ -150,6 +159,9 @@ export const FullPageRegister = () => {
                 name="email"
                 label="Email"
                 placeholder="Enter your email"
+                onChange={setFormValue}
+                onCheck={setFormError}
+                accepter={Input}
                 style={{
                   fontWeight: "bold",
                   width: " 400px",
@@ -164,12 +176,15 @@ export const FullPageRegister = () => {
                   justifyContent: "center",
                 }}
               />
-                
+
               <TextFieldLogin
                 name="password"
                 label="Password"
                 type="password"
                 autoComplete="off"
+                accepter={Input}
+                onChange={setFormValue}
+                onCheck={setFormError}
                 style={{
                   fontWeight: "bold",
                   width: " 100%",
@@ -188,7 +203,10 @@ export const FullPageRegister = () => {
                 label="Verify password"
                 type="password"
                 autoComplete="off"
-                autoFill="on"
+                autofill="on"
+                accepter={Input}
+                onChange={setFormValue}
+                onCheck={setFormError}
                 style={{
                   width: " 100%",
                   padding: "12px 20px",
@@ -201,7 +219,7 @@ export const FullPageRegister = () => {
                   outline: "none",
                 }}
               />
-              <Container style={{ display: "flex" }}>
+              <Container style={{ display: "flex",flexDirection:'row' }}>
                 <Button
                   onClick={HandleSubmit}
                   style={{
@@ -242,7 +260,39 @@ export const FullPageRegister = () => {
     </React.Fragment>
   );
 };
-
+  class User {
+    constructor(email, userName, uid, role, created_at) {
+      this.email = email;
+      this.userName = userName;
+      this.uid = uid;
+      this.role = role;
+      this.created_at = created_at;
+    }
+    toString() {
+      return JSON.stringify(this);
+    }
+  }
+  const userConverter = {
+    toFirestore: (user) => {
+      return {
+        email: user.email,
+        userName: user.userName,
+        uid: user.uid,
+        role: user.role,
+        created_at: user.created_at,
+      };
+    },
+    fromFirestore: (snapshot, options) => {
+      const data = snapshot.data(options);
+      return new User(
+        data.email,
+        data.userName,
+        data.uid,
+        data.role,
+        data.created_at
+      );
+    },
+  };
 export const RegisterPage = () => {
   
   return (

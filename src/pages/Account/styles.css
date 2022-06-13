@@ -1,3 +1,15 @@
 div#rs-container {
     display:flex;
 }
+.account-page-profile{
+      height: 100%;
+  display:flex;
+  position: relative;
+  text-align: left;
+  background-color: rgb(238, 238, 238);
+  color: rgb(128, 128, 128);
+  font-size: 20px;
+  width: 90%;
+  left: 5%;
+  position: relative;
+}
