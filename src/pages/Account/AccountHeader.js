@@ -1,11 +1,11 @@
-import { AccountPageHeader } from "../../components/Custom/AccountStyles";
+import { AccountPageHeader } from "./AccountStyles";
 
 export const AccountHeader = () => {
 
     return (
-        <AccountPageHeader>
-            <h1>My Account</h1>
-        </AccountPageHeader>
+        <div className="account-page-header">
+            
+        </div>
     );
 
 }

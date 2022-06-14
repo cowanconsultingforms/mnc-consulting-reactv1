@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import  { auth, storage } from '../../firebase';
 import { ref } from 'firebase/storage';
 import './styles.css';
+import { DownloadURL } from '../../hooks/useDownloadUrl';
 export const LoginDiv = styled.div`
     display: flex;
     flex-direction: column;
@@ -27,17 +28,17 @@ export const LoginButton = styled.button`
     cursor: pointer;
     background-color: #686868;
     font-size: 18px;
-    text-decoration: none;`
+    text-decoration: none;
+    `
 const LoginButtonRef = forwardRef((props, ref) => {
   return <LoginButton ref={ref} {...props} />;
 
 });
-
+const user = [{name:'name',}]
 
 //Login Form used by code
 export const LoginForm = () => {
-  const [signInWithEmailAndPassword, user, loading, error] =
-      useSignInWithEmailAndPassword(auth);
+
   const navigate = useNavigate();
   const formRef = useRef();
   const [formError, setFormError] = useState({});
@@ -54,7 +55,7 @@ export const LoginForm = () => {
 
       const {email,password} = formValue;
      
-    signInWithEmailAndPassword(formValue.email, formValue.password).then(
+    signInWithEmailAndPassword(auth,formValue.email, formValue.password).then(
       (res) => {
         const user = res.data();
         console.log(JSON.stringify(user));
@@ -71,25 +72,12 @@ export const LoginForm = () => {
     };
 
     useEffect( () => {
-      if (loading) {
-      
-        return (
-          <React.Fragment>
-            <div>
-              <Loader />
-            </div>
-          </React.Fragment>
-        );
-      }
-      if (user) navigate("/");
-      else if (error) {
-        alert = error.message;
-        alert.call();
-      }
-    }, [user, loading, error,navigate]);
+
+    }, []);
   return (
     <div className="LoginForm">
       <Form
+        className="login-form"
         ref={formRef}
         onChange={setFormValue}
         onCheck={setFormError}
@@ -105,6 +93,7 @@ export const LoginForm = () => {
           name="email"
           label="Email"
           type="email"
+          autoComplete="email"
           ref={formRef}
           style={{
             padding: "12px 20px",
@@ -124,6 +113,7 @@ export const LoginForm = () => {
           name="password"
           label="Password"
           type="password"
+          autoComplete="password"
           ref={formRef}
           value={formValue}
           style={{
@@ -140,7 +130,7 @@ export const LoginForm = () => {
             alignItems: "center",
           }}
         />
-        <ButtonToolbar alignItems="center" justifyContent="center" style={{display:'flex',width:'80%',spaceBetween:'1px',padding:'5px',border:'5px'}}>
+        <ButtonToolbar style={{display:'flex',width:'80%',spaceBetween:'1px',padding:'5px',border:'5px',justifyContent:'space-between',flexDirection:'row'}}>
           <LoginButtonRef
             className="login-button"
             onClick={HandleSubmit}
@@ -150,7 +140,6 @@ export const LoginForm = () => {
               padding: "14px 20px",
               border: '2px',
               margin: "8px 0",
-              border: "none",
               cursor: "pointer",
               backgroundColor: "black",
               justifyContent: "center",

@@ -7,12 +7,33 @@ import {
 import { getDatabase } from "firebase/database";
 import {
   addDoc,
-  collection, getDocs, getFirestore, query, serverTimestamp, where
+  collection, getDocs, getFirestore, query, serverTimestamp, where,setDoc,doc
 } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 //Contains all the firebase configuration
+export const auditLogger = async ({
+  action = "Created Account",
+  user,
+  userName,
+  uid,
+  timestamp,
+}) => {
+  user = auth.currentUser;
 
+  const docData = {
+    user: auth.currentUser.email.split("@")[0],
+    userName: auth.currentUser.displayName,
+    uid: auth.currentUser.uid,
+    timestamp: serverTimestamp(),
+    action,
+  };
+  const docRef = doc(db, "auditLogs");
+  await addDoc(docRef, docData).then(() => {
+    console.log("Audit Log Created");
+    console.log(JSON.stringify(docRef));
+  });
+};
 export const firebaseConfig = {
   apiKey: "AIzaSyDWCSguMcsxy-39ZV2vfPJwQdmd44JP0rk",
   authDomain: "mnc-development.firebaseapp.com",
@@ -48,6 +69,7 @@ export const signUp = async (email, password) => {
     await addDoc(collection(db, "users"), {
       uid: user.uid,
       email: user.email,
+      userName:user.email.split("@")[0],
       AccountType: "Regular",
       CreatedOn: serverTimestamp,
     });
@@ -66,12 +88,55 @@ export const signIn = async (email, password) => {
     );
     const user = userCredential.user;
     localStorage.setItem(JSON.stringify(user));
+    const userRef = doc(db, "users", user.uid).withConverter(userConverter);
+    setDoc(
+      userRef,
+      new User(user.email, user.userName, user.uid, user.role, user.created_at)
+    )
+  
+
+    addDoc(userRef, user).then((docRef) => {
+      auditLogger(user);
+      console.log(docRef);
+    });
     return true;
   } catch (error) {
     return { error: error.message };
   }
 };
-
+  class User {
+    constructor(email, userName, uid, role, created_at) {
+      this.email = email;
+      this.userName = userName;
+      this.uid = uid;
+      this.role = role;
+      this.created_at = created_at;
+    }
+    toString() {
+      return JSON.stringify(this);
+    }
+  }
+  const userConverter = {
+    toFirestore: (user) => {
+      return {
+        email: user.email,
+        userName: user.userName,
+        uid: user.uid,
+        role: user.role,
+        created_at: user.created_at,
+      };
+    },
+    fromFirestore: (snapshot, options) => {
+      const data = snapshot.data(options);
+      return new User(
+        data.email,
+        data.userName,
+        data.uid,
+        data.role,
+        data.created_at
+      );
+    },
+  };
 export const userSignOut = async () => {
   try {
     await signOut(auth);

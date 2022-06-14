@@ -6,6 +6,7 @@ import { Form } from "rsuite";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 export const AccountPagePortfolioBox = () => {
+  const user = auth.currentUser;
   const [formValue, setFormValue] = useState({
     uid: user.uid,
     email: user.email,
@@ -14,7 +15,7 @@ export const AccountPagePortfolioBox = () => {
   });
   const formRef = useRef();
   const [formError, setFormError] = useState({});
-  const [user, loading, error] = useAuthState(auth);
+  
 
   const handlePortfolioChange = (e) => {
     let userName = e.target.value;
@@ -40,7 +41,7 @@ export const AccountPagePortfolioBox = () => {
   })
   
   return (
-    <AccountPagePortfolio>
+    <div className="account-page-portfolio">
       <AccGridInfo>
         <h4 style="padding-bottom:15px; position:relative;">Portfolio</h4>
         <p>
@@ -59,7 +60,7 @@ export const AccountPagePortfolioBox = () => {
         </p>
         <ProfileButton onClick={handlePortfolioChange}>Save</ProfileButton>
       </AccGridInfo>
-    </AccountPagePortfolio>
+    </div>
   );
 };
 

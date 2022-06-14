@@ -3,10 +3,10 @@ import { useDownloadURL } from 'react-firebase-hooks/storage';
 import { ref, getDownloadURL, getStorage } from 'firebase/storage';
 import {storage} from '../firebase';
 
-const reference = ref(storage, "images/mncdevelopmentlogo.jpg");
+
 
 export const GetImage =() => {
-    
+    const reference = ref(storage, "images/mncdevelopmentlogo.jpg");
     const [downloadUrl, loading, error] = useDownloadURL(reference);
     getDownloadURL(reference).then(() => {
       return (
@@ -17,9 +17,9 @@ export const GetImage =() => {
     });
 };
   
-export const DownloadURL = ({ reference }) => {
-  const { reference } = imageURL;
-  const [value, loading, error] = useDownloadURL(storage,imageURL.reference);
+export const DownloadURL = () => {
+const reference = ref(storage, "images/mncdevelopmentlogo.jpg");
+  const [value, loading, error] = useDownloadURL(storage,reference);
 
   return (
     <div>

@@ -91,11 +91,10 @@ export const StyledInput = styled.input`
 export const AccountPageContainer = styled.div`
   margin: auto;
   padding-top: 100px;
-  display: grid;
+  display: flex;
   width: 75%;
   height: 100%;
-  grid-gap: 30px;
-  grid-template-columns: 1fr !important;
+  flex-direction: column;
 `;
 
 export const AccountPageHeader = styled.div`
@@ -107,8 +106,6 @@ export const AccountPageHeader = styled.div`
 
 export const AccountPagePortfolio = styled.div`
   width: 100%;
-  grid-column: 3;
-  grid-row: 2;
   position: relative;
   text-align: left;
   background-color: #eeeeee;

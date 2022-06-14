@@ -9,33 +9,44 @@ import {
   AccountPagePortfolio,
   AccountPageSignOut,
   StyledInput,
-} from "../../components/Custom/AccountStyles";
+} from "./AccountStyles";
 import {AccountPageSignOutBox} from './AccountPageSignOutBox'
 import { AccountHeader } from "./AccountHeader";
 import { ProfileButton } from '../../components/Custom/Buttons';
 import { auth, db, userSignOut } from "../../firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { Container } from "rsuite";
 import  AccountPageDeleteProfileBox  from './DeleteAccount';
 
 export const AccountPage = () => {
   //hook to get current user
  
-  const user = auth.currentUser;
  
+  const [user, setUser] = useState(auth.currentUser);
+  const [data, setData] = useState('')
+ 
+  const getUserInfo = async () => { 
+    const uid = user.uid;
+    const userDoc = await getDoc(`users/${uid}`);
+    const userInfo = userDoc.data();
+    setData(JSON.stringify(userInfo));
+
+  }
   
+  useEffect(() => {
+    getUserInfo();
+  })
 
 
 
   return (
-    <AccountPageContainer>
-      <Container>
-        <AccountHeader />
-        <AccGridInfo />
+    <Container className="account-page-container">
+      <h1>My Account</h1>
+     
+ 
         <AccountPageSignOutBox />
         <AccountPageDeleteProfileBox />
-      </Container>
-    </AccountPageContainer>
+     
+    </Container>
   );
 
 };

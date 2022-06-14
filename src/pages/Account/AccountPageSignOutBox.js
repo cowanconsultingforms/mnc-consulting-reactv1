@@ -1,4 +1,4 @@
-import { StyledProfileLabel ,AccountPageSignOut} from "../../components/Custom/AccountStyles";
+import { StyledProfileLabel ,AccountPageSignOut} from "./AccountStyles";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { userSignOut ,db,auth,} from "../../firebase";
@@ -9,7 +9,7 @@ import { Container } from "rsuite";
 
 
 export const AccountPageSignOutBox = () => {
-  const [user, loading, error] = useAuthState(auth);
+  const user = auth.currentUser;
   const navigate = useNavigate();
   const handleSignOut = async () => {
     await userSignOut().then(

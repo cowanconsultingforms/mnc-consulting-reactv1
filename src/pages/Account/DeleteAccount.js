@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { auth, db,userSignOut } from '../../firebase';
-import { ProfileButton } from "../../components/Custom/AccountStyles";
+import { ProfileButton } from "./AccountStyles";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { deleteDoc,collection,doc,query } from 'firebase/firestore';
 import React, { useEffect } from 'react';
-import { StyledProfileLabel } from '../../components/Custom/AccountStyles';
+import { StyledProfileLabel } from './AccountStyles';
 const AccountPageDeleteProfile = styled.div`
   height: 100%;
   grid-column: 3;

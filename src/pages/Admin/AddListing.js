@@ -132,7 +132,7 @@ fileList = [{fileElement:fileElement,file:file}];
           createdBy: auth.currentUser.email,
         };
         await addDoc(db, "listings", listing).then(
-          await addAuditLog({
+          addAuditLog({
             user: auth.currentUser,
             action: `Added ${formValue.type} listing`,
           })

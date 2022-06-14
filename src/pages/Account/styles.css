@@ -13,3 +13,25 @@ div#rs-container {
   left: 5%;
   position: relative;
 }
+.account-page-container{
+      margin: auto;
+  padding-top: 100px;
+  display: flex;
+  width: 75%;
+  height: 100%;
+  flex-direction: column;
+}
+.account-page-container h1{
+    font-size: 30px;
+}
+.SignOutBox{
+    display:flex;
+flex-direction:row;
+  height: 100%;
+  position: relative;
+  text-align: left;
+  background-color: #eeeeee;
+  color: rgb(128, 128, 128);
+  font-size: 20px;
+  width: 50%;
+}

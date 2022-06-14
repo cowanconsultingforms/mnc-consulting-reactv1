@@ -106,7 +106,7 @@ export const Landing = () => {
               }}
               onClick={()=>setType('forSale')}
             >
-              Buy
+              Buydfgfgdfgdgd
             </Button>
           </FlexboxGrid.Item>
           <Divider />
