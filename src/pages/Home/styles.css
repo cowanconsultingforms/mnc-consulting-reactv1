@@ -54,7 +54,8 @@ button#login-page {
  }
  
 .home-search-bar{
-   
+   display:flex;
+   flex-direction: row;
   font-size: 17px;
   float: left;
   width: 80%;

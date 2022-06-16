@@ -1,6 +1,8 @@
-import { getDoc } from 'firebase/firestore';
-import React, { useState } from 'react';
+import { async } from '@firebase/util';
+import { getDoc ,collection,query,where, doc} from 'firebase/firestore';
+import React, { useState,useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { FaHome } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import { Divider,Modal } from 'rsuite';
@@ -20,89 +22,96 @@ const NavBarItem = styled.button`
 `;
 
 export const NavBar = () => {
-  //logic for the navbar modal opener to login 
-  const [open,setOpen] = useState(false);
+ 
   const [loggedIn, setLoggedIn] = useState(false);
   //custom hook to read the user's auth state
   const [user, loading, error] = useAuthState(auth);
-  const [userData,setUserData] = useState({})
+  const [userData, setUserData] = useState({})
+  const collectionRef = collection(db, "users");
+  
   const LoginCheck = async () => {
-    
-    if (user) {
-      setLoggedIn(true);
-      await getDoc(db, 'users', user.uid).then(doc => {
-        setUserData(doc.data());
+    try {
+      const docRef = await getDoc(db)
+      getDoc(db, 'users', auth.currentUser.uid).then(doc => {
+        setUserData(...doc.data());
         document.getElementById('admin-page').style.display = 'none';
+        console.log(userData)
       })
+    } catch (error) {
+      console.log(error);
     }
+
   }
+    
+  
       
     
   
   //standard react hook to navigate to a new page
   const navigate = useNavigate();
   //objects for the navbar and their props
-    const pages = [
-      {
-        page: "/contact",
-        text: "Contact",
-        onClickFunc: () => navigate("/contact"),
-        id: "contact-page",
-      },
-      {
-        page: "/account",
-        text: "Account",
-        onClickFunc: () => navigate("/account"),
-        id: "account-page",
-      },
-      {
-        page: "/listings",
-        text: "Properties",
-        onClickFunc: () => navigate("/listings"),
-        id: "listing-page",
-      },
-      {
-        page: "/admin",
-        text: "Administrator",
-        onClickFunc: () => navigate("/admin"),
-        id: "admin-page",
-      },
-      {
-        page: "/",
-        text: "Login/Register",
-        onClickFunc: () => navigate("/login"),
-        id: "login-modal"
-      },
-  ];
-  const adminPages = [{
+  const pages = [
+    {
+      page: "/admin",
+      text: "Administrator",
+      onClickFunc: () => navigate("/admin"),
+      id: "admin-page",
+    },
+    {
+      page: "/contact",
+      text: "Contact",
+      onClickFunc: () => navigate("/contact"),
+      id: "contact-page",
+    },
+    {
+      page: "/listings",
+      text: "Properties",
+      onClickFunc: () => navigate("/listings"),
+      id: "listing-page",
+    },
+    {
+      page: "/account",
+      text: "Account",
+      onClickFunc: () => navigate("/account"),
+      id: "account-page",
+    },
 
-  }]
-  //function to render nav bar items (coded into the navbar object)
-  const renderNavBarItems = () => { 
+    {
+      page: "/",
+      text: "Login/Register",
+      onClickFunc: () => navigate("/login"),
+      id: "login-page",
+    }, {
       
-      return (
-        <React.Fragment>
-          {
-            pages.map((page, idx) => (
-              <NavBarItem key={idx} onClick={page.onClickFunc}>
-                {page.text}
-              </NavBarItem>
-            ))}
-
-          {pages.map((page, idx) => (
+    }
+  ];
+  //function to render nav bar items (coded into the navbar object)
+  const renderNavBarItems = () => {
+      
+    return (
+      <React.Fragment>
+        {
+          pages.map((page, idx) => (
             <NavBarItem key={idx} onClick={page.onClickFunc}>
               {page.text}
-              <Divider vertical />
             </NavBarItem>
           ))}
-        </React.Fragment>
-      );
+
+        {pages.map((page, idx) => (
+          <NavBarItem key={idx} onClick={page.onClickFunc}>
+            {page.text}
+            <Divider vertical />
+          </NavBarItem>
+        ))}
+      </React.Fragment>
+    );
   }
   // on loading, performs a check to see if the user is logged in
-  React.useEffect(() => {
-    LoginCheck();
-  
-  }, [])
+  useEffect( () => {
+
+    }
+  )
+;
   
   //renders the navbar, divided into 2 sections, the left side and the right side
   return (

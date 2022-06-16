@@ -1,34 +1,50 @@
 import React,{ useState ,useEffect} from 'react';
 import AdminFlex from "../../components/Custom/Containers";
 import  Search  from './Search';
-import { FlexboxGrid ,Container,Header,Row,Form,Schema, Divider} from 'rsuite';
+import { FlexboxGrid ,Container,Row,Form,Schema, Divider} from 'rsuite';
 import './styles.css';
 import AddListing from './AddListing';
 import { auth, db } from '../../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import { query,where } from 'firebase/firestore';
+import { query,where,getDoc } from 'firebase/firestore';
+import { AddUser } from './SearchUser';
 
-
+const Header = () => {
+  return <h1>Administrator Dashboard</h1>
+}
 
 const AdminPage = () => {
   const [user, loading, error] = useAuthState(auth);
-  const [data, setData] = useState({});
+  const [data, setData] = useState({uid:"",email:"",userName:"",role:"",});
   const navigate = useNavigate();
-  useEffect(() => {
+  const [admin, setAdmin] = useState(false);
+
+  const getUserInfo = async () => { 
     if (user) {
-      query(db, 'users', where('uid', '==', user.uid)).then(res => { 
-        setData(res.docs[0].data())
+      console.log(user);
+      const q = query(db, "users", where("uid", "==", user.uid));
+      await getDoc(q).then((doc) => {
+        setData(...doc.data());
+        console.log(data);
+        if (doc.data().admin) {
+          setAdmin(true);
+        }
       })
     }
-  })
+  }
+  useEffect(() => {
+    if (auth.currentUser !== null) {
+      getUserInfo();
+   }
+  },[])
   return (
     <Container fluid="true" className="admin-container">
+    <Header />
+      
   
-        <h1> Administrator Page</h1>
-  
-   
-       <AddListing />
+      <AddListing  />
+      <AddUser />
    
     </Container>
   );

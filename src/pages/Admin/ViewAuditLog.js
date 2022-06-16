@@ -1,6 +1,6 @@
 import React, { useState,useEffect ,useRef} from "react";
 import { db, auth, app} from "../../firebase";
-import { query, getDocs,where,collection ,doc,addDoc,onSnapshot} from 'firebase/firestore';
+import { query, getDocs,where,collection ,doc,addDoc,onSnapshot,orderBy} from 'firebase/firestore';
 import { useCollection, useCollectionData } from 'react-firebase-hooks/firestore';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Container} from "rsuite";
@@ -11,7 +11,7 @@ export const ViewAuditLog = () => {
    
   const auditLog = collection("auditLog");
   const placeHolder = useRef();
-  const q = query(auditLog,orderBy("DateTime","desc"));
+  const q = query(auditLog,orderBy("DateTime","desc").limit(25));
   const [values] = useCollectionData(q,{ idField: "DateTime" });
   const [data, setData] = useState([values]);
   const renderAuditLog = async (e) => {
@@ -49,8 +49,10 @@ export const ViewAuditLog = () => {
   },[]);
 
     return (
-        <div>
+        <React.Fragment>
         <button onClick={()=>renderAuditLog()}>Audit Log</button>
-        </div>
+        </React.Fragment>
     )
 }
+
+export default ViewAuditLog;

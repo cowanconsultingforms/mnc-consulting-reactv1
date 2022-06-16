@@ -1,15 +1,45 @@
 import {
   getStorage,
-  ref,
+  ref as reference,
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import React from "react";
+import React, {useState,useRef,forwardRef,useEffect } from "react";
+import { storage } from "../../firebase";
+import { Uploader } from 'rsuite';
+import { useUploadFile } from "react-firebase-hooks/storage";
 
-export const FileUploader = ({ action, ref, listType,defaultFileList}) => {
+export const FileUploader = ({ action, ref, listType, defaultFileList }) => {
+  const storageRef = reference(storage, "images/" + uploadFile);
+  const fileList = [];
+  const [uploadFile, uploading, snapshot, error] = useUploadFile();
+  const [files, setFiles] = useState('');
+  const uploadRef = useRef();
+  const upload = async (e) => {
+    e.preventDefault();
+      const result = await uploadFile(storageRef,files, {
+        contentType: "image/jpeg",
+      });
+        alert(`Result: ${JSON.stringify(result)}`);
+      
+    };
+  const RenderFileInfo = () => {
+    return (
+      <React.Fragment>
+        {fileList.map((file) => {
+          return (
+            <div key={file.name}>
+              <span>{file.name}</span>
+              <span>{file.size}</span>
+            </div>
+          );
+        })}
+      </React.Fragment>
+    );
+  }
   const handleUpload = async (e, file) => {
     e.preventDefault();
-    const storageRef = ref(storage, "images/" + file.name);
+    const storageRef = reference(storage, "images/" + file.name);
 
     const uploadTask = uploadBytesResumable(storageRef, file);
     uploadTask.on(
@@ -42,14 +72,20 @@ export const FileUploader = ({ action, ref, listType,defaultFileList}) => {
       }
     );
   };
+  useEffect(()=> {
+  
+  },[fileList])
     return (
-      <React.Fragment>
+      <div className="uploader">
         <Uploader
-          action={handleUpload}
+          action={upload}
           listType="picture-text"
           defaultFileList={fileList}
-          renderFileInfo={RenderFileInfo(file, fileElement)}
+          ref={uploadRef}
+          onUpload={file=>uploadFile(reference(storage,'listingImages/'+file.name))}
+          renderFileInfo={RenderFileInfo()}
         />
-      </React.Fragment>
+      </div>
     );
 }
+export default FileUploader;

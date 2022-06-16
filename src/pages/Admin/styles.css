@@ -18,20 +18,24 @@ div#admin-flex-box  {
 
 .listing-form{
   font-size: 20px;
+  width:80%;
 }
 .listing-flexbox{
   display:flex;
+  flex-direction: column;
+  justify-content: center;
+  margin:5%;
+  
 }
+
 .admin-container {
     display:flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
   font-family: Garamond;
-  color: rgb(196, 196, 196);
-  text-decoration:underline;
+  color: rgb(46, 45, 45);
   text-decoration-style: bold;
-  -webkit-text-decoration: underline;
   height: 100%;
   background-color: white;
   margin-top:100px;

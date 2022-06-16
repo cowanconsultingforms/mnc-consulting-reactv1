@@ -1,5 +1,5 @@
 import { async } from "@firebase/util";
-import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from "firebase/auth";
 import {
   addDoc, collection, serverTimestamp, setDoc, doc
 } from "firebase/firestore";
@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { Button,Container, FlexboxGrid, Form, Input, Schema,Divider } from "rsuite";
 import { auth, db, storage,signUp } from "../../firebase";
 import { LoginDiv } from "../Login/LoginForm";
+import usePasswordReset from "./usePasswordReset";
 
 const { StringType} = Schema.Types;
 const model = Schema.Model({
@@ -32,7 +33,7 @@ const model = Schema.Model({
     .isRequired("This field is required."),
 });
 const RegisterForm = () => {
-
+  const [user,loading,error] = useAuthState(auth);
   const navigate = useNavigate();
   const formRef = useRef();
   const [formError, setFormError] = useState({});
@@ -51,12 +52,23 @@ const RegisterForm = () => {
     }
     
   }
+  const validatePassword = () => {
+  let isValid = true
+  if (formData.password !== '' && formData.verifyPassword !== ''){
+    if (formData.password !== formData.verifyPassword) {
+      isValid = false;
+      setFormError("Passwords does not match");
+    }
+  }
+  return isValid
+  }
   useEffect(() => {
+    formRef.current = formData;
     const unsubscribe = onAuthStateChanged(auth, user => {
       localStorage.setItem('user',user);
     })
     return unsubscribe;
-  }, [])
+  }, [formData])
   
   return (
     <React.Fragment>
@@ -147,23 +159,22 @@ const RegisterForm = () => {
             >
               Register
             </Button>
-
-            <Button
-              onClick={() => navigate("/register")}
-              style={{
-                color: "white",
-                padding: "30px",
-                width: "50%",
-
-                border: "2px solid #ccc",
-                cursor: "pointer",
-                backgroundColor: "#686868",
-                float: "right",
-              }}
-            >
-              Forgot Password?
-            </Button>
           </Form>
+          <Button
+            onClick={() => sendPasswordResetEmail(auth, formData.email)}
+            style={{
+              color: "white",
+              padding: "30px",
+              width: "50%",
+
+              border: "2px solid #ccc",
+              cursor: "pointer",
+              backgroundColor: "#686868",
+              float: "right",
+            }}
+          >
+            Forgot Password?
+          </Button>
         </FlexboxGrid.Item>
       </FlexboxGrid>
     </React.Fragment>
@@ -250,7 +261,7 @@ export const FullPageRegister = () => {
           width: "100%",
         }}
       >
-        <FlexboxGrid.Item colspan={24} style={{ alignItems: "stretch" }}>
+        <FlexboxGrid.Item colspan={24} style={{ alignItems: "center" }}>
           <Form
             ref={formRef}
             onChange={setFormData}
@@ -321,7 +332,6 @@ export const FullPageRegister = () => {
 
             <Button
               type="submit"
-              onClick={handleSubmit}
               style={{
                 color: "white",
                 padding: "30px",
@@ -335,7 +345,7 @@ export const FullPageRegister = () => {
             >
               Register
             </Button>
-
+            </Form>
             <Button
               onClick={() => navigate("/register")}
               style={{
@@ -351,7 +361,7 @@ export const FullPageRegister = () => {
             >
               Forgot Password?
             </Button>
-          </Form>
+         
         </FlexboxGrid.Item>
       </FlexboxGrid>
     </Container>

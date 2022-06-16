@@ -102,12 +102,7 @@ div#rs-container {
     justify-content: center;
     margin-top: 200px;
 }
-form.rs-form {
-    display: flex;
-    flex-direction: column;
-    width:100%;
- 
-}
+
 .buy-button {
     float: left;
     text-align: center;

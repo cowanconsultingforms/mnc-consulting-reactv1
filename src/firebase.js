@@ -87,23 +87,23 @@ export const signIn = async (email, password) => {
       password
     );
     const user = userCredential.user;
-    localStorage.setItem(JSON.stringify(user));
-    const userRef = doc(db, "users", user.uid).withConverter(userConverter);
-    setDoc(
-      userRef,
-      new User(user.email, user.userName, user.uid, user.role, user.created_at)
-    )
-  
-
-    addDoc(userRef, user).then((docRef) => {
-      auditLogger(user);
-      console.log(docRef);
-    });
-    return true;
+    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    const docs = await getDocs(q);
+    if (docs.length === 0) {
+      await addDoc(collection(db, "users"),
+        {
+          uid: user.uid, email: user.email(), name: user.displayName(), AccountType: "Regular", CreatedOn: serverTimestamp()
+        }).then(() => {
+          console.log("User Created");
+        })
+    }
   } catch (error) {
-    return { error: error.message };
+      return { error: error.message };
+    }
+    
+    
   }
-};
+
   class User {
     constructor(email, userName, uid, role, created_at) {
       this.email = email;

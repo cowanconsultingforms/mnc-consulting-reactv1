@@ -3,12 +3,12 @@ import React, { useEffect, useState,useRef,forwardRef } from 'react';
 import { useAuthState, useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useDownloadURL } from 'react-firebase-hooks/storage';
 import { useNavigate } from 'react-router-dom';
-import {  ButtonToolbar, Divider, FlexboxGrid, Form, Loader, Schema } from 'rsuite';
+import {  ButtonToolbar, Container, Divider, FlexboxGrid, Form, Loader, Schema } from 'rsuite';
 import styled from 'styled-components';
 import  { auth, storage } from '../../firebase';
 import { ref } from 'firebase/storage';
 import './styles.css';
-import { DownloadURL } from '../../hooks/useDownloadUrl';
+import { ImageBox } from "../../components/Custom/Containers";
 export const LoginDiv = styled.div`
     display: flex;
     flex-direction: column;
@@ -34,7 +34,7 @@ const LoginButtonRef = forwardRef((props, ref) => {
   return <LoginButton ref={ref} {...props} />;
 
 });
-const user = [{name:'name',}]
+
 
 //Login Form used by code
 export const LoginForm = () => {
@@ -49,15 +49,15 @@ export const LoginForm = () => {
    });
   const HandleSubmit = async(e) => {
     e.preventDefault();
-      if (!formRef.current.check()) {
+      if (!formRef.current) {
         console.error("Form Error");
       }
 
       const {email,password} = formValue;
      
     signInWithEmailAndPassword(auth,formValue.email, formValue.password).then(
-      (res) => {
-        const user = res.data();
+      () => {
+        const user = auth.currentUser;
         console.log(JSON.stringify(user));
         sessionStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem('userToken', JSON.stringify(user));
@@ -72,10 +72,10 @@ export const LoginForm = () => {
     };
 
     useEffect( () => {
-
-    }, []);
+      formRef.current = formValue;
+    }, [formValue]);
   return (
-    <div className="LoginForm">
+    <Container className="LoginForm">
       <Form
         className="login-form"
         ref={formRef}
@@ -86,7 +86,7 @@ export const LoginForm = () => {
         style={{
           justifyContent: "center",
           alignItems: "center",
-          width: "50%",
+          width: "80%",
         }}
       >
         <TextFieldLogin
@@ -94,10 +94,9 @@ export const LoginForm = () => {
           label="Email"
           type="email"
           autoComplete="email"
-          ref={formRef}
           style={{
-            padding: "12px 20px",
-            margin: "8px 0",
+           
+            
             fontSize: "16px",
             border: "1px solid #ccc",
             boxSizing: "border-box",
@@ -114,8 +113,6 @@ export const LoginForm = () => {
           label="Password"
           type="password"
           autoComplete="password"
-          ref={formRef}
-          value={formValue}
           style={{
             padding: "12px 20px",
             margin: "8px 0",
@@ -130,6 +127,7 @@ export const LoginForm = () => {
             alignItems: "center",
           }}
         />
+        <Form.Group>
         <ButtonToolbar style={{display:'flex',width:'80%',spaceBetween:'1px',padding:'5px',border:'5px',justifyContent:'space-between',flexDirection:'row'}}>
           <LoginButtonRef
             className="login-button"
@@ -166,10 +164,12 @@ export const LoginForm = () => {
             }}
           >
             Register Here
-          </LoginButtonRef>
+            </LoginButtonRef>
+         
         </ButtonToolbar>
+           </Form.Group>
       </Form>
-    </div>
+    </Container>
   );
 }
 
@@ -177,6 +177,9 @@ export const LoginForm = () => {
 export const FullPageLogin = () => {
   
   const [user, loading, error] = useAuthState(auth);
+  if (user) {
+    
+  }
   const navigate = useNavigate();
   const DownloadURL = () => {
     const reference = ref(storage, "images/mncdevelopmentlogo.jpg");
@@ -202,11 +205,14 @@ export const FullPageLogin = () => {
       </React.Fragment>
     )
   }
+  useEffect(() => {
+    
+  })
   
   return (
       <div className="login-div">
-      {<DownloadURL />}
-        <img id="logo" alt="logo"></img>
+      {<img src={DownloadURL} />}
+        <img id="logo" alt="logo" src={DownloadURL()}></img>
         <FlexboxGrid classPrefix="flexbox-grid-start">
           <FlexboxGrid.Item colspan={6}>
            {RenderLogin}
@@ -233,7 +239,7 @@ const model = Schema.Model({
 const TextFieldLogin = React.forwardRef((props, ref) => {
   const { name, label, accepter, ...rest } = props;
   return (
-    <Form.Group controlId={`${name}-4`} ref={ref}>
+    <Form.Group controlId={`${name}`} ref={ref}>
       <Form.ControlLabel>{label} </Form.ControlLabel>
       <Form.Control name={name} accepter={accepter} {...rest} />
     </Form.Group>

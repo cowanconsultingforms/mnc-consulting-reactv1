@@ -1,12 +1,11 @@
 import { collection, getDoc, query, where, querySnapshot, doc,onSnapshot } from 'firebase/firestore';
-import React,{forwardRef,useRef,useEffect} from 'react';
+import React,{forwardRef,useRef,useEffect,useState} from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollection, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
 import { Button, Form, Loader, Schema, Container, Input, FlexboxGrid,ButtonToolbar} from 'rsuite';
 import styled from 'styled-components';
 import { auth, db } from '../../firebase';
-import { AccountInput } from '../../components/Custom/AccountStyles';
-
+import UserDataService from '../../services/crudoperations';
 const SearchUserBox = styled.div`
   position: relative;
   text-align: center;
@@ -43,7 +42,7 @@ function asyncCheckUsername(name) {
 const model = Schema.Model({
   name:StringType().isRequired(),
 })
-const TextFieldLogin = forwardRef((props, ref) => {
+const TextField = forwardRef((props, ref) => {
   const { name, label, accepter, ...rest } = props;
   return (
     <Form.Group controlId={`${name}`} ref={ref}>
@@ -55,10 +54,20 @@ const TextFieldLogin = forwardRef((props, ref) => {
 export const SearchUser = () => {
   const formRef = React.useRef();
   const [formError, setFormError] = React.useState({});
-  const [formValue, setFormValue] = React.useState({
-    name: "",
-  });
+  const [user, setUser] = useState({});
+  const [formValue,setFormValue] = useState({})
   const isMounted = useRef();
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const getUser = async(id) => {
+    const data = await UserDataService.getUser(id);
+    console.log(data);
+    setUser(data)
+  }
+  
 
   const handleSubmit = () => {
     formRef.current.checkAsync().then((result) => {
@@ -120,6 +129,53 @@ export const SearchUser = () => {
   );
   }
 
+export const AddUser = ({userName,role,uuid,email,portfolio}) => {
+  const formRef = useRef();
+  const [formError, setFormError] = useState({ error: false, message: "" });
+  const [user, setUser] = useState({});
+  const [formData,setFormData] = useState({uid:"",email:"",userName:"",role:"Regular",portfolio:[{min:"",max:""}]})
+  const handleSubmit = async(e) => { 
+    e.preventDefault();
+  }
+  return (
+    <React.Fragment>
+      <h1>Add New User</h1>
+      <Form className="add-user-form"
+        ref={formRef}
+        value={formData}
+        onClick={handleSubmit}
+        onChange={setFormData}
+      onCheck={setFormError}>
+        <TextField
+          accepter={Input}
+          label="uuid"
+          name="uid" />
+        <TextField
+          accepter={Input}
+          label="email"
+          name="email" />
+        <TextField
+          accepter={Input}
+          label="userName"
+          name="userName" />
+        <TextField
+          accepter={Input}
+          label="role"
+          name="role" />
+        <TextField
+          accepter={Input}
+          label="portfolio"
+          name="portfolio" />
+        <ButtonToolbar>
+          <Button appearance="primary" onClick={handleSubmit}>
+            Submit
+          </Button>
+        </ButtonToolbar>
+      </Form>
+    </React.Fragment>
+      
+    )
+}
 
 
 

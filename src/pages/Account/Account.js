@@ -11,7 +11,6 @@ import {
   StyledInput,
 } from "./AccountStyles";
 import {AccountPageSignOutBox} from './AccountPageSignOutBox'
-import { AccountHeader } from "./AccountHeader";
 import { ProfileButton } from '../../components/Custom/Buttons';
 import { auth, db, userSignOut } from "../../firebase";
 import { Container } from "rsuite";
@@ -21,8 +20,8 @@ export const AccountPage = () => {
   //hook to get current user
  
  
-  const [user, setUser] = useState(auth.currentUser);
-  const [data, setData] = useState('')
+  const [user, setUser] = useState({user:auth.currentUser.uid});
+  const [data, setData] = useState({})
  
   const getUserInfo = async () => { 
     const uid = user.uid;
@@ -34,7 +33,7 @@ export const AccountPage = () => {
   
   useEffect(() => {
     getUserInfo();
-  })
+  },[user,data])
 
 
 
