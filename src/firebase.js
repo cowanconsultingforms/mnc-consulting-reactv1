@@ -1,16 +1,27 @@
 import { initializeApp } from "firebase/app";
 import {
-  createUserWithEmailAndPassword, getAuth,
+  createUserWithEmailAndPassword,
+  getAuth,
   GoogleAuthProvider,
-  signInWithEmailAndPassword, signOut,signInWithPopup,sendPasswordResetEmail
+  signInWithEmailAndPassword,
+  signOut,
+  signInWithPopup,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 import {
   addDoc,
-  collection, getDocs, getFirestore, query, serverTimestamp, where,setDoc,doc
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  serverTimestamp,
+  where,
+  setDoc,
+  doc,
 } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-
+import { Input } from "rsuite";
 //Contains all the firebase configuration
 export const auditLogger = async ({
   action = "Created Account",
@@ -69,7 +80,7 @@ export const signUp = async (email, password) => {
     await addDoc(collection(db, "users"), {
       uid: user.uid,
       email: user.email,
-      userName:user.email.split("@")[0],
+      userName: user.email.split("@")[0],
       AccountType: "Regular",
       CreatedOn: serverTimestamp,
     });
@@ -90,53 +101,54 @@ export const signIn = async (email, password) => {
     const q = query(collection(db, "users"), where("uid", "==", user.uid));
     const docs = await getDocs(q);
     if (docs.length === 0) {
-      await addDoc(collection(db, "users"),
-        {
-          uid: user.uid, email: user.email(), name: user.displayName(), AccountType: "Regular", CreatedOn: serverTimestamp()
-        }).then(() => {
-          console.log("User Created");
-        })
+      await addDoc(collection(db, "users"), {
+        uid: user.uid,
+        email: user.email(),
+        name: user.displayName(),
+        AccountType: "Regular",
+        CreatedOn: serverTimestamp(),
+      }).then(() => {
+        console.log("User Created");
+      });
     }
   } catch (error) {
-      return { error: error.message };
-    }
-    
-    
+    return { error: error.message };
   }
+};
 
-  class User {
-    constructor(email, userName, uid, role, created_at) {
-      this.email = email;
-      this.userName = userName;
-      this.uid = uid;
-      this.role = role;
-      this.created_at = created_at;
-    }
-    toString() {
-      return JSON.stringify(this);
-    }
+class User {
+  constructor(email, userName, uid, role, created_at) {
+    this.email = email;
+    this.userName = userName;
+    this.uid = uid;
+    this.role = role;
+    this.created_at = created_at;
   }
-  const userConverter = {
-    toFirestore: (user) => {
-      return {
-        email: user.email,
-        userName: user.userName,
-        uid: user.uid,
-        role: user.role,
-        created_at: user.created_at,
-      };
-    },
-    fromFirestore: (snapshot, options) => {
-      const data = snapshot.data(options);
-      return new User(
-        data.email,
-        data.userName,
-        data.uid,
-        data.role,
-        data.created_at
-      );
-    },
-  };
+  toString() {
+    return JSON.stringify(this);
+  }
+}
+const userConverter = {
+  toFirestore: (user) => {
+    return {
+      email: user.email,
+      userName: user.userName,
+      uid: user.uid,
+      role: user.role,
+      created_at: user.created_at,
+    };
+  },
+  fromFirestore: (snapshot, options) => {
+    const data = snapshot.data(options);
+    return new User(
+      data.email,
+      data.userName,
+      data.uid,
+      data.role,
+      data.created_at
+    );
+  },
+};
 export const userSignOut = async () => {
   try {
     await signOut(auth);
@@ -175,7 +187,25 @@ export const sendPasswordReset = async (email) => {
     alert(err.message);
   }
 };
-
+export const getUserInfo = async () => {
+  const user = auth.currentUser;
+  if (user !== null) {
+    user.providerData.forEach((profile) => {
+      console.log("Sign-in provider: " + profile.providerId);
+      console.log("  Provider-specific UID: " + profile.uid);
+      console.log("  Name: " + profile.displayName);
+      console.log("  Email: " + profile.email);
+      console.log("  Photo URL: " + profile.photoURL);
+      return (
+        <div>
+          <Input value={profile.displayName} />
+          <Input value={profile.email} />
+          <Input value={profile.uid} />
+        </div>
+      );
+    });
+  }
+};
 /*const firebaseConfig2 = {
   apiKey: "AIzaSyBgdbGeJukJQA2_cPzEmocY_HtefKb9ono",
   authDomain: "mnc-test-server.firebaseapp.com",
@@ -191,6 +221,5 @@ export const db2 = getFirestore(app2);
 export const auth2 = getAuth(app2);
 test server code I created that needs to be commented out
 */
-
 
 export default app;

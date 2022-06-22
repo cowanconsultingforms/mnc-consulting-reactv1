@@ -1,8 +1,8 @@
-import React,{forwardRef} from "react";
+import React,{forwardRef,useRef,useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc, onSnapshot,collection, DocumentSnapshot ,query,where, serverTimestamp,setDoc} from "firebase/firestore";
 import { db ,auth} from "../../firebase";
-import { Form,Container,Button,Schema,FlexboxGrid, ButtonToolbar } from "rsuite";
+import { Form,Container,Button,Schema,FlexboxGrid, ButtonToolbar ,Input} from "rsuite";
 import './styles.css';
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
 import TextField from "../../components/Custom/TextField";
@@ -27,12 +27,12 @@ const TextFieldSearch= forwardRef((props, ref) => {
 });
 
 //code to render search user from the admin page
-const Search = () => {
+export const Search = () => {
   const collectionRef = collection(db, "users");
   
-  const formRef = React.useRef();
-  const [formError, setFormError] = React.useState({});
-  const [formValue, setFormValue] = React.useState({
+  const formRef = useRef();
+  const [formError, setFormError] = useState({});
+  const [formValue, setFormValue] = useState({
     email: "",
   });
   const auditLogger = async ({ action = "Modified User Account" }) => {
@@ -51,8 +51,8 @@ const Search = () => {
       return;
     }
     
-    const q = query(collection(db, "users"), where("email", "==", formValue.email));
-    getDoc(db, "users", "email", formValue.email).then((snap) => {
+    const q = query(collection(db, "users"), where("email", "===", formValue.email));
+    getDoc(q).then((snap) => {
       if (snap.exists) {
         console.log(snap.data());
         return (
@@ -92,7 +92,7 @@ const Search = () => {
           name="email"
           label="User Email"
           ref={formRef}
-          accepter={StringType()}
+          accepter={Input}
           placeholder="Search User By Email"
           className="user-input"
           style={{              

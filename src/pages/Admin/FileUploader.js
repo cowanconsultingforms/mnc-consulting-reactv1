@@ -13,6 +13,7 @@ export const FileUploader = ({ action, ref, listType, defaultFileList }) => {
   const storageRef = reference(storage, "images/" + uploadFile);
   const fileList = [];
   const [uploadFile, uploading, snapshot, error] = useUploadFile();
+    const [selectedFile, setSelectedFile] = useState<File>(null);
   const [files, setFiles] = useState('');
   const uploadRef = useRef();
   const upload = async (e) => {
@@ -21,7 +22,24 @@ export const FileUploader = ({ action, ref, listType, defaultFileList }) => {
         contentType: "image/jpeg",
       });
         alert(`Result: ${JSON.stringify(result)}`);
-      
+    return (
+      <div>
+        <p>
+          {error && <strong>Error: {error.message}</strong>}
+          {uploading && <span>Uploading file...</span>}
+          {snapshot && <span>Snapshot: {JSON.stringify(snapshot)}</span>}
+          {selectedFile && <span>Selected file: {selectedFile.name}</span>}
+          <input
+            type="file"
+            onChange={(e) => {
+              const file = e.target.files ? e.target.files[0] : undefined;
+              setSelectedFile(file);
+            }}
+          />
+          <button onClick={upload}>Upload file</button>
+        </p>
+      </div>
+    );
     };
   const RenderFileInfo = () => {
     return (

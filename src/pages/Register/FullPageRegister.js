@@ -12,6 +12,7 @@ import { Button,Container, FlexboxGrid, Form, Input, Schema,Divider } from "rsui
 import { auth, db, storage,signUp } from "../../firebase";
 import { LoginDiv } from "../Login/LoginForm";
 import usePasswordReset from "./usePasswordReset";
+import {DownloadURL} from '../../components/useDownloadUrl';
 
 const { StringType} = Schema.Types;
 const model = Schema.Model({
@@ -72,14 +73,15 @@ const RegisterForm = () => {
   
   return (
     <React.Fragment>
-      <img id="logo" alt="logo"></img>
+      {<img src={DownloadURL} />}
+      <img id="logo" alt="logo" src={DownloadURL()}></img>
       <FlexboxGrid classPrefix="flexbox-grid-start">
         <FlexboxGrid.Item>
           <Form
             ref={formRef}
             onChange={setFormData}
             onCheck={setFormError}
-            formData={formData}
+            formValue={formData}
             model={model}
             onSubmit={handleSubmit}
           >
@@ -145,6 +147,7 @@ const RegisterForm = () => {
 
             <Button
               type="submit"
+              ref={formRef}
               onClick={handleSubmit}
               style={{
                 color: "white",
@@ -192,28 +195,15 @@ export const FullPageRegister = () => {
     password: "",
     verifyPassword: "",
   });
-  
-  
-
-     
-
-
-    
-  
   const handleSubmit = async() => {
     const { email, password, verifyPassword } = formData;
     try {
-       signUp(formData.email, formData.password);
+       signUp(email, password);
     } catch (error) {
       console.log(error);
     }
     
   }
-     
-    
-    
-  
-  
   const DownloadURL = async () => {
     const reference = ref(storage, "images/mncdevelopmentlogo.jpg");
     getDownloadURL(reference).then((url) => {
@@ -241,6 +231,7 @@ export const FullPageRegister = () => {
 
   return (
     <Container
+      className="register-container"
       style={{
         display: "flex",
         flexDirection: "column",
@@ -249,7 +240,8 @@ export const FullPageRegister = () => {
         marginTop: "100px",
       }}
     >
-      <img id="logo" src={image} alt="logo" />
+      {<img src={DownloadURL} />}
+      <img id="logo" alt="logo" src={DownloadURL()}></img>
 
       <FlexboxGrid
         classPrefix="login-flex"
@@ -266,11 +258,12 @@ export const FullPageRegister = () => {
             ref={formRef}
             onChange={setFormData}
             onCheck={setFormError}
-            formData={formData}
+            formValue={formData}
             model={model}
             onSubmit={handleSubmit}
           >
             <TextFieldLogin
+              ref={formRef}
               accepter={Input}
               name="email"
               label="Email"
@@ -291,6 +284,7 @@ export const FullPageRegister = () => {
             />
 
             <TextFieldLogin
+              ref={formRef}
               accepter={Input}
               name="password"
               label="Password"
@@ -316,6 +310,7 @@ export const FullPageRegister = () => {
               type="password"
               autoComplete="off"
               autofill="off"
+              ref={formRef}
               accepter={Input}
               style={{
                 width: " 100%",
@@ -340,28 +335,26 @@ export const FullPageRegister = () => {
                 border: "2px solid #ccc",
                 cursor: "pointer",
                 backgroundColor: "#686868",
-               
               }}
             >
               Register
             </Button>
-            </Form>
-            <Button
-              onClick={() => navigate("/register")}
-              style={{
-                color: "white",
-                padding: "30px",
-                width: "100%",
+          </Form>
+          <Button
+            onClick={() => navigate("/register")}
+            style={{
+              color: "white",
+              padding: "30px",
+              width: "100%",
 
-                border: "2px solid #ccc",
-                cursor: "pointer",
-                backgroundColor: "#686868",
-                float: "right",
-              }}
-            >
-              Forgot Password?
-            </Button>
-         
+              border: "2px solid #ccc",
+              cursor: "pointer",
+              backgroundColor: "#686868",
+              float: "right",
+            }}
+          >
+            Forgot Password?
+          </Button>
         </FlexboxGrid.Item>
       </FlexboxGrid>
     </Container>

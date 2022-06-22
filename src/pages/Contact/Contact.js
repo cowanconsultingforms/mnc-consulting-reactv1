@@ -2,14 +2,15 @@ import styled from 'styled-components';
 import TextField from '../../components/Custom/TextField';
 import React,{ useState,forwardRef,useRef } from 'react';
 import { useDownloadURL } from 'react-firebase-hooks/storage';
-import { Container, Form ,Input,Button,Loader} from 'rsuite';
+import { Container, Button,Loader,Form} from 'rsuite';
 import { useNavigate } from 'react-router-dom';
 import { TextFieldLogin } from '../../components/Custom/TextField';
 import { ImageBox } from '../../components/Custom/Containers';
 import { storage } from '../../firebase';
 import { ref as reff, downloadURL } from 'firebase/storage';
+import {useForm,useController} from 'react-hook-form';
 import './styles.css';
-
+import {Input,Controller} from '../../components/Custom/Inputs';
 const ContactTop = styled.div`
 background-size:cover;
 box-sizing:border-box;
@@ -91,6 +92,7 @@ const Contact = () => {
   );
 }
 const ContactForm = () => {
+  const {control,register,handleSubmit} = useForm();
   const [data, setData] = useState({});
   const navigate = useNavigate();
   const formRef = useRef();
@@ -131,40 +133,27 @@ const ContactForm = () => {
       <h2>Contact Us</h2>
 
       <Form
-        fluid
-        onChange={setFormValue}
-        formValue={formValue}
-        className="main-contact-form"
-        layout="horizontal"
-      >
-        <Form.Group controlId="contact-form" className="main-contact-form">
-          <Form.ControlLabel>Name</Form.ControlLabel>
-          <Form.Control name="contact-name" accepter={Input} />
-          <Form.HelpText>Required</Form.HelpText>
-        </Form.Group>
-        <Form.Group controlId="contact-email">
-          <Form.ControlLabel>Email</Form.ControlLabel>
-          <Form.Control name="email" type="email" accepter={Input} />
-          <Form.HelpText>Required</Form.HelpText>
-        </Form.Group>
-        <Form.Group controlId="contact-phone">
-          <Form.ControlLabel>Phone Number</Form.ControlLabel>
-          <Form.Control
-            name="phone"
-            type="number"
-            autoComplete="off"
-            accepter={Input}
-          />
-        </Form.Group>
-        <Form.Group controlId="contact-textarea">
-          <Form.ControlLabel>Message</Form.ControlLabel>
-          <Form.Control rows={5} name="textarea" accepter={Textarea} />
-        </Form.Group>
-      </Form>
-      <Button type="submit" className="contact-button">
-        Send
-      </Button>
-
+      ref={formRef}>
+    <Form.Group controlId="name">
+      <Form.ControlLabel>Username</Form.ControlLabel>
+      <Form.Control name="name" />
+      <Form.HelpText>Username is required</Form.HelpText>
+    </Form.Group>
+    <Form.Group controlId="email">
+      <Form.ControlLabel>Email</Form.ControlLabel>
+      <Form.Control name="email" type="email" />
+      <Form.HelpText tooltip>Email is required</Form.HelpText>
+    </Form.Group>
+    <Form.Group controlId="password">
+      <Form.ControlLabel>Password</Form.ControlLabel>
+      <Form.Control name="password" type="password" autoComplete="off" />
+    </Form.Group>
+    <Form.Group controlId="textarea">
+      <Form.ControlLabel>Textarea</Form.ControlLabel>
+      <Form.Control rows={5} name="textarea" accepter={Textarea} />
+    </Form.Group>
+<Button type="submit"></Button>
+  </Form>
       <script src="https://smtpjs.com/v3/smtp.js"></script>
     </Container>
   );

@@ -8,7 +8,7 @@ import { ImageBox } from '../../components/Custom/Containers';
 import Searchbar from '../../components/Searchbar';
 import { storage,db,auth } from '../../firebase';
 import { LandingFooter } from './Footer';
-import { collection, getDoc, query,where,doc,orderBy } from 'firebase/firestore';
+import { collection, getDoc, query,where,doc,orderBy,getDocs } from 'firebase/firestore';
 import './styles.css';
 import { FaSearch } from "react-icons/fa";
 import { StringType } from 'schema-typed';
@@ -43,7 +43,7 @@ export const Landing = () => {
       reference: referenced(storage, "images/mncthumbnail3.jpg"),
     },
   ];
-
+  const searchRef = useRef();
   const [value, loading, error] = useDownloadURL(referenced(storage, "images/mncdevelopmentlogo.jpg"))
      
   
@@ -74,8 +74,8 @@ export const Landing = () => {
   const handleSearch = async() => { 
 
     const collRef = collection(db, type);
-    const q = query(db,where(searchQuery, '==', 'zip'));
-    await getDoc(q).then(async (doc) => {
+    const q = query(collRef,where(searchQuery, '==', 'zip'));
+    await getDocs(q).then(async (doc) => {
       if (doc.exists) {
         console.log(doc.data());
         navigate(`/${type}/${doc.data().id}`);
@@ -99,7 +99,9 @@ export const Landing = () => {
         >
           <FlexboxGrid.Item colspan={24} order={1}>
             <Button
+              ref={searchRef}
               className="buy-button"
+              value={type}
               style={{
                 padding: "15px",
                 border: "none",
@@ -115,9 +117,10 @@ export const Landing = () => {
               Buy
             </Button>
           </FlexboxGrid.Item>
-        
+
           <FlexboxGrid.Item colspan={24} order={2}>
             <Button
+            ref={searchRef}
               className="rent-button"
               style={{
                 float: "middle",
@@ -130,7 +133,7 @@ export const Landing = () => {
                 cursor: "pointer",
                 borderRadius: "1px",
               }}
-              type="submit"
+              value={type}
               onClick={() => setType("forRent")}
             >
               Rent
@@ -139,6 +142,8 @@ export const Landing = () => {
           <Divider />
           <FlexboxGrid.Item colspan={6} order={3}>
             <Button
+            ref={searchRef}
+              value={type}
               className="sold-button"
               style={{
                 float: "right",
@@ -156,16 +161,14 @@ export const Landing = () => {
           </FlexboxGrid.Item>
         </FlexboxGrid>
         <div className="search-input">
-          <Form
-            ref={formRef}
-          value={[type,searchQuery]}>
+          <Form ref={formRef} value={[type, searchQuery]}>
             <Input
               className="home-search-bar"
               value={searchQuery}
               onChange={setSearchQuery}
               placeholder="Enter an address, city, or zip code"
               type="search"
-              onClick={handleSearch}
+             
             />
 
             <IconButton

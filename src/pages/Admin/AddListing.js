@@ -1,11 +1,31 @@
-import { getDownloadURL,  ref } from 'firebase/storage';
-import React, { useState,useRef,forwardRef,useEffect } from "react";
+import { getDownloadURL, ref } from "firebase/storage";
+import React, { useState, useRef, forwardRef, useEffect } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { useUploadFile } from 'react-firebase-hooks/storage';
-import { db,auth,storage } from "../../firebase";
-import { serverTimestamp,addDoc,collection,setDoc} from 'firebase/firestore';
-import { Container, FlexboxGrid, Uploader, DOMHelper, Schema, Checkbox, Row,Form,Button,RadioGroup,Radio, Input,Col, Panel} from 'rsuite';
-import { StringType } from 'schema-typed';
+import { useUploadFile } from "react-firebase-hooks/storage";
+import { db, auth, storage } from "../../firebase";
+import {
+  serverTimestamp,
+  addDoc,
+  collection,
+  setDoc,
+} from "firebase/firestore";
+import {
+  Container,
+  FlexboxGrid,
+  Uploader,
+  DOMHelper,
+  Schema,
+  Checkbox,
+  Row,
+  Form,
+  Button,
+  RadioGroup,
+  Radio,
+  Input,
+  Col,
+  Panel,
+} from "rsuite";
+import { StringType } from "schema-typed";
 import {
   StorageError,
   StorageReference,
@@ -15,40 +35,33 @@ import {
   UploadTaskSnapshot,
 } from "firebase/storage";
 import { useMemo } from "react";
-import { addAuditLog } from '../../hooks/addAuditLog';
-import { Textarea,TextField,RadioPicker } from './AdminPageComponents';
-import FileUploader from './FileUploader';
+import { addAuditLog } from "../../hooks/addAuditLog";
+import { Textarea, TextField, RadioPicker } from "./AdminPageComponents";
+import FileUploader from "./FileUploader";
 
 const model = Schema.Model({
   type: StringType().isRequired("This field is required."),
-  street: StringType()
-    .isRequired("This field is required."),
+  street: StringType().isRequired("This field is required."),
   city: StringType().isRequired("This field is required."),
-  state: StringType()
-    .isRequired("This field is required."),
+  state: StringType().isRequired("This field is required."),
   zip: StringType().isRequired("This field is required."),
   bedrooms: StringType().isRequired("This field is required."),
   bathrooms: StringType().isRequired("This field is required."),
   price: StringType().isRequired("This field is required."),
   description: StringType().isRequired("This field is required."),
-
 });
 
-
-
-
-
-
-
 export const AddListing = () => {
-  const { fileList } = useState({});
   const types = [
-    { id: 1, type: "Sale", id: 2, type: "Rent", id: 3, type: "Sold" },
+    { id: 1, type: "Sale" },
+    { id: 2, type: "Rent" },
+    { id: 3, type: "Sold" },
   ];
   const formRef = useRef();
   const handleChange = () => {
-    setFormValue(formValue.type)
-  }
+    setFormValue(formValue.type);
+  };
+  const [type, setType] = useState("");
   const [formValue, setFormValue] = useState({
     street: "",
     city: "",
@@ -58,10 +71,8 @@ export const AddListing = () => {
     bedrooms: "",
     bathrooms: "",
     description: "",
-    images: [],
-    type:""
-    
-  })
+    type: "",
+  });
   const [formError, setFormError] = useState({});
 
   const handleSubmit = async (e) => {
@@ -70,92 +81,78 @@ export const AddListing = () => {
     if (!isValid) {
       setFormError(errors);
       console.log(JSON.stringify(formError));
-    }
-    else {
+    } else {
       setFormError({});
-      
 
-    
-      
-
-
-        const listing = {
-          ...formValue,
-          createdAt: serverTimestamp(),
-          createdBy: auth.currentUser.email,
-        };
-        await addDoc(db, "listings", listing).then(
-          addAuditLog({
-            user: auth.currentUser.displayName,
-            action: `Added ${formValue.type} listing`,
-          })
-        );
-      
-    }
-  }
-  
-      const auditLogger = async ({ action = "Added Listing" }) => {
-        const user = auth.currentUser;
-        const userName = user.displayName;
-        const uid = user.uid;
-        const timestamp = serverTimestamp();
-        const docRef = collection("auditLogs").doc();
-        await setDoc(docRef, { action, userName, uid, timestamp }).then(() => {
-          console.log("Audit Log Created");
-          console.log(JSON.stringify(docRef));
-        });
+      const listing = {
+        ...formValue,
+        createdAt: serverTimestamp(),
+        createdBy: auth.currentUser.email,
       };
+      await addDoc(db, "listings", listing).then(
+        addAuditLog({
+          user: auth.currentUser.displayName,
+          action: `Added ${formValue.type} listing`,
+        })
+      );
+    }
+  };
+
+
+  const renderTypes = () => {
+    return types.map((type) => {
+      return (
+        <Radio key={type.id} value={type.type} onChange={handleChange}>
+          {type.type}
+        </Radio>
+      );
+    });
+  };
   useEffect(() => {
     formRef.current = formValue;
-  }, [])
+  }, []);
 
-  
-
-
-  
   return (
     <React.Fragment>
-      <Panel
+      <Container
+        bodyFill
         className="listing-flexbox"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          width: "80%",
-          height: "100%",
-          fontSize: "20px",
-          backgroundColor: "gray",
-          border: "2px solid black",
-          zIndex: "1",
-        }}
       >
         <Row>
-        <h1 style={{alignItems:'center',justifyContent:'center'}}> Add Listing</h1>
+          <h1 style={{ alignItems: "center", justifyContent: "center" }}>
+            {" "}
+            Add Listing
+          </h1>
+          {renderTypes}
         </Row>
         <Form
           className="listing-form"
           ref={formRef}
-          onChange={(formValue) => setFormValue(formValue)}
+          onChange={() => setFormValue(formValue)}
           onCheck={setFormError}
           formValue={formValue}
           model={model}
           onSubmit={handleSubmit}
-          style={{
-            padding: "10px", margin:'5%' }}
         >
-          <Form.Group controlId="type" ref={formRef}>
-            <RadioGroup name="type" inline>
+          <Form.Group controlId="type">
+            <RadioGroup
+              name="type"
+              inline
+              appearance="picker"
+              value={formValue.type}
+              defaultValue={'forSale'}
+            >
               <Radio
+                name={formValue.type}
                 value={formValue.type}
                 onChange={() => setFormValue({ type: "forSale" })}
-                ref={formRef}
               >
                 For Sale
               </Radio>
               <Radio
+           
                 value={formValue.type}
                 onChange={() => setFormValue({ type: "forRent" })}
-                ref={formRef}
               >
                 Rental
               </Radio>
@@ -167,7 +164,7 @@ export const AddListing = () => {
               </Radio>
             </RadioGroup>
           </Form.Group>
-
+        
           <TextField
             name="street"
             label="Street"
@@ -179,6 +176,8 @@ export const AddListing = () => {
             style={{
               fontSize: "20px",
               width: "100%",
+              border: "1px",
+              margin: "1px",
             }}
           />
           <TextField
@@ -242,7 +241,8 @@ export const AddListing = () => {
             style={{ fontSize: "20px", width: "100%" }}
           />
           <Textarea
-            name="textarea"
+            accepter={Input}
+            name="description"
             label="Description"
             value={formValue.description}
             onChange={(value) => {
@@ -263,33 +263,26 @@ export const AddListing = () => {
             Submit
           </Button>
         </Form>
-      </Panel>
+      </Container>
     </React.Fragment>
   );
-}
+};
 
 export const NewListing = () => {
-  
+  return;
+  <Container style={{ listingStyles }}></Container>;
+};
 
-  return
-  (
-    <Container style={{listingStyles}}>
-    
-    </Container>
-
-  )
-}
-
-const listingStyles = [{
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '10px',
-  margin: '15%',
-  border: '1px solid black',
-  borderRadius: '5px',
-  
-
-}]
+const listingStyles = [
+  {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "10px",
+    margin: "15%",
+    border: "1px solid black",
+    borderRadius: "5px",
+  },
+];
 export default AddListing;

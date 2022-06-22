@@ -86,7 +86,7 @@ export const SearchUser = () => {
     });
   }
   useEffect(() => {
-    if (isMounted.current) {
+    if (formRef.current) {
       return;
     }
     isMounted.current = true;
@@ -133,10 +133,15 @@ export const AddUser = ({userName,role,uuid,email,portfolio}) => {
   const formRef = useRef();
   const [formError, setFormError] = useState({ error: false, message: "" });
   const [user, setUser] = useState({});
-  const [formData,setFormData] = useState({uid:"",email:"",userName:"",role:"Regular",portfolio:[{min:"",max:""}]})
+  const [formData, setFormData] = useState({ uid: "", email: "", userName: "", role: "Regular" });
   const handleSubmit = async(e) => { 
     e.preventDefault();
   }
+  useEffect(() => {
+    return () => {
+      
+    };
+  }, []);
   return (
     <React.Fragment>
       <h1>Add New User</h1>
@@ -162,10 +167,6 @@ export const AddUser = ({userName,role,uuid,email,portfolio}) => {
           accepter={Input}
           label="role"
           name="role" />
-        <TextField
-          accepter={Input}
-          label="portfolio"
-          name="portfolio" />
         <ButtonToolbar>
           <Button appearance="primary" onClick={handleSubmit}>
             Submit

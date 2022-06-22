@@ -174,3 +174,31 @@ input:focus{
   height:55px;
   width:55px;
 }
+.pagination {
+  display: inline-block;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+.pagination a.active {
+  background-color: #4caf5c;
+  color: white;
+}
+
+
+.panelStyles {
+  padding: '15px 20px';
+  color: '#aaa';
+};
+
+.header {
+  padding: '20';
+  font-size: '16';
+  background-color: '#34c3fc';
+  color: ' #808080';
+};

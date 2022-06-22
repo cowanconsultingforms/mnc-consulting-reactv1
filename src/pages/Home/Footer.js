@@ -56,7 +56,7 @@ export const LandingFooter = () => {
   },[]);
   
   return (
-    <div>
+    <React.Fragment>
       <Container
         style={{
           display: "flex",
@@ -153,6 +153,6 @@ export const LandingFooter = () => {
           </Container>
         </Panel>
       </div>
-    </div>
+    </React.Fragment>
   );
 }

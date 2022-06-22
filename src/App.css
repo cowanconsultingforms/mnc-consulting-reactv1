@@ -178,3 +178,7 @@ background-color: #686868;
 .sold-button{
 width:90px;
 }
+.btn :hover{
+  opacity: .8; 
+
+}

@@ -1,48 +1,85 @@
 import React,{useState,useRef,useEffect,forwardRef} from "react";
 import TextField  from "./AdminPageComponents";
-import { Input, Form } from "rsuite";
-import { collection, addDoc, setDoc } from 'firebase/firestore';
-
+import { Form,Input, Panel, Schema, Button, ButtonToolbar } from "rsuite";
+//import { Form } from 'react-bootstrap';
+import { collection, addDoc, setDoc ,doc, serverTimestamp} from 'firebase/firestore';
+import { db, auth } from '../../firebase';
+import { StringType } from "schema-typed";
+import {useAuthState} from 'react-firebase-hooks/auth';
+import './styles.css';
+import {UserDataService} from '../../services/crudoperations';
+import { useLayoutEffect } from "react";
+const model = Schema.Model({
+  uid: StringType().isRequired("This field is required."),
+  userName: StringType().isRequired("This field is required."),
+  email: StringType().isRequired("This field is required."),
+  role: StringType().isRequired("This field is required."),
+})
 export const AddUser = () => {
+
+
+  const collectionRef = collection(db, 'users');
+  const [user, loading, error] = useAuthState(auth);
   const formRef = useRef();
   const [formError, setFormError] = useState({ error: false, message: "" });
-  const [user, setUser] = useState({});
   const [formData, setFormData] = useState({
-    uid: "",
+    uuid: "",
     email: "",
     userName: "",
-    role: "Regular",
-    portfolio: [{ min: "", max: "" }],
+    privilege: "Regular",
   });
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const collectionRef = collection(db, 'users');
+  const handleSubmit = async() => {
+    const newUser = { ...formData };
+    console.log(newUser);
+    const doc = (collectionRef, newUser.uuid);
+  
+        try {
+          
+          addDoc(doc, newUser)
+        
+        } catch (err) {
+          console.log(err)
+      }
+    
   };
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        uuid: user.uid,
+        email: user.email,
+        userName: user.displayName,
+        privilege: "Regular",
+      });
+    } else {
+      formRef.current = formData;
+    }
+  })
   return (
     <React.Fragment>
-      <Container className="add-user-container">
+      <Panel className="add-user-container">
         <h1>Add New User</h1>
         <Form
+          fluid
           className="add-user-form"
           ref={formRef}
           value={formData}
-          onClick={handleSubmit}
+          onSubmit={handleSubmit}
           onChange={setFormData}
           onCheck={setFormError}
         >
-          <TextField accepter={Input} label="uuid" name="uid" />
-          <TextField accepter={Input} label="email" name="email" />
-          <TextField accepter={Input} label="userName" name="userName" />
-          <TextField accepter={Input} label="role" name="role" />
-          <TextField accepter={Input} label="portfolio" name="min" />
-          <TextField accepted={Input} label="max" name="max" />
-          <ButtonToolbar>
-            <Button appearance="primary" onClick={handleSubmit}>
+          <TextField className="search-field" accepter={Input} label="UUID :" name="uuid" ref={formRef } />
+          <TextField className="search-field" accepter={Input} label="Email :" name="email" ref={formRef } />
+          <TextField className="search-field"  accepter={Input} label="Username" name="userName" ref={formRef} />
+          <TextField className="search-field"  accepter={Input} label="Privilege Level" name="privilege" ref={formRef} />
+
+        <Form.Group>
+            <Button appearance="primary" type="submit" ref={formRef}>
               Submit
             </Button>
-          </ButtonToolbar>
+        </Form.Group>
         </Form>
-      </Container>
+      </Panel>
     </React.Fragment>
   );
 };
+export default AddUser;

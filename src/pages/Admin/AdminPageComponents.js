@@ -1,5 +1,9 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef,useRef ,useState} from 'react';
 import { Form,Input ,Radio,RadioGroup} from 'rsuite';
+import { auth, db, storage } from '../../firebase';
+import { serverTimestamp, collection, setDoc } from 'firebase/firestore';
+
+
 
 export const TextField = forwardRef((props, ref) => {
   const { name, label, accepter, ...rest } = props;
@@ -22,7 +26,8 @@ export const RadioPicker = forwardRef((props, ref) => {
       appearance="picker"
       ref={ref}
       label={label}
-     accepter={accepter}
+      accepter={accepter}
+      {...rest}
       
     >
       <Radio value="forSale">For Sale</Radio>
@@ -31,5 +36,15 @@ export const RadioPicker = forwardRef((props, ref) => {
     </RadioGroup>
   );
 });
-
+export const auditLogger = async ({ action = "Added Listing" }) => {
+    const user = auth.currentUser;
+    const userName = user.displayName;
+    const uid = user.uid;
+    const timestamp = serverTimestamp();
+    const docRef = collection("auditLogs").doc();
+    await setDoc(docRef, { action, userName, uid, timestamp }).then(() => {
+      console.log("Audit Log Created");
+      console.log(JSON.stringify(docRef));
+    });
+  };
 export default TextField;

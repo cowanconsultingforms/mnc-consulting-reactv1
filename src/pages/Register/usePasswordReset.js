@@ -20,7 +20,7 @@ export const usePasswordReset = () => {
 
     return (
         <div className="password-reset-button">
-        <Button className="button-password-button" onClick = {()=> sendPasswordReset(userEmail)}>Reset Password</Button>
+        <Button className="button-password-button" onClick = {()=> sendPasswordReset(userEmail)}>Send Password Reset Email</Button>
         </div>
     )
 }
