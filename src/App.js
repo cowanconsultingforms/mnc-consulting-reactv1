@@ -17,7 +17,7 @@ import { Container } from 'rsuite';
 import './App.css';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { query,where } from 'firebase/firestore';
-
+import { AuthContext } from './hooks/AuthContext';
 export const App = () => {
 
  // const queryRef = query(collRef, query => query.where('Role', '==', 'Administrator'));
@@ -30,8 +30,9 @@ export const App = () => {
           document.getElementById('login-modal').style.display = 'none';
         
         console.log(user.email);
+        return;
       }
-    })
+    },[]);
   
   //returns the navbar on every page, and each route corresponds to a different page
   //the navbar is maintained in the NavBar component ,and is designed to show different options depending on whether the user

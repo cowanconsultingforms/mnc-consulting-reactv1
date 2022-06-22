@@ -37,57 +37,8 @@ const LoginPage = () => {
    }
 }
   const formRef = useRef();
-    const onSubmit = () =>{
-    signInWithUsernameAndPassword = async () => {
-      // basic client side auth // firebase login functionality
-      try {
-        const res = await signInWithEmailAndPassword(auth,data.email, data.password);
-        console.log(res); // add alert for success // add ui functionalities on successful login
-      } catch (error) {
-        console.log(error); // add alert for error
-      }
-    };
-    };
-  const renderButton = () => {
-    return (
-      <LoginButtonRef
-        className="register-button"
-        onClick={handleNavigate}
-        ref={formRef}
-      >
-        Register Here
-      </LoginButtonRef>
-    );
-  };
-  const renderForm = () => {
-    return (
-      <Controller>
-      <form
-        onSubmit={handleSubmit((data)=>{
-          alert(JSON.stringify(data))
-        })}>
-        <Input label="Email" name="email" {...register('email'), { required: true, maxLength: 40 }} onChange={e=>e.target.value } />
-        <Input
-          label="Password"
-          name="password"
-          onChange={e=>e.target.value}
-          {...register('password', { required: true })}
-        />
 
-        <ButtonToolbar.Button color="green" appearance="primary" type="submit">
-          Login
-        </ButtonToolbar.Button>
-        <ButtonToolbar.Button
-          color="red"
-          appearance="subtle"
-          onClick={handleNavigate}
-        >
-          Cancel
-        </ButtonToolbar.Button>
-        </form>
-        </Controller>
-    );
-  };
+
 
   const handleNavigate = () => {
     navigate("/");

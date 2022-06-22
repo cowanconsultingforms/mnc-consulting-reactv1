@@ -1,5 +1,12 @@
 import styled from 'styled-components';
-import { Link } from "react-router-dom";
+import * as React from 'react';
+import Button from '@mui/material/Button';
+
+export const Buttons =({title, handleAction})=> {
+    return (
+        <Button variant="contained" onClick={handleAction}>{title}</Button>
+    );
+}
 export const ProfileButton = styled.button`
   margin-bottom: 20px;
   padding: 15px;
@@ -11,8 +18,6 @@ export const ProfileButton = styled.button`
   background-color: #4193ff;
   left: 10%;
 `;
-
-
 
 
 //const NavLink = React.forwardRef(({ href, children, ...rest }, ref)) => {
