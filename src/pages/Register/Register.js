@@ -3,6 +3,7 @@ import { Modal } from 'rsuite';
 import ModalDiv from '../../components/Modals';
 import TextField from '../../components/TextField';
 import { getStorage,ref,getDownloadURL } from 'firebase/storage';
+import React, { useState, useEffect } from 'react';
 
 export const Register = () => {
     const storage = getStorage();
