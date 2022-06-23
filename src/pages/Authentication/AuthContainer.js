@@ -1,73 +1,65 @@
 import { onAuthStateChanged,signInWithUsernameAndPassword } from "firebase/auth";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef,useState } from "react";
 import {useAuthState,signInWithEmailAndPassword} from "react-firebase-hooks/auth";
 import { useDownloadURL } from "react-firebase-hooks/storage";
 import { useNavigate } from "react-router-dom";
 import {ButtonToolbar,Container,Divider,FlexboxGrid,Loader,Schema} from "rsuite";
-import { auth, db } from "../../firebase";
+import { auth, db,storage } from "../../firebase";
 import { useForm ,Controller,useController} from "react-hook-form";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-
-const AuthPage = ({title}) => {
+import { LoginForm } from "./LoginForm";
+import {RegisterForm} from "./RegisterForm";
+import { ref } from "firebase/storage";
+import  {ImageBox} from "../../components/Custom/Containers";
+import { getDownloadURL } from "firebase/storage";
+import './styles.css';
+export const AuthPage = ({title}) => {
   const navigate = useNavigate();
   const [authState, authLoading, authError] = useAuthState(auth);
   const [reference, loading, error] = useDownloadURL(
     ref(storage, "images/mncdevelopmentlogo.jpg")
   );
-  const handleAction = (title) => {
-    if(title==='login'){
-      try{
-      signIn(data.email,data.password)
-    }catch(e){
-      console.log(e)
-      }
-    }
-    if (id === 2) {
-      signUp( data.email, data.password)
-        .then((response) => {
-          sessionStorage.setItem('Auth Token', response._tokenResponse.refreshToken)
-          console.log(response);
-          navigate('/');  
-      })
-   }
-}
-  const formRef = useRef();
+  const [image,setImage] = useState('');
+  
   const handleFormRender = (id)=>{
     if(title === 'Login'){
       return <LoginForm />
     }
     if(title === 'Register'){
-      return <SignUpForm />
+      return <RegisterForm />
     }
   }
+  const DownloadURL = async () => {
+    const reference = ref(storage, "images/mncdevelopmentlogo.jpg");
+    getDownloadURL(reference).then((url) => {
+//      const xhr = new XMLHttpRequest();
+   //   xhr.responseType = 'blob';
 
+  //    xhr.open('GET', url);
+    
+      const img = document.getElementById('logo');
+      img.setAttribute('src', url);
+      setImage(url);
+    })}
 
   const handleNavigate = () => {
     navigate("/");
   };
-  const renderLogo = () => {
-    return <ImageBox src={reference} />
-  }
+
   useEffect(() => {
     if (authState) {
       navigate("/");
     } else {
-      formRef.current = formValue;
-      renderLogo();
+      
+      DownloadURL();
     }
   }, [authState, navigate, reference]);
 
   return (
-    <Container className="login-page">
-      <img src={renderLogo} id="logo" alt="logo" />
-      {renderForm}
+    <Container className="auth-page">
+      <ImageBox src={image} id="logo" alt="logo" />
+      {handleFormRender(title)}
     </Container>
   );
 };
-
-const Input = ({label,register,required}) => ( 
-  <React.Fragment>
-  <label> {label} </label> <input {...register(label, {required})}/> 
-  </React.Fragment>
-);

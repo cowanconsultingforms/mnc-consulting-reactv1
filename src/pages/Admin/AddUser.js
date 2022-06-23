@@ -43,16 +43,7 @@ export const AddUser = () => {
     
   };
   useEffect(() => {
-    if (user) {
-      setFormData({
-        uuid: user.uid,
-        email: user.email,
-        userName: user.displayName,
-        privilege: "Regular",
-      });
-    } else {
-      formRef.current = formData;
-    }
+
   })
   return (
     <React.Fragment>

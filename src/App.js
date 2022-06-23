@@ -10,6 +10,7 @@ import Contact from './pages/Contact/Contact';
 import Landing from './pages/Home/Landing';
 import { LoginForm ,} from './pages/Authentication/LoginForm';
 import { RegisterForm } from './pages/Authentication/RegisterForm';
+import {AuthPage} from './pages/Authentication/AuthContainer';
 import FullPageLogin from './pages/Login/LoginForm';
 import FullPageRegister from './pages/Register/FullPageRegister';
 import {ListingPage} from './pages/Listings/Listings';
@@ -29,13 +30,7 @@ export const App = () => {
    
     let authToken = sessionStorage.getItem('Auth Token')
         console.log(authToken)
-        if (authToken) {
-            navigate('/home')
-        }
 
-        if (!authToken) {
-            navigate('/login')
-        }
     },[]);
   
   //returns the navbar on every page, and each route corresponds to a different page
@@ -54,8 +49,8 @@ export const App = () => {
         <Route path="/account" element={<AccountPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/login" element={<LoginForm title="Login" />} />
-        <Route path="/register" element={<RegisterForm title="Register" />} />
+        <Route path="/login" element={<AuthPage title="Login" />} />
+        <Route path="/register" element={<AuthPage title="Register" />} />
         <Route path="/listings" element={<ListingPage />} />
       </Routes>
     </div>

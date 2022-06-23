@@ -3,6 +3,7 @@ import {Box,TextField,FormControlLabel,Checkbox} from '@mui/material';
 import { auth,db,signIn } from "../../firebase";
 import { CustomButton } from "../../components/Custom/Buttons";
 import { useNavigate } from "react-router-dom";
+import {ButtonGroup,Button} from '@mui/material';
 export const LoginForm = ({title}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,6 +48,7 @@ export const LoginForm = ({title}) => {
         onSubmit={handleAction}
       >
         <TextField
+        className="form-text-field"
          id="email"
          label="Email :"
          variant="outlined"
@@ -72,7 +74,8 @@ export const LoginForm = ({title}) => {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-        <CustomButton title={title} handleAction={handleAction}></CustomButton>
+          <ButtonGroup>
+        <CustomButton title={title} handleAction={handleAction}/></ButtonGroup>
       </Box>
     </div>
   );
