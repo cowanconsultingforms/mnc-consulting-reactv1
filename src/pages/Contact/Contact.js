@@ -133,7 +133,8 @@ const ContactForm = () => {
       <h2>Contact Us</h2>
 
       <Form
-      ref={formRef}>
+      ref={formRef}
+      onSubmit={handleSubmit(onSubmit)}>
     <Form.Group controlId="name">
       <Form.ControlLabel>Username</Form.ControlLabel>
       <Form.Control name="name" />
@@ -144,7 +145,7 @@ const ContactForm = () => {
       <Form.Control name="email" type="email" />
       <Form.HelpText tooltip>Email is required</Form.HelpText>
     </Form.Group>
-    <Form.Group controlId="password">
+    <Form.Group controlId="phone">
       <Form.ControlLabel>Password</Form.ControlLabel>
       <Form.Control name="password" type="password" autoComplete="off" />
     </Form.Group>

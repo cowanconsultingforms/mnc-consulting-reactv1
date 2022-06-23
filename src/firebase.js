@@ -22,6 +22,8 @@ import {
 } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { Input } from "rsuite";
+import { AuthContext } from './hooks/AuthContext';
+import React, { useContext } from "react";
 //Contains all the firebase configuration
 export const auditLogger = async ({
   action = "Created Account",
@@ -115,7 +117,29 @@ export const signIn = async (email, password) => {
     return { error: error.message };
   }
 };
-
+export const Authentication = (props)=>{
+  const authContext = useContext(AuthContext);
+  const loginHandler = ()=>{
+    signIn(props.email,props.password)
+    .then((res)=>{
+      if(!res.error){
+      const userResponse = {
+        token:auth.currentUser.getIdToken()
+      }
+    authContext.login(userResponse.token)}
+    })}
+    const logoutHandler = () =>{
+      signOut(auth).then(()=>{
+        authContext.logout();
+      })
+    }
+    return(
+      <React.Fragment>
+      {!authContext.isLoggedIn && <button className="login" onClick={loginHandler}>Login</button>}
+          {authContext.isLoggedIn && (<button className="logout" onClick={logoutHandler}>Logout</button>)}
+      </React.Fragment>
+    )
+}
 class User {
   constructor(email, userName, uid, role, created_at) {
     this.email = email;
@@ -160,18 +184,22 @@ export const userSignOut = async () => {
 export const googleProvider = new GoogleAuthProvider();
 export const signInWithGoogle = async () => {
   try {
-    const res = await signInWithPopup(auth, googleProvider);
-    const user = res.user;
-    const q = query(collection(db, "users"), where("uid", "==", user.uid));
-    const docs = await getDocs(q);
+    const res =  signInWithPopup(auth, googleProvider).then((res)=>{
+      const user = res.user;
+      const q = query(collection(db, "users"), where("uid", "==", user.uid));
+      const docs = getDocs(q);
     if (docs.docs.length === 0) {
-      await addDoc(collection(db, "users"), {
+       addDoc(collection(db, "users"), {
         uid: user.uid,
         name: user.displayName,
         authProvider: "google",
         email: user.email,
       });
     }
+    })
+    
+   
+   
   } catch (err) {
     console.error(err);
     alert(err.message);

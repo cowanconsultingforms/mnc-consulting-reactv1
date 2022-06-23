@@ -197,12 +197,13 @@ export const FullPageRegister = () => {
   });
   const handleSubmit = async() => {
     const { email, password, verifyPassword } = formData;
+    if(password === verifyPassword){
     try {
        signUp(email, password);
     } catch (error) {
       console.log(error);
     }
-    
+  }
   }
   const DownloadURL = async () => {
     const reference = ref(storage, "images/mncdevelopmentlogo.jpg");

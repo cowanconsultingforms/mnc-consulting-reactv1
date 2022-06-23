@@ -8,6 +8,9 @@ import ProfilePage from './pages/Account/Profile';
 import AdminPage from './pages/Admin/Admin';
 import Contact from './pages/Contact/Contact';
 import Landing from './pages/Home/Landing';
+import { LoginForm ,} from './pages/Authentication/LoginForm';
+import { RegisterForm } from './pages/Authentication/RegisterForm';
+import {AuthPage} from './pages/Authentication/AuthContainer';
 import FullPageLogin from './pages/Login/LoginForm';
 import FullPageRegister from './pages/Register/FullPageRegister';
 import {ListingPage} from './pages/Listings/Listings';
@@ -17,21 +20,18 @@ import { Container } from 'rsuite';
 import './App.css';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { query,where } from 'firebase/firestore';
-
+import { AuthContext } from './hooks/AuthContext';
 export const App = () => {
 
  // const queryRef = query(collRef, query => query.where('Role', '==', 'Administrator'));
   //hook to check for current user
-  const user = auth.currentUser;
+  const navigate = useNavigate();
   useEffect(() => {
    
-      if (user) {
-    
-          document.getElementById('login-modal').style.display = 'none';
-        
-        console.log(user.email);
-      }
-    })
+    let authToken = sessionStorage.getItem('Auth Token')
+        console.log(authToken)
+
+    },[]);
   
   //returns the navbar on every page, and each route corresponds to a different page
   //the navbar is maintained in the NavBar component ,and is designed to show different options depending on whether the user
@@ -49,8 +49,8 @@ export const App = () => {
         <Route path="/account" element={<AccountPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/login" element={<FullPageLogin />} />
-        <Route path="/register" element={<FullPageRegister />} />
+        <Route path="/login" element={<AuthPage title="Login" />} />
+        <Route path="/register" element={<AuthPage title="Register" />} />
         <Route path="/listings" element={<ListingPage />} />
       </Routes>
     </div>

@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components'
 import { Form } from 'rsuite';
+import {Box,Button} from '@mui/material';
+import { BasicButtons } from './Buttons';
 export const TextFieldLogin = React.forwardRef((props, ref) => {
   const { name, label, accepter, ...rest } = props;
   return (
@@ -73,5 +75,29 @@ export const TextArea = ({ label, value, onChange, placeholder =''}) => {
         </React.Fragment>
     );
 }
+export const BasicTextFields =({title,setPassword,setEmail,handleAction}) => {
+    return (
+        <div>
+            <div className="heading-container">
+                <h3>
+                    {title} Form
+                </h3>
+            </div>
 
+            <Box
+                component="form"
+                sx={{
+                    '& > :not(style)': { m: 1, width: '25ch' },
+                }}
+                noValidate
+                autoComplete="off"
+            >
+                <TextField id="email" label="Enter the Email" variant="outlined" onChange={(e)=>setEmail(e.target.value)} />
+                <TextField id="password" label="Enter the Password" variant="outlined" />
+            </Box>
+
+            <Button title={title}/>
+        </div>
+    );
+}
 export default TextField;
