@@ -9,26 +9,22 @@ import { useForm ,Controller,useController} from "react-hook-form";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-const LoginPage = () => {
+const AuthPage = ({title}) => {
   const navigate = useNavigate();
   const [authState, authLoading, authError] = useAuthState(auth);
   const [reference, loading, error] = useDownloadURL(
     ref(storage, "images/mncdevelopmentlogo.jpg")
   );
- 
-  const {register,handleSubmit,formState: {errors}} = useForm({
-      defaultValues: {
-        email: "",
-        password: ""
-      }});
-  const [data, setData] = useState({
-    email: "",
-    password: "",
-  });
-  const handleAction = (id) => {
-    
+  const handleAction = (title) => {
+    if(title==='login'){
+      try{
+      signIn(data.email,data.password)
+    }catch(e){
+      console.log(e)
+      }
+    }
     if (id === 2) {
-      createUserWithEmailAndPassword(auth, email, password)
+      signUp( data.email, data.password)
         .then((response) => {
           sessionStorage.setItem('Auth Token', response._tokenResponse.refreshToken)
           console.log(response);
@@ -37,7 +33,14 @@ const LoginPage = () => {
    }
 }
   const formRef = useRef();
-
+  const handleFormRender = (id)=>{
+    if(title === 'Login'){
+      return <LoginForm />
+    }
+    if(title === 'Register'){
+      return <SignUpForm />
+    }
+  }
 
 
   const handleNavigate = () => {

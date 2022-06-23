@@ -29,6 +29,10 @@ export const Landing = () => {
   const [type,setType] = useState('');
   const [user] = useAuthState(auth);
   const formRef = useRef();
+  const handleLogout = () => {
+        sessionStorage.removeItem('Auth Token');
+        navigate('/login')
+    }
   const images = [
     {
       id: "1",

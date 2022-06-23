@@ -9,10 +9,12 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { auth, storage } from "../../firebase";
 import { ref, getDownloadURL } from "firebase/storage";
-import "./styles.css";
 import { ImageBox } from "../../components/Custom/Containers";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import {CustomButton} from '../../components/Custom/Buttons';
+import { ButtonGroup,Button } from "rsuite";
+
 export const LoginDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -72,13 +74,12 @@ const Input = (props) => {
 */
 //Login Form used by code
 const reference = ref(storage, "images/mncdevelopmentlogo.jpg");
+
+
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [url, loading, error] = useDownloadURL(
-    reference
-  );
   const [image, setImage] = useState("");
 
   const handleAction = () => {
@@ -100,10 +101,9 @@ export const LoginForm = () => {
   };
 
   useEffect(() => {
-    if(!loading && !error){
-      setImage(url);
+
     }
-  }, []);
+  , []);
   return (
     <div className="login-form">
       <Box
@@ -123,7 +123,10 @@ export const LoginForm = () => {
          variant="outlined"
          onChange={(e) => setPassword(e.target.value)} 
          />
-        <Button type="submit"></Button>
+         <ButtonGroup orientation="horizontal">
+        <CustomButton type="submit">Login</CustomButton>
+        <Button onClick={handleNavigate}>Register</Button>
+        </ButtonGroup>
       </Box>
     </div>
   );
@@ -182,13 +185,13 @@ export const FullPageLogin = () => {
 };
 
 //model for Form Schema - check rsuite documentation for more info
-const { StringType } = rsuite.Schema.Types;
+//const { StringType } = rsuite.Schema.Types;
 
-const model = rsuite.Schema.Model({
+/*const model = rsuite.Schema.Model({
   email: StringType()
     .isEmail("Please enter a valid email address.")
     .isRequired("This field is required."),
   password: StringType().isRequired("This field is required."),
-});
+}); */
 
 export default LoginForm;

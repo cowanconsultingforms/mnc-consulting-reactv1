@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import * as React from 'react';
+import React,{useState,useEffect,forwardRef,useRef} from 'react';
 import Button from '@mui/material/Button';
 
-export const Buttons =({title, handleAction})=> {
+export const CustomButton =({title, handleAction})=> {
     return (
         <Button variant="contained" onClick={handleAction}>{title}</Button>
     );
@@ -19,7 +19,11 @@ export const ProfileButton = styled.button`
   left: 10%;
 `;
 
-
+export const LoginButton = forwardRef(({title, handleAction})=> {
+  return (
+        <Button variant="contained" onClick={handleAction}>{title}</Button>
+    );
+})
 //const NavLink = React.forwardRef(({ href, children, ...rest }, ref)) => {
   //  return (
     //<Link ref={ref} to={href} {...rest}>
