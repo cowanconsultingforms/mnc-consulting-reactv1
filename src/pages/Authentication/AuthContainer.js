@@ -22,7 +22,7 @@ export const AuthPage = ({title}) => {
   );
   const [image,setImage] = useState('');
   
-  const handleFormRender = (id)=>{
+  const handleFormRender = ()=>{
     if(title === 'Login'){
       return <LoginForm />
     }
