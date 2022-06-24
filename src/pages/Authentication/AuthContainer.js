@@ -14,6 +14,8 @@ import { ref } from "firebase/storage";
 import  {ImageBox} from "../../components/Custom/Containers";
 import { getDownloadURL } from "firebase/storage";
 import './styles.css';
+
+
 export const AuthPage = ({title}) => {
   const navigate = useNavigate();
   const [authState, authLoading, authError] = useAuthState(auth);
@@ -22,7 +24,7 @@ export const AuthPage = ({title}) => {
   );
   const [image,setImage] = useState('');
   
-  const handleFormRender = (id)=>{
+  const handleFormRender = ()=>{
     if(title === 'Login'){
       return <LoginForm />
     }
