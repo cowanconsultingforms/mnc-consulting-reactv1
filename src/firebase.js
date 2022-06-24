@@ -91,7 +91,18 @@ export const signUp = async (email, password) => {
     return { error: error.message };
   }
 };
-
+export const createUser = async(email,userName)=>{
+  const AuthToken = auth.currentUser.getIdToken();
+  localStorage.setItem(JSON.stringify('user', AuthToken));
+  const docRef = doc(db, "users");
+  await addDoc(collection(db, "users"), {
+    uuid: auth.currentUser.uid,
+    email: email,
+    userName: email.split("@")[0],
+    AccountType: "Regular",
+    CreatedOn: serverTimestamp,
+  });
+}
 export const signIn = async (email, password) => {
   try {
     const userCredential = await signInWithEmailAndPassword(
@@ -100,7 +111,7 @@ export const signIn = async (email, password) => {
       password
     );
     const user = userCredential.user;
-    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    const q = query(collection(db, "users"), where("uuid", "==", user.uid));
     const docs = await getDocs(q);
     if (docs.length === 0) {
       await addDoc(collection(db, "users"), {

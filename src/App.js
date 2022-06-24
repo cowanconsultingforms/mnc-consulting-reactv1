@@ -25,12 +25,12 @@ export const App = () => {
 
  // const queryRef = query(collRef, query => query.where('Role', '==', 'Administrator'));
   //hook to check for current user
+  const [user,loading,error] = useAuthState(auth);
   const navigate = useNavigate();
   useEffect(() => {
-   
-    let authToken = sessionStorage.getItem('Auth Token')
-        console.log(authToken)
-
+    if(user){
+      document.getElementById('login-page').style.display = 'none';
+    }
     },[]);
   
   //returns the navbar on every page, and each route corresponds to a different page

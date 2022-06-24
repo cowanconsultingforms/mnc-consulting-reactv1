@@ -3,6 +3,7 @@ import React,{useState,useEffect,forwardRef,useRef} from 'react';
 import Button from '@mui/material/Button';
 
 export const CustomButton =({title, handleAction})=> {
+  
     return (
         <Button variant="contained" onClick={handleAction}>{title}</Button>
     );
@@ -19,9 +20,10 @@ export const ProfileButton = styled.button`
   left: 10%;
 `;
 
-export const LoginButton = forwardRef(({title, handleAction})=> {
+export const LoginButton = forwardRef(({props,ref})=> {
+  const {title, handleAction, ...rest} = props;
   return (
-        <Button variant="contained" onClick={handleAction}>{title}</Button>
+        <Button variant="contained" onClick={handleAction} ref={ref}>{title}</Button>
     );
 })
 //const NavLink = React.forwardRef(({ href, children, ...rest }, ref)) => {

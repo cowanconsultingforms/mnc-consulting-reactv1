@@ -1,5 +1,5 @@
 import { onAuthStateChanged,signInWithUsernameAndPassword } from "firebase/auth";
-import React, { useEffect, useRef,useState } from "react";
+import React, { useEffect, useRef,useState,createRef } from "react";
 import {useAuthState,signInWithEmailAndPassword} from "react-firebase-hooks/auth";
 import { useDownloadURL } from "react-firebase-hooks/storage";
 import { useNavigate } from "react-router-dom";
@@ -24,12 +24,12 @@ export const AuthPage = ({title}) => {
   );
   const [image,setImage] = useState('');
   
-  const handleFormRender = ()=>{
+  const handleFormRender = (title)=>{
     if(title === 'Login'){
-      return <LoginForm />
+      return <LoginForm title={title} />
     }
     if(title === 'Register'){
-      return <RegisterForm />
+      return <RegisterForm title={title} />
     }
   }
   const DownloadURL = async () => {

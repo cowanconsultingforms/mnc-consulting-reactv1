@@ -12,8 +12,8 @@ import { ref, getDownloadURL } from "firebase/storage";
 import { ImageBox } from "../../components/Custom/Containers";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import {CustomButton} from '../../components/Custom/Buttons';
-import { ButtonGroup,Button } from "rsuite";
+import { CustomButton } from "../../components/Custom/Buttons";
+import { ButtonGroup, Button, Form, Input } from "rsuite";
 
 export const LoginDiv = styled.div`
   display: flex;
@@ -75,7 +75,6 @@ const Input = (props) => {
 //Login Form used by code
 const reference = ref(storage, "images/mncdevelopmentlogo.jpg");
 
-
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -100,32 +99,28 @@ export const LoginForm = () => {
     navigate("/register");
   };
 
-  useEffect(() => {
-
-    }
-  , []);
+  useEffect(() => {}, []);
   return (
     <div className="login-form">
-      <Box
-        component="form"
-        autocomplete={true}
-        noValidate
-      >
-        <TextField
-         id="email"
-         label="Email :"
-         variant="outlined"
-         onChange={(e) => setEmail(e.target.value)} 
-         />
-         <TextField
-         id="password"
-         label="Password :"
-         variant="outlined"
-         onChange={(e) => setPassword(e.target.value)} 
-         />
-         <ButtonGroup orientation="horizontal">
-        <CustomButton type="submit">Login</CustomButton>
-        <Button onClick={handleNavigate}>Register</Button>
+      <Box component="form" autocomplete={true} noValidate>
+        <Form.Group controlId="email">
+          <Form.ControlLabel>Email</Form.ControlLabel>
+          <Form.Control accepter={Input} />
+          <Form.HelpText>Email is Required</Form.HelpText>
+        </Form.Group>
+        <Form.Group controlId="password">
+          <Form.ControlLabel>Password</Form.ControlLabel>
+          <Form.Control accepter={Input} />
+          <Form.HelpText>Password Required</Form.HelpText>
+        </Form.Group>
+        <Form.Group controlId="remember">
+        <Form.ControlLabel>Verify Password</Form.ControlLabel>
+          <Form.Control accepter={Input} />
+          <Form.HelpText>Required</Form.HelpText>
+        </Form.Group>
+        <ButtonGroup orientation="horizontal">
+          <Button type="submit" >Login</Button>
+          <Button onClick={handleNavigate}>Register</Button>
         </ButtonGroup>
       </Box>
     </div>
@@ -175,11 +170,9 @@ export const FullPageLogin = () => {
 
   return (
     <div className="login-div">
-   
-        {<ImageBox src={DownloadURL} id="logo" alt="logo" />}
-        <img id="logo" alt="logo" src={DownloadURL}></img>
-        {RenderLogin}
-  
+      {<ImageBox src={DownloadURL} id="logo" alt="logo" />}
+      <img id="logo" alt="logo" src={DownloadURL}></img>
+      {RenderLogin}
     </div>
   );
 };

@@ -65,13 +65,13 @@ export const NavBar = () => {
     },
     {
       page: "/listings",
-      text: "Properties",
+      text: "Listings",
       onClickFunc: () => navigate("/listings"),
       id: "listing-page",
     },
     {
       page: "/account",
-      text: "Account",
+      text: "Profile",
       onClickFunc: () => navigate("/account"),
       id: "account-page",
     },

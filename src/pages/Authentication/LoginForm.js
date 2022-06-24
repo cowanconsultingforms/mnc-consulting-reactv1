@@ -1,10 +1,11 @@
-import React,{useState,useEffect} from "react";
+import React,{useState,useEffect,createRef} from "react";
 import {Box,TextField,FormControlLabel,Checkbox} from '@mui/material';
 import { auth,db,signIn } from "../../firebase";
 import { CustomButton } from "../../components/Custom/Buttons";
 import { useNavigate } from "react-router-dom";
 import {ButtonGroup,Button} from '@mui/material';
 export const LoginForm = ({title}) => {
+ 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -13,10 +14,10 @@ export const LoginForm = ({title}) => {
     password: "",
   })
   
-
-  const handleAction = () => {
+  const formRef = createRef();
+  const handleAction = async() => {
     try {
-      signIn(email, password).then((res) => {
+      await signIn(email, password).then((res) => {
         if (res) {
           const user = auth.currentUser;
           console.log(JSON.stringify(user));
@@ -52,30 +53,34 @@ export const LoginForm = ({title}) => {
          id="email"
          label="Email :"
          variant="outlined"
-         onChange={(e) => setEmail(e.target.value)} 
+         onChange={(e) => setEmail(data.email =e.target.value)} 
          autoComplete="email"
          autoFocus
          fullWidth={true}
          required
          margin="normal"
+         value={data.email}
          />
          <TextField
          id="password"
          label="Password :"
          variant="outlined"
-         onChange={(e) => setPassword(e.target.value)} 
+         onChange={(e) => setPassword(data.password = e.target.value)} 
          autoFocus
          fullWidth={true}
          required
          margin="normal"
          type="password"
+         value={data.password}
          />
          <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
           <ButtonGroup>
-        <CustomButton title={title} handleAction={handleAction}/></ButtonGroup>
+        <Button handleAction={handleAction} component="form" key="Login">Login</Button>
+        <Button onClick={handleNavigate}>Register</Button>
+        </ButtonGroup>
       </Box>
     </div>
   );
