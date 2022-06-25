@@ -1,14 +1,13 @@
-import { async } from '@firebase/util';
-import { getDoc ,collection,query,where, doc} from 'firebase/firestore';
-import React, { useState,useEffect } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
-import { FaHome } from 'react-icons/fa';
+import { async } from "@firebase/util";
+import { getDoc, collection, query, where, doc } from "firebase/firestore";
+import React, { useState, useEffect } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { FaHome } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { Divider,Modal } from 'rsuite';
+import { Divider, Modal } from "rsuite";
 import styled from "styled-components";
-import { auth,db } from '../firebase';
-
+import { auth, db } from "../firebase";
 
 const NavBarItem = styled.button`
   border: none;
@@ -18,35 +17,29 @@ const NavBarItem = styled.button`
   font-size: 20px;
   padding: 19px 20px;
   text-decoration: none;
-  text-align:left;
+  text-align: left;
 `;
 
 export const NavBar = () => {
- 
   const [loggedIn, setLoggedIn] = useState(false);
   //custom hook to read the user's auth state
   const [user, loading, error] = useAuthState(auth);
-  const [userData, setUserData] = useState({})
+  const [userData, setUserData] = useState({});
   const collectionRef = collection(db, "users");
-  
+
   const LoginCheck = async () => {
     try {
-      const docRef = await getDoc(db)
-      getDoc(db, 'users', auth.currentUser.uid).then(doc => {
+      const docRef = await getDoc(db);
+      getDoc(db, "users", auth.currentUser.uid).then((doc) => {
         setUserData(...doc.data());
-        document.getElementById('admin-page').style.display = 'none';
-        console.log(userData)
-      })
+        document.getElementById("admin-page").style.display = "none";
+        console.log(userData);
+      });
     } catch (error) {
       console.log(error);
     }
+  };
 
-  }
-    
-  
-      
-    
-  
   //standard react hook to navigate to a new page
   const navigate = useNavigate();
   //objects for the navbar and their props
@@ -81,21 +74,26 @@ export const NavBar = () => {
       text: "Login/Register",
       onClickFunc: () => navigate("/login"),
       id: "login-page",
-    }, {
-      
-    }
+    },
+    {
+      page: "/",
+      text: "Logout",
+      onClickFunc: () => {
+        auth.signOut();
+        navigate("/");
+      },
+      id: "logout",
+    },
   ];
   //function to render nav bar items (coded into the navbar object)
   const renderNavBarItems = () => {
-      
     return (
       <React.Fragment>
-        {
-          pages.map((page, idx) => (
-            <NavBarItem key={idx} onClick={page.onClickFunc}>
-              {page.text}
-            </NavBarItem>
-          ))}
+        {pages.map((page, idx) => (
+          <NavBarItem key={idx} onClick={page.onClickFunc}>
+            {page.text}
+          </NavBarItem>
+        ))}
 
         {pages.map((page, idx) => (
           <NavBarItem key={idx} onClick={page.onClickFunc}>
@@ -105,34 +103,34 @@ export const NavBar = () => {
         ))}
       </React.Fragment>
     );
-  }
+  };
   // on loading, performs a check to see if the user is logged in
-  useEffect( () => {
-
+  useEffect(() => {
+    if(user){
+      document.getElementById("login-page").style.display = "none";
+    }else{
+      document.getElementById("logout").style.display = "none";
     }
-  )
-;
-  
+  });
+
   //renders the navbar, divided into 2 sections, the left side and the right side
   return (
     <div className="navigation-bar">
       <div className="navigation-bar-left">
-        <NavBarItem href="/" onClick={()=>navigate('/')}>MNC Development 3.20</NavBarItem>
-        <FaHome size={25} padding="2"/>
+        <NavBarItem href="/" onClick={() => navigate("/")}>
+          MNC Development 3.20
+        </NavBarItem>
+        <FaHome size={25} padding="2" />
       </div>
       <div className="navigation-bar-right">
-        {
-          pages.map((page, idx) => (
-            <NavBarItem id={page.id} key={idx} onClick={page.onClickFunc}>
-              {page.text}
-            </NavBarItem>
-            ))}
-        
+        {pages.map((page, idx) => (
+          <NavBarItem id={page.id} key={idx} onClick={page.onClickFunc}>
+            {page.text}
+          </NavBarItem>
+        ))}
       </div>
     </div>
   );
 };
-
-
 
 export default NavBar;

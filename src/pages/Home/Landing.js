@@ -1,38 +1,55 @@
-import { ref as referenced} from 'firebase/storage';
-import React, { useState,useRef } from 'react';
-import { useDownloadURL } from 'react-firebase-hooks/storage';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useNavigate } from 'react-router-dom';
-import { Button, Container, Divider, FlexboxGrid, Loader,Input, IconButton ,Form,Schema} from 'rsuite';
-import { ImageBox } from '../../components/Custom/Containers';
-import Searchbar from '../../components/Searchbar';
-import { storage,db,auth } from '../../firebase';
-import { LandingFooter } from './Footer';
-import { collection, getDoc, query,where,doc,orderBy,getDocs } from 'firebase/firestore';
-import './styles.css';
+import { ref as referenced } from "firebase/storage";
+import React, { useState, useRef } from "react";
+import { useDownloadURL } from "react-firebase-hooks/storage";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useNavigate } from "react-router-dom";
+import {
+  Button,
+  Container,
+  Divider,
+  FlexboxGrid,
+  Loader,
+  Input,
+  IconButton,
+  Form,
+  Schema,
+} from "rsuite";
+import { ImageBox } from "../../components/Custom/Containers";
+import Searchbar from "../../components/Searchbar";
+import { storage, db, auth } from "../../firebase";
+import { LandingFooter } from "./Footer";
+import {
+  collection,
+  getDoc,
+  query,
+  where,
+  doc,
+  orderBy,
+  getDocs,
+} from "firebase/firestore";
+import "./styles.css";
 import { FaSearch } from "react-icons/fa";
-import { StringType } from 'schema-typed';
-
+import { StringType } from "schema-typed";
 
 const model = Schema.Model({
   searchQuery: StringType(),
   type: StringType().isRequired("This field is required."),
-})
+});
 //this is the home page
 
 export const Landing = () => {
-  //react hooks, navigate to a new page, 
+  //react hooks, navigate to a new page,
   const navigate = useNavigate();
   //hooks to manage state of the searchbar
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   //state manager to select type of query
-  const [type,setType] = useState('');
+  const [type, setType] = useState("");
   const [user] = useAuthState(auth);
   const formRef = useRef();
   const handleLogout = () => {
-        sessionStorage.removeItem('Auth Token');
-        navigate('/login')
-    }
+    sessionStorage.removeItem("Auth Token");
+    navigate("/login");
+  };
   const images = [
     {
       id: "1",
@@ -48,37 +65,40 @@ export const Landing = () => {
     },
   ];
   const searchRef = useRef();
-  const [value, loading, error] = useDownloadURL(referenced(storage, "images/mncdevelopmentlogo.jpg"))
-     
-  
+  const [value, loading, error] = useDownloadURL(
+    referenced(storage, "images/mncdevelopmentlogo.jpg")
+  );
+
   const DownloadURL = () => {
     const reference = referenced(storage, "images/mncdevelopmentlogo.jpg");
-    
-      const [value, loading, error] = useDownloadURL(reference);
-      return (
-        (
-          <React.Fragment>
-              { (
-                <React.Fragment>
-                {loading && <Loader size="md" content="Loading..." />}
-                    <ImageBox
-                      id="logo"
-                      src={value}
-                      alt="logo"
-                      style={{justifyContent:'center',height:'100px',width:'69px'}}
-                    ></ImageBox>
-      
-                </React.Fragment>
-              )}
-          </React.Fragment>
-        ),
-        [value, loading, error]
-      );
-  };
-  const handleSearch = async() => { 
 
+    const [value, loading, error] = useDownloadURL(reference);
+    return (
+      (
+        <React.Fragment>
+          {
+            <React.Fragment>
+              {loading && <Loader size="md" content="Loading..." />}
+              <ImageBox
+                id="logo"
+                src={value}
+                alt="logo"
+                style={{
+                  justifyContent: "center",
+                  height: "100px",
+                  width: "69px",
+                }}
+              ></ImageBox>
+            </React.Fragment>
+          }
+        </React.Fragment>
+      ),
+      [value, loading, error]
+    );
+  };
+  const handleSearch = async () => {
     const collRef = collection(db, type);
-    const q = query(collRef,where(searchQuery, '==', 'zip'));
+    const q = query(collRef, where(searchQuery, "==", "zip"));
     await getDocs(q).then(async (doc) => {
       if (doc.exists) {
         console.log(doc.data());
@@ -86,8 +106,8 @@ export const Landing = () => {
       } else {
         console.log("No such document!");
       }
-    })
-  }
+    });
+  };
   return (
     <Container
       className="home-page"
@@ -97,7 +117,7 @@ export const Landing = () => {
         {<ImageBox src={DownloadURL()} alt="logo" />}
         <Divider />
         <FlexboxGrid
-          justify="space-between"
+          justify="start"
           align="bottom"
           className="search-button-grid"
         >
@@ -107,14 +127,11 @@ export const Landing = () => {
               className="buy-button"
               value={type}
               style={{
-                padding: "15px",
-                border: "none",
-                letterSpacing: "1px",
-                fontSize: "16px",
-                cursor: "pointer",
-                borderRadius: "2px",
+                fontSize: "20px",
                 color: "white",
                 backgroundColor: "black",
+                fontWeight: "bold",
+                padding:'15px'
               }}
               onClick={() => setType("forSale")}
             >
@@ -124,18 +141,14 @@ export const Landing = () => {
 
           <FlexboxGrid.Item colspan={24} order={2}>
             <Button
-            ref={searchRef}
+              ref={searchRef}
               className="rent-button"
               style={{
-                float: "middle",
-                textAlign: "center",
                 fontWeight: "bold",
                 padding: "15px",
-                border: "none",
-                letterSpacing: "1px",
-                fontSize: "16px",
-                cursor: "pointer",
-                borderRadius: "1px",
+                fontSize: "20px",
+                color: "white",
+                backgroundColor: "#858181",
               }}
               value={type}
               onClick={() => setType("forRent")}
@@ -146,17 +159,15 @@ export const Landing = () => {
           <Divider />
           <FlexboxGrid.Item colspan={6} order={3}>
             <Button
-            ref={searchRef}
+              ref={searchRef}
               value={type}
               className="sold-button"
               style={{
-                float: "right",
+                borderBox: "solid 1px black",
                 textAlign: "center",
                 padding: "15px",
-                border: "none",
-                fontSize: "17px",
-                cursor: "pointer",
-                borderRadius: "0px",
+                fontSize: "20px",
+                width: "90px",
               }}
               onClick={() => setType("sold")}
             >
@@ -172,7 +183,6 @@ export const Landing = () => {
               onChange={setSearchQuery}
               placeholder="Enter an address, city, or zip code"
               type="search"
-             
             />
 
             <IconButton
@@ -188,5 +198,5 @@ export const Landing = () => {
       </div>
     </Container>
   );
-}
+};
 export default Landing;

@@ -1,9 +1,15 @@
 import React,{useState,useEffect,createRef} from "react";
 import {Box,TextField,FormControlLabel,Checkbox} from '@mui/material';
 import { auth,db,signIn } from "../../firebase";
+import {signInWithEmailAndPassword} from "firebase/auth";
 import { CustomButton } from "../../components/Custom/Buttons";
 import { useNavigate } from "react-router-dom";
 import {ButtonGroup,Button} from '@mui/material';
+import './styles.css';
+import {LandingFooter} from '../Home/Footer';
+
+
+
 export const LoginForm = ({title}) => {
  
   const [email, setEmail] = useState("");
@@ -15,11 +21,12 @@ export const LoginForm = ({title}) => {
   })
   
   const formRef = createRef();
-  const handleAction = async() => {
+  const handleSubmit = async(e) => {
+    e.preventDefault();
     try {
-      await signIn(email, password).then((res) => {
+      await signInWithEmailAndPassword(auth,email, password).then((res) => {
         if (res) {
-          const user = auth.currentUser;
+          const user = auth.currentUser.uid;
           console.log(JSON.stringify(user));
           sessionStorage.setItem("user", JSON.stringify(user));
           localStorage.setItem("userToken", JSON.stringify(user));
@@ -43,10 +50,12 @@ export const LoginForm = ({title}) => {
     <div className="login-form">
     <h1>{title} Form</h1>
       <Box
+      className="login-form-box"
         component="form"
         autocomplete={true}
         noValidate
-        onSubmit={handleAction}
+        onSubmit={handleSubmit}
+        sx={{ display: "flex", flexDirection: "column",marginTop:'20px',paddding:'20px' }}
       >
         <TextField
         className="form-text-field"
@@ -65,6 +74,7 @@ export const LoginForm = ({title}) => {
          id="password"
          label="Password :"
          variant="outlined"
+         autoComplete="current-password"
          onChange={(e) => setPassword(data.password = e.target.value)} 
          autoFocus
          fullWidth={true}
@@ -73,15 +83,12 @@ export const LoginForm = ({title}) => {
          type="password"
          value={data.password}
          />
-         <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-          <ButtonGroup>
-        <Button handleAction={handleAction} component="form" key="Login">Login</Button>
-        <Button onClick={handleNavigate}>Register</Button>
+          <ButtonGroup sx={{m:5,alignItems:'center'}}>
+        <Button  key="Login" variant="contained" type="submit" sx={{backgroundColor:'gray'}}>Login</Button>
+        <Button key="Register" onClick={handleNavigate} variant="contained">Register</Button>
         </ButtonGroup>
       </Box>
+      <LandingFooter />
     </div>
   );
 };

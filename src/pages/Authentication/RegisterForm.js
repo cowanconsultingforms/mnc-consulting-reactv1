@@ -27,7 +27,7 @@ export const RegisterForm = ({ title }) => {
       console.log(JSON.stringify(user));
       sessionStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("userToken", JSON.stringify(user));
-      navigate("/");
+      navigate("/create-profile");
     }
   };
 
@@ -59,7 +59,7 @@ export const RegisterForm = ({ title }) => {
           flexDirection: "column",
           alignItems: "center",
           fontFamily: "Garamond",
-          justifyContet: "space-between",
+          justifyContent: "space-between",
         }}
       >
         <TextField
@@ -77,6 +77,7 @@ export const RegisterForm = ({ title }) => {
           id="password"
           label="Password :"
           variant="outlined"
+          type="password"
           onChange={(e) => setPassword(e.target.value)}
           sx={{
             backgroundColor: "whitesmoke",
@@ -88,6 +89,7 @@ export const RegisterForm = ({ title }) => {
           id="confirmPassword"
           label="Confirm Password :"
           variant="outlined"
+          type="password"
           onChange={(e) => setConfirmPassword(e.target.value)}
           sx={{
             backgroundColor: "whitesmoke",

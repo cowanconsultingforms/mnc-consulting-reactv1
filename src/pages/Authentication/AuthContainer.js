@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { LoginForm } from "./LoginForm";
 import {RegisterForm} from "./RegisterForm";
+import {NewUserPage} from "./NewUserProfile";
 import { ref } from "firebase/storage";
 import  {ImageBox} from "../../components/Custom/Containers";
 import { getDownloadURL } from "firebase/storage";
@@ -31,6 +32,9 @@ export const AuthPage = ({title}) => {
     if(title === 'Register'){
       return <RegisterForm title={title} />
     }
+    if(title === 'New User Profile'){
+      return <NewUserPage title={title} />
+    }
   }
   const DownloadURL = async () => {
     const reference = ref(storage, "images/mncdevelopmentlogo.jpg");
@@ -50,16 +54,13 @@ export const AuthPage = ({title}) => {
   };
 
   useEffect(() => {
-    if (authState) {
-      navigate("/");
-    } else {
-      
+
       DownloadURL();
-    }
+    
   }, [authState, navigate, reference]);
 
   return (
-    <Container className="auth-page">
+    <Container className="auth-page" style={{display:'flex',flexDirection:'column',width:'100%',mt:8}}>
       <ImageBox src={image} id="logo" alt="logo" />
       {handleFormRender(title)}
     </Container>

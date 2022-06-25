@@ -1,5 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import { db, auth, app } from "../../firebase";
+//import { Sidenav, Nav, Dropdown, Row } from 'rsuite';
+//import { Container, Header, Content, Footer, Sidebar } from 'rsuite';
+//import { Pagination } from 'rsuite';
+//import './App.css';
+//import slideIndex from 'slideIndex';
+//import tableApp from './Components/tables';
+//import instance from './Components/navbar';
+import { Component } from 'react'
+import * as ReactDOM from 'react-dom';
 import {
   query,
   getDocs,
@@ -28,6 +37,8 @@ import {
   Header,
   Content,
   Table,
+  Sidebar,
+  Footer
 } from "rsuite";
 import Listing from "./Listing";
 import './styles.css';
@@ -61,113 +72,34 @@ export const ListingPage = () => {
   */
 
   return (
-    <div
-      style={{
-        display: "block",
-        width: 700,
-        paddingLeft: 20,
-        color: "gray",
-      }}
-    >
-      <header>
-        <h2
-          style={{
-            color: "gray",
-          }}
-        >
-          {" "}
-          MNC Development{" "}
-        </h2>{" "}
-      </header>{" "}
-      <Sidenav defaultOpenKeys={["3", "4"]} activeKey="1">
+    <div style={{
+      display: 'block', width: 700, paddingLeft: 30
+      }}>
+      <h4>React Suite Sidenav Component</h4>
+      <Sidenav defaultOpenKeys={['3', '4']} activeKey="1">
         <Sidenav.Body>
-          <Nav>
-            <div>
-              <Nav.Item eventKey="1"> Status </Nav.Item>{" "}
-            </div>{" "}
-            <div>
-              <Nav.Item eventKey="2"> Price </Nav.Item>{" "}
-            </div>{" "}
-            <div> </div> <Nav.Item eventKey="3"> Bedrooom </Nav.Item>{" "}
-            <div> </div> <Nav.Item eventKey="4"> Bathroom </Nav.Item>{" "}
-            <Dropdown eventKey="5" title="Advanced">
-              <Dropdown.Item eventKey="4-1"> Privacy </Dropdown.Item>{" "}
-              <Dropdown.Item eventKey="4-2"> About </Dropdown.Item>{" "}
-              <Dropdown.Item eventKey="4-3"> Terms </Dropdown.Item>{" "}
-            </Dropdown>{" "}
-          </Nav>{" "}
-        </Sidenav.Body>{" "}
-      </Sidenav>{" "}
+        <Nav>
+          <Nav.Item eventKey="1">Status</Nav.Item>
+          <Nav.Item eventKey="2">Price</Nav.Item>
+          <Nav.Item eventKey="3">Bedrooom</Nav.Item>
+          <Nav.Item eventKey="4">Bathroom</Nav.Item>
+          <Dropdown eventKey="5" title="Advanced">
+          <Dropdown.Item eventKey="4-1">Privacy</Dropdown.Item>
+          <Dropdown.Item eventKey="4-2">About</Dropdown.Item>
+          <Dropdown.Item eventKey="4-3">Terms</Dropdown.Item>
+          </Dropdown>
+        </Nav>
+        </Sidenav.Body>
+      </Sidenav>
       <Container>
-        <div
-          style={{
-            display: "block",
-            width: 700,
-            paddingLeft: 1150,
-          }}
-        >
-          <Header>
-            <h2> Listings </h2>{" "}
-          </Header>{" "}
-          <Content> Content Info </Content>
-          <table
-            style={{
-              color: "gray",
-              border: "10px solid",
-            }}
-          >
-            <tr>
-              {" "}
-              Status <td> Active </td>
-            </tr>{" "}
-            <tr>
-              {" "}
-              Price <td> 1 </td>{" "}
-            </tr>{" "}
-            <tr>
-              {" "}
-              Bedrooms <td> 3 </td>{" "}
-            </tr>{" "}
-            <tr>
-              {" "}
-              Bathroom <td> 1 </td>{" "}
-            </tr>{" "}
-          </table>
-        </div>{" "}
-      </Container>{" "}
+      <Header>MCN Development</Header>
       <Container>
-        <div
-          style={{
-            display: "block",
-            width: 700,
-            paddingLeft: 1150,
-          }}
-        >
-          <h1> Contact us </h1> <p> info @cowanconsulting.com </p>
-        </div>
-      </Container>{" "}
-      <Container>
-        <div
-          style={{
-            display: "block",
-            width: 700,
-            paddingLeft: 215,
-          }}
-        >
-          <h2> Active and Hoverable Pagination </h2>{" "}
-          <p> Move the mouse over the numbers. </p>
-          <div class="pagination">
-            <a href="#"> & laquo; </a> <a href="#"> 1 </a>{" "}
-            <a class="active" href="#">
-              {" "}
-              2{" "}
-            </a>{" "}
-            <a href="#"> 3 </a> <a href="#"> 4 </a> <a href="#"> 5 </a>{" "}
-            <a href="#"> 6 </a> <a href="#"> & raquo; </a>{" "}
-          </div>{" "}
-        </div>{" "}
+        <Content>Content</Content>
+        <Sidebar>Listings</Sidebar>
       </Container>
-    </div>
+      <Footer>Footer</Footer>
+    </Container>
+      </div>
   );
 };
 

@@ -20,24 +20,5 @@ export const ProfileButton = styled.button`
   left: 10%;
 `;
 
-export const LoginButton = forwardRef(({props,ref})=> {
-  const {title, handleAction, ...rest} = props;
-  return (
-        <Button variant="contained" onClick={handleAction} ref={ref}>{title}</Button>
-    );
-})
-//const NavLink = React.forwardRef(({ href, children, ...rest }, ref)) => {
-  //  return (
-    //<Link ref={ref} to={href} {...rest}>
-      //{children}
-    //</Link>)
-//}
-
-
-//return (
-  //<Nav.Item as={NavLink} href="/">
-    //Home
-  //</Nav.Item>
-//);
 
 export default ProfileButton;
