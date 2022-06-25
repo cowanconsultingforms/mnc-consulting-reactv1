@@ -4,7 +4,10 @@ import { auth, db, signUp } from "../../firebase";
 import { CustomButton } from "../../components/Custom/Buttons";
 import { Input } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword ,sendPasswordResetEmail} from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import "./styles.css";
 
 export const RegisterForm = ({ title }) => {
@@ -30,7 +33,10 @@ export const RegisterForm = ({ title }) => {
       navigate("/create-profile");
     }
   };
-
+  const resetPassword = (e) => {
+    e.preventDefault();
+    sendPasswordResetEmail(auth, email);
+  };
   const validatePassword = () => {
     let isValid = true;
     if (password !== "" && confirmPassword !== "") {

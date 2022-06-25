@@ -20,7 +20,7 @@ export const LoginForm = ({title}) => {
     password: "",
   })
   
-  const formRef = createRef();
+  
   const handleSubmit = async(e) => {
     e.preventDefault();
     try {

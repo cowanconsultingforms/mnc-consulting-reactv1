@@ -7,18 +7,17 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 
 
-export const addAuditLog = ({...props}) => { 
-    const {User, Action,Timestamp,UserID } = this.props;
+export const addAuditLog = () => { 
+    
     const auditLog = collection('auditLog');
     
    
-    const addToLog = async(e,user, action) => {
+    const addToLog = async(e, action) => {
         const auditLog = collection(db,'auditLog');
        
             e.preventDefault()
             await addDoc(auditLog,{
-                UserID: user.uid,
-                UserName: user.displayName,
+         
                 Action: action,
                 Timestamp: serverTimestamp()
             }).then((res) => {

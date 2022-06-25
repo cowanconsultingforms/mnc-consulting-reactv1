@@ -1,11 +1,9 @@
-import { async } from "@firebase/util";
 import { getDoc, collection, query, where, doc } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useDocumentData } from "react-firebase-hooks/firestore";
 import { FaHome } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { Divider, Modal } from "rsuite";
+import { Divider } from "rsuite";
 import styled from "styled-components";
 import { auth, db } from "../firebase";
 
