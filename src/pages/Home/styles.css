@@ -1,5 +1,3 @@
-
-
 button#login-page {
   border: none;
   background-color: rgb(196, 196, 196);
@@ -25,7 +23,19 @@ button#login-page {
  a:hover{
      opacity:0.8;
  }
-
+ .auth-page {
+  display: "flex";
+  color: white;
+  padding: 14px 20px;
+  width: 100%;
+  height: 100%;
+  margin: 8px 0;
+  border: none;
+  background-color: #686868;
+  justify-content: center;
+  align-items: center;
+  font-family: "Garamond";
+}
  div#rs-btn-toolbar{
    display:flex;
    width:auto;

@@ -1,33 +1,21 @@
-*{
-  font-family: 'Garamond';
+* {
+  font-family: "Garamond";
 }
 
-div#rs-container{
-    background-color: rgb(196, 196, 196);
+div#rs-container {
+  background-color: rgb(196, 196, 196);
   height: 60px;
   width: 100%;
   display: flex;
-  flex-direction:row;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   font-size: 20px;
   color: white;
   box-shadow: 0px 5px 10px 2px #888888;
-  text-decoration:none;
+  text-decoration: none;
 }
-  .auth-page {
-    display:'flex';
-    color: white;
-    padding: 14px 20px;
-    width: 100%;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    background-color: #686868;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Garamond';
-  }
+
 button#login-page {
   border: none;
   background-color: rgb(196, 196, 196);
@@ -36,153 +24,174 @@ button#login-page {
   font-size: 20px;
   padding: 19px 20px;
   text-decoration: none;
-  text-align:left;
+  text-align: left;
 }
- button#login-page :hover{
-    opacity: 0.8;
- }
- div#rs-btn-toolbar{
-   justify-content: center;
-   align-items: center;
-   width:60%;
- }
-  .animate {
-    -webkit-animation: animatezoom 0.6s;
-    animation: animatezoom 0.6s
-  }
-  
-  @-webkit-keyframes animatezoom {
-    from {-webkit-transform: scale(0)} 
-    to {-webkit-transform: scale(1)}
-  }
-    
-  @keyframes animatezoom {
-    from {transform: scale(0)} 
-    to {transform: scale(1)}
-  }
-  
-  /***************************** CSS to match modal with different screen sizes   *****************************/
-  @media only screen and (max-width: 1639px) {
-    .modal-content {
-      width: 400px; 
-    }
-  }
-  
-  @media only screen and (max-width: 1229px) {
-    .modal-content {
-      width: 450px; 
-    }
-  }
-  
-  @media only screen and (max-width: 500px) {
-    .modal-content {
-  
-      width: 90%; 
-  
-    }
-  }
-
-  .docs-main{
-    text-align: center;
-  }
-
-  .add-listing{
-    height: 40px;
-    width: 200px;
-    background-color: #ffc107;
-    border: none;
-    cursor: pointer;
+button#login-page :hover {
+  opacity: 0.8;
 }
-.header-modal{
-    border-radius: 10px;
-    color: rgb(78, 78, 78);
-    font-size: 20px;
-    margin: 5%;
-    padding: 5%;
-    border: rgb(73, 73, 73) 2px solid;
+div#rs-btn-toolbar {
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+}
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s;
+}
+
+@-webkit-keyframes animatezoom {
+  from {
+    -webkit-transform: scale(0);
+  }
+  to {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes animatezoom {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/***************************** CSS to match modal with different screen sizes   *****************************/
+@media only screen and (max-width: 1639px) {
+  .modal-content {
+    width: 400px;
+  }
+}
+
+@media only screen and (max-width: 1229px) {
+  .modal-content {
+    width: 450px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .modal-content {
+    width: 90%;
+  }
+}
+
+.docs-main {
+  text-align: center;
+}
+
+.add-listing {
+  height: 40px;
+  width: 200px;
+  background-color: #ffc107;
+  border: none;
+  cursor: pointer;
+}
+.header-modal {
+  border-radius: 10px;
+  color: rgb(78, 78, 78);
+  font-size: 20px;
+  margin: 5%;
+  padding: 5%;
+  border: rgb(73, 73, 73) 2px solid;
 }
 div#rs-container {
-    align-items: center;
-    justify-content: center;
-    margin-top: 200px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 200px;
 }
 
 .buy-button {
-    float: left;
-    text-align: center;
-    width: 15%;
-    padding: 15px;
-    border: none;
-    letter-spacing: 1px;
-    font-size: 100%;
-    cursor: pointer;
-    border-radius: 0px;
+ 
+ 
+ width:90px;
+  padding: 15px;
+  border: 1px solid black;
+  letter-spacing: 1px;
+  font-size: 100%;
+  cursor: pointer;
+  border-radius: 0px;
 }
-.search-box{
-    height: 300px;
+.rent-button{
+  width:90px;
+  padding: 15px;
+  border: 1px solid black;
+  letter-spacing: 1px;
+  font-size: 100%;
+  cursor: pointer;
+  border-radius: 0px;
+}
+.sold-button{
+  width:90px;
+  padding: 15px;
+  border: 1px solid black;
+  letter-spacing: 1px;
+  font-size: 100%;
+  cursor: pointer;
+  border-radius: 0px;
+}
+.search-box {
+  height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width:90%;
+  width: 90%;
   border-bottom: 3px solid rgb(177, 177, 177);
   margin-left: 5%;
 }
-.navigation-bar{
-    background-color: rgb(196, 196, 196);
+.navigation-bar {
+  background-color: rgb(196, 196, 196);
   height: 60px;
   width: 100%;
   display: flex;
-  flex-direction:row;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   font-size: 20px;
   color: white;
   box-shadow: 0px 5px 10px 2px #888888;
-  text-decoration:none;
-  overflow:hidden;
+  text-decoration: none;
+  overflow: hidden;
 }
-.navigation-bar-right{
-    font-size: 20px;
+.navigation-bar-right {
+  font-size: 20px;
   display: block;
   color: white;
   text-align: center;
   padding: 19px 20px;
   text-decoration: none;
 }
-.navigation-bar-left{
+.navigation-bar-left {
   font-weight: bold;
-font-size:20px;
-color:white;
-justify-content:space-between;
-text-decoration:none;
+  font-size: 20px;
+  color: white;
+  justify-content: space-between;
+  text-decoration: none;
 }
-.search-box{
-    height: 300px;
+.search-box {
+  height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: left;
   align-items: left;
-  width:90%;
+  width: 90%;
   border-bottom: 3px solid rgb(177, 177, 177);
   margin-left: 5%;
 }
-.search-button-grid{
-  position:relative;
-  display:flex;
+.search-button-grid {
+  position: relative;
+  display: flex;
   grid-template-rows: auto;
 }
-.buy-button{
-width:90px;
+.buy-button {
+  width: 90px;
 }
-.rent-button{
-width:90px;
-background-color: #686868;
+.rent-button {
+  width: 90px;
+  background-color: #686868;
 }
-.sold-button{
-width:90px;
-}
-.btn :hover{
-  opacity: .8; 
 
+.btn :hover {
+  opacity: 0.8;
 }

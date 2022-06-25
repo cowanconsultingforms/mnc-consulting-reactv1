@@ -1,5 +1,5 @@
 import { onAuthStateChanged,signInWithUsernameAndPassword } from "firebase/auth";
-import React, { useEffect, useRef,useState } from "react";
+import React, { useEffect, useRef,useState,createRef } from "react";
 import {useAuthState,signInWithEmailAndPassword} from "react-firebase-hooks/auth";
 import { useDownloadURL } from "react-firebase-hooks/storage";
 import { useNavigate } from "react-router-dom";
@@ -10,10 +10,13 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { LoginForm } from "./LoginForm";
 import {RegisterForm} from "./RegisterForm";
+import {NewUserPage} from "./NewUserProfile";
 import { ref } from "firebase/storage";
 import  {ImageBox} from "../../components/Custom/Containers";
 import { getDownloadURL } from "firebase/storage";
 import './styles.css';
+
+
 export const AuthPage = ({title}) => {
   const navigate = useNavigate();
   const [authState, authLoading, authError] = useAuthState(auth);
@@ -22,12 +25,15 @@ export const AuthPage = ({title}) => {
   );
   const [image,setImage] = useState('');
   
-  const handleFormRender = ()=>{
+  const handleFormRender = (title)=>{
     if(title === 'Login'){
-      return <LoginForm />
+      return <LoginForm title={title} />
     }
     if(title === 'Register'){
-      return <RegisterForm />
+      return <RegisterForm title={title} />
+    }
+    if(title === 'New User Profile'){
+      return <NewUserPage title={title} />
     }
   }
   const DownloadURL = async () => {
@@ -48,16 +54,13 @@ export const AuthPage = ({title}) => {
   };
 
   useEffect(() => {
-    if (authState) {
-      navigate("/");
-    } else {
-      
+
       DownloadURL();
-    }
+    
   }, [authState, navigate, reference]);
 
   return (
-    <Container className="auth-page">
+    <Container className="auth-page" style={{display:'flex',flexDirection:'column',width:'100%',mt:8}}>
       <ImageBox src={image} id="logo" alt="logo" />
       {handleFormRender(title)}
     </Container>

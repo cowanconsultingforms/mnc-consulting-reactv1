@@ -1,45 +1,43 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import './App.css';
-import { NavBar } from './components/Navbar';
-import { auth,db } from './firebase';
-import AccountPage from './pages/Account/Account';
-import ProfilePage from './pages/Account/Profile';
-import AdminPage from './pages/Admin/Admin';
-import Contact from './pages/Contact/Contact';
-import Landing from './pages/Home/Landing';
-import { LoginForm ,} from './pages/Authentication/LoginForm';
-import { RegisterForm } from './pages/Authentication/RegisterForm';
-import {AuthPage} from './pages/Authentication/AuthContainer';
-import FullPageLogin from './pages/Login/LoginForm';
-import FullPageRegister from './pages/Register/FullPageRegister';
-import {ListingPage} from './pages/Listings/Listings';
-import { useEffect,useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Container } from 'rsuite';
-import './App.css';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { query,where } from 'firebase/firestore';
-import { AuthContext } from './hooks/AuthContext';
-export const App = () => {
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import { NavBar } from "./components/Navbar";
+import { auth, db } from "./firebase";
+import AccountPage from "./pages/Account/Account";
+import ProfilePage from "./pages/Account/Profile";
+import AdminPage from "./pages/Admin/Admin";
+import Contact from "./pages/Contact/Contact";
+import Landing from "./pages/Home/Landing";
+import { AuthPage } from "./pages/Authentication/AuthContainer";
+import { ListingPage } from "./pages/Listings/Listings";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Container } from "rsuite";
+import "./App.css";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { query, where } from "firebase/firestore";
 
- // const queryRef = query(collRef, query => query.where('Role', '==', 'Administrator'));
+export const App = () => {
+  // const queryRef = query(collRef, query => query.where('Role', '==', 'Administrator'));
   //hook to check for current user
+  const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
   useEffect(() => {
-   
-    let authToken = sessionStorage.getItem('Auth Token')
-        console.log(authToken)
+    if (user) {
+      document.getElementById("login-page").style.display = "none";
+    }
+    if(!user){
+      document.getElementById("login-page").style.display = "block";
+    }
+  }, []);
 
-    },[]);
-  
   //returns the navbar on every page, and each route corresponds to a different page
   //the navbar is maintained in the NavBar component ,and is designed to show different options depending on whether the user
   //is signed in and whether they are an administrator
 
   return (
     <div className="App">
-      <Container fluid="true" classPrefix='container'>
+      <Container fluid="true" classPrefix="container">
         <NavBar />
       </Container>
 
@@ -52,47 +50,49 @@ export const App = () => {
         <Route path="/login" element={<AuthPage title="Login" />} />
         <Route path="/register" element={<AuthPage title="Register" />} />
         <Route path="/listings" element={<ListingPage />} />
+        <Route
+          path="/create-profile"
+          element={<AuthPage title="New User Profile" />}
+        />
       </Routes>
     </div>
-  );}
-
-
+  );
+};
 
 export default App;
 
+export class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
 
- export class ErrorBoundary extends React.Component {
-   constructor(props) {
-     super(props);
-     this.state = { hasError: false };
-   }
+  static getDerivedStateFromError(error) {
+    // Update state so the next render will show the fallback UI.
+    return { hasError: true };
+  }
 
-   static getDerivedStateFromError(error) {
-     // Update state so the next render will show the fallback UI.
-     return { hasError: true };
-   }
+  componentDidCatch(error, errorInfo) {
+    // You can also log the error to an error reporting service
+    console.log(error, errorInfo);
+  }
 
-   componentDidCatch(error, errorInfo) {
-     // You can also log the error to an error reporting service
-      console.log(error, errorInfo);
-   }
+  render() {
+    if (this.state.hasError) {
+      // You can render any custom fallback UI
+      return <h1>Something went wrong.</h1>;
+    }
 
-   render() {
-     if (this.state.hasError) {
-       // You can render any custom fallback UI
-       return <h1>Something went wrong.</h1>;
-     }
-
-     return this.props.children;
-   }
- }
-  //const checkUser = () => {
-    //const [snapshot, loading, error] = useCollectionOnce(
-      //query(collRef, where("uid", "==", user.uid))
-    //);
-    //if (user.isAdmin == "true") {
-     // return <AdminPage />;
-    //} else {
-     // return <FullPageLogin />;
-    //}
-  //};
+    return this.props.children;
+  }
+}
+//const checkUser = () => {
+//const [snapshot, loading, error] = useCollectionOnce(
+//query(collRef, where("uid", "==", user.uid))
+//);
+//if (user.isAdmin == "true") {
+// return <AdminPage />;
+//} else {
+// return <FullPageLogin />;
+//}
+//};
