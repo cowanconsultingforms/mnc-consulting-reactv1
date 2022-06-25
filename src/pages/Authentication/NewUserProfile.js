@@ -12,9 +12,10 @@ export const NewUserPage = ({ title }) => {
   const [role, setRole] = useState("User");
   const userRef = collection(db, "users");
   const formRef = useRef();
-  const onSubmit = async () => {
+  const onSubmit = async (e) => {
+    e.preventDefault();
     const { email, userName, portfolioMin, portfolioMax, role } =
-      formRef.current.getValues();
+      formRef.current.elements;
     const newUser = {
       email,
       userName,
@@ -23,8 +24,8 @@ export const NewUserPage = ({ title }) => {
       role,
       created_at: serverTimestamp(),
     };
-    const docRef = doc(userRef,userName);
-    const docId = documentId(userRef,userName);
+    const docRef = doc(userRef);
+    const docId = docRef.documentId()
   };
   useEffect(() => {});
   return (
@@ -39,31 +40,32 @@ export const NewUserPage = ({ title }) => {
           flexDirection: "column",
           height: "100%",
           fontFamily: "Garamond",
+          backgroundColor:'grey'
         }}
       >
         <h1>{title} Form</h1>
         <TextField
           name="userName"
           label="User Name"
-          sx={{ m: 2, fontFamily: "Garamond" }}
+          sx={{ m: 2, fontFamily: "Garamond",backgroundColor:'whitesmoke' }}
           onChange={(e) => setUserName(e.target.value)}
         />
         <TextField
           name="email"
           label="Email"
-          sx={{ m: 2, fontFamily: "Garamond" }}
+          sx={{ m: 2, fontFamily: "Garamond" ,backgroundColor:'whitesmoke'}}
           onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
           name="portfolioMin"
           label="Portfolio Minimum"
-          sx={{ m: 2 }}
+          sx={{ m: 2,backgroundColor:'whitesmoke' }}
           onChange={(e) => setPortfolioMin(e.target.value)}
         />
         <TextField
           name="portfolioMax"
           label="Portfolio Maximum"
-          sx={{ m: 2 }}
+          sx={{ m: 2,backgroundColor:'whitesmoke' }}
           onChange={(e) => setPortfolioMax(e.target.value)}
         />
         <Button variant="contained" className="add-user-button" type="submit">
