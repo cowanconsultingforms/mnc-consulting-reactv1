@@ -5,8 +5,10 @@ import { db, auth, app } from "../../firebase";
 //import { Pagination } from 'rsuite';
 //import './App.css';
 //import slideIndex from 'slideIndex';
-//import tableApp from './Components/tables';
-//import instance from './Components/navbar';
+//Both imagecarousel and tableapp make the screen white. 
+import {ImageCarousel} from "./imageCarousel"; 
+import {TableApp} from "./tables";
+
 import { Component } from 'react'
 import * as ReactDOM from 'react-dom';
 import {

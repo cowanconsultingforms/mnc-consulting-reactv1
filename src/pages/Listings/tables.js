@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import * as ReactDOM from 'react-dom';
 import fakeData from 'https://github.com/rsuite/rsuite/blob/master/docs/public/data/users.json';
 
-const tableApp = () => {
+export const TableApp = () => {
     return (
       <Table
         height={400}
@@ -66,9 +66,7 @@ const tableApp = () => {
     );
   };
   
-  ReactDOM.render(<tableApp />);
 
-
-export default tableApp
+export default TableApp
 
 
