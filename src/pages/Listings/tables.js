@@ -1,13 +1,13 @@
 import Table from 'rsuite/Table';
 import React, { useState, useEffect } from 'react';
 import * as ReactDOM from 'react-dom';
-import fakeData from 'https://github.com/rsuite/rsuite/blob/master/docs/public/data/users.json';
+
 
 export const TableApp = () => {
     return (
       <Table
         height={400}
-        data={fakeData}
+        data={""}
         onRowClick={data => {
           console.log(data);
         }}
