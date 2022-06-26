@@ -54,7 +54,6 @@ export const AuthPage = ({title}) => {
   };
 
   useEffect(() => {
-
       DownloadURL();
     
   }, [authState, navigate, reference]);

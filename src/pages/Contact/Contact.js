@@ -11,6 +11,8 @@ import { ref as reff, downloadURL } from 'firebase/storage';
 import {useForm,useController} from 'react-hook-form';
 import './styles.css';
 import {Input,Controller} from '../../components/Custom/Inputs';
+
+
 const ContactTop = styled.div`
 background-size:cover;
 box-sizing:border-box;
@@ -46,6 +48,8 @@ const ContactButton = styled.button`
     outline: none;
     cursor: pointer;
     transition: .3s;`
+
+    
 const Textarea = React.forwardRef((props, ref) => (
   <Input {...props} as="textarea" ref={ref} />
 ));
@@ -86,7 +90,7 @@ const Contact = () => {
     <Container className="contact-box">
      
         <img src={DownloadURL()} alt="logo" />
-      <ContactForm />
+    
  
     </Container>
   );

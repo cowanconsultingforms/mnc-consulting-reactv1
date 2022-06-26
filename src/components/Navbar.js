@@ -1,3 +1,4 @@
+import { onAuthStateChanged } from "firebase/auth";
 import { getDoc, collection, query, where, doc } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -109,7 +110,11 @@ export const NavBar = () => {
     }else{
       document.getElementById("logout").style.display = "none";
     }
-  });
+    onAuthStateChanged(auth,(user)=>{
+      if(!user){
+        document.getElementById("login-page").style.display = "none";
+    }})
+  },[user]);
 
   //renders the navbar, divided into 2 sections, the left side and the right side
   return (
