@@ -1,16 +1,12 @@
-import { onAuthStateChanged,signInWithUsernameAndPassword } from "firebase/auth";
-import React, { useEffect, useRef,useState,createRef } from "react";
-import {useAuthState,signInWithEmailAndPassword} from "react-firebase-hooks/auth";
+import React, { useEffect,useState } from "react";
+import {useAuthState} from "react-firebase-hooks/auth";
 import { useDownloadURL } from "react-firebase-hooks/storage";
 import { useNavigate } from "react-router-dom";
-import {ButtonToolbar,Container,Divider,FlexboxGrid,Loader,Schema} from "rsuite";
+import {Container} from "rsuite";
 import { auth, db,storage } from "../../firebase";
-import { useForm ,Controller,useController} from "react-hook-form";
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import { LoginForm } from "./LoginForm";
 import {RegisterForm} from "./RegisterForm";
-import {NewUserPage} from "./NewUserProfile";
+import {NewUserPage, NewUserSignUp} from "./NewUserProfile";
 import { ref } from "firebase/storage";
 import  {ImageBox} from "../../components/Custom/Containers";
 import { getDownloadURL } from "firebase/storage";
@@ -48,10 +44,6 @@ export const AuthPage = ({title}) => {
       img.setAttribute('src', url);
       setImage(url);
     })}
-
-  const handleNavigate = () => {
-    navigate("/");
-  };
 
   useEffect(() => {
       DownloadURL();

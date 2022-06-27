@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, forwardRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   addDoc,
   collection,
@@ -6,12 +6,16 @@ import {
   doc,
   setDoc,
   documentId,
+  Timestamp,
 } from "firebase/firestore";
 import { LandingFooter } from "../Home/Footer";
 import { Box, TextField, Button, ButtonGroup } from "@mui/material";
 import { db, auth } from "../../firebase";
 import "./styles.css";
-import { Form, Schema } from "rsuite";
+import { Form } from "rsuite";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Field = React.forwardRef((props, ref) => {
   const { name, message, label, accepter, error, ...rest } = props;
@@ -32,116 +36,73 @@ const Field = React.forwardRef((props, ref) => {
     </Form.Group>
   );
 });
-const { StringType, NumberType } = Schema.Types;
 
-const model = Schema.Model({
-  name: StringType().isRequired("This field is required."),
-  email: StringType()
-    .isEmail("Please enter a valid email address.")
-    .isRequired("This field is required."),
-  age: NumberType("Please enter a valid number.").range(
-    18,
-    30,
-    "Please enter a number from 18 to 30"
-  ),
-  password: StringType().isRequired("This field is required."),
-  verifyPassword: StringType()
-    .addRule((value, data) => {
-      console.log(data);
 
-      if (value !== data.password) {
-        return false;
-      }
-
-      return true;
-    }, "The two passwords do not match")
-    .isRequired("This field is required."),
-});
-
-export const NewUserSignUp = ({ title }) => {
-  const uid = auth.currentUser.uid;
-  const role = "User";
-  const createdAt = Date.now();
-  const [formError, setFormError] = React.useState({});
-  const [formValue, setFormValue] = useState({
-    email: "",
-    userName: "",
-    portfolioMin: "",
-    portfolioMax: "",
-  });
-  const userRef = doc(collection(db, "users"));
-  const formRef = useRef();
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    const { email, userName, portfolioMin, portfolioMax, role } =
-      formRef.current.elements;
-    const newUser = {
-      email,
-      userName,
-      portfolioMin,
-      portfolioMax,
-      role: "User",
-      created_at: Date.now(),
-    };
-    const docRef = doc(userRef, { ...newUser });
-    try {
-      await setDoc(docRef).then((doc) => {
-        console.log(doc);
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  useEffect(() => {});
-  return (
-    <React.Fragment>
-      <Form
-        ref={formRef}
-        onSubmit={onSubmit}
-        formValue={formValue}
-        onChange={setFormValue}
-      >
-      <Field name="email" label="Email" />
-      <Field name="userName" label="User Name" />
-      <Field name="portfolioMin" label="Portfolio Min" />
-      <Field name="portfolioMax" label="Portfolio Max" />
-      <Button appearance="primary" type="submit">Submit</Button>
-      </Form>
-    </React.Fragment>
-  );
-};
 export const NewUserPage = ({ title }) => {
-  const [email, setEmail] = useState("");
-  const uid = auth.currentUser.uid;
-  const role = "User";
-  const createdAt = Date.now();
-  const [userName, setUserName] = useState("");
-  const [portfolioMin, setPortfolioMin] = useState("");
-  const [portfolioMax, setPortfolioMax] = useState("");
-  const userRef = doc(db, "users");
+  const navigate=useNavigate();
+  const [user,loading,error] = useAuthState(auth);
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
+  const [email,setEmail] = useState("");
+  const [userName,setUserName] = useState("");
+  const [portfolioMin,setPortfolioMin] = useState("");
+  const [portfolioMax,setPortfolioMax] = useState("");
   const formRef = useRef();
   const onSubmit = async (e) => {
     e.preventDefault();
-    const { email, userName, portfolioMin, portfolioMax, role } =
-      formRef.current.elements;
+    const role = "User"
+    
+    setIsSubmit(true);
     const newUser = {
       email,
       userName,
       portfolioMin,
       portfolioMax,
       role: "User",
-      created_at: Date.now(),
     };
-    const docRef = doc(userRef, { ...newUser });
+   
+   
+   
+    const collRef = collection(db,"users");
     try {
-      await addDoc(docRef).then((doc) => {
+      await addDoc(collRef,{...newUser}).then((doc) => {
         console.log(doc);
       });
     } catch (err) {
       console.log(err);
+    }finally{
+      setIsSubmit(false);
+      navigate('/');
     }
   };
-  useEffect(() => {});
+  const validate = (values) => {
+    const errors = {};
+    const regex = /^[^\s@]+@[^\s@]+.[^\s@]{2,}$/i;
+    if (!values.username) {
+      errors.userName = "Username is required!";
+    }
+     if (!values.email) {
+      errors.email = "Email is required!";
+    } else if (!regex.test(values.email)) {
+      errors.email = "This is not a valid email format!";
+    }
+    if (!values.portfolioMin) {
+      errors.portfolioMin = "Portfolio Min is required!";
+    }
+    if (!values.portfolioMax) {
+      errors.portfolioMax = "Portfolio Max is required!";
+    }
+    return errors;
+  }
+  useEffect(() => {
+    console.log(formErrors);
+    if (Object.keys(formErrors).length === 0 && isSubmit) {
+      console.log(formErrors);
+    }
+    if(user){
+      const uid = user.uid;
+    }
+  }, [user,formErrors,formRef,isSubmit] );
   return (
     <React.Fragment>
       <Box
@@ -162,25 +123,25 @@ export const NewUserPage = ({ title }) => {
           name="userName"
           label="User Name"
           sx={{ m: 2, fontFamily: "Garamond", backgroundColor: "whitesmoke" }}
-          onChange={(e) => setUserName(e.target.value)}
+          onChange={(e)=> setUserName(e.target.value)}
         />
         <TextField
           name="email"
           label="Email"
           sx={{ m: 2, fontFamily: "Garamond", backgroundColor: "whitesmoke" }}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e)=> setEmail(e.target.value)}
         />
         <TextField
           name="portfolioMin"
           label="Portfolio Minimum"
           sx={{ m: 2, backgroundColor: "whitesmoke" }}
-          onChange={(e) => setPortfolioMin(e.target.value)}
+          onChange={(e)=> setPortfolioMin(e.target.value)}
         />
         <TextField
           name="portfolioMax"
           label="Portfolio Maximum"
           sx={{ m: 2, backgroundColor: "whitesmoke" }}
-          onChange={(e) => setPortfolioMax(e.target.value)}
+          onChange={(e)=> setPortfolioMax(e.target.value)}
         />
         <Button variant="contained" className="add-user-button" type="submit">
           Complete Registration

@@ -1,20 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Box, TextField, Button, ButtonGroup } from "@mui/material";
-import { auth, db, signUp } from "../../firebase";
+import { auth,  } from "../../firebase";
 import { CustomButton } from "../../components/Custom/Buttons";
-import { Input } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
 import "./styles.css";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export const RegisterForm = ({ title }) => {
+  const [user] = useAuthState(auth);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [error,setError]= useState({});
   const navigate = useNavigate();
   const formRef = useRef();
 
@@ -31,12 +32,20 @@ export const RegisterForm = ({ title }) => {
       sessionStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("userToken", JSON.stringify(user));
       navigate("/create-profile");
-    }
+    }setError(listErrors(error));
   };
   const resetPassword = (e) => {
     e.preventDefault();
     sendPasswordResetEmail(auth, email);
   };
+  const listErrors = (error)=>{
+    const errors = {};
+    Object.keys(error).forEach((key)=>{
+      errors[key] = error[key].message;
+    }
+    )
+    return errors;
+  }
   const validatePassword = () => {
     let isValid = true;
     if (password !== "" && confirmPassword !== "") {
@@ -47,16 +56,17 @@ export const RegisterForm = ({ title }) => {
     }
     return isValid;
   };
-  const handleNavigate = () => {
-    navigate("/register");
-  };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if(user){
+
+    }
+  }, [user,formRef,email,password,confirmPassword]);
   return (
     <div className="register-form">
       <Box
         component="form"
-        autocomplete={true}
+        autoComplete
         noValidate
         ref={formRef}
         onSubmit={handleAction}
@@ -72,6 +82,7 @@ export const RegisterForm = ({ title }) => {
           id="email"
           label="Email :"
           variant="outlined"
+          autocomplete="username"
           onChange={(e) => setEmail(e.target.value)}
           sx={{
             backgroundColor: "whitesmoke",
@@ -84,6 +95,7 @@ export const RegisterForm = ({ title }) => {
           label="Password :"
           variant="outlined"
           type="password"
+          autoComplete="new-password"
           onChange={(e) => setPassword(e.target.value)}
           sx={{
             backgroundColor: "whitesmoke",
@@ -96,6 +108,7 @@ export const RegisterForm = ({ title }) => {
           label="Confirm Password :"
           variant="outlined"
           type="password"
+          autoComplete="new-password"
           onChange={(e) => setConfirmPassword(e.target.value)}
           sx={{
             backgroundColor: "whitesmoke",
@@ -107,7 +120,7 @@ export const RegisterForm = ({ title }) => {
           <CustomButton title={title} handleAction={handleAction} type="submit">
             Register
           </CustomButton>
-          <Button onClick={sendPasswordResetEmail()}>Forgot Password?</Button>
+          <Button onClick={resetPassword}>Forgot Password?</Button>
         </ButtonGroup>
       </Box>
     </div>

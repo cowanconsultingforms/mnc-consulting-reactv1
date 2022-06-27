@@ -27,7 +27,7 @@ export const App = () => {
       document.getElementById("login-page").style.display = "none";
     }
     if(!user){
-      document.getElementById("login-page").style.display = "block";
+      document.getElementById("login-page").style.display = "list-item";
     }
   }, []);
 

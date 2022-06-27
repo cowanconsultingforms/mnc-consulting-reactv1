@@ -27,9 +27,13 @@ export const NavBar = () => {
   const collectionRef = collection(db, "users");
 
   const LoginCheck = async () => {
+    if(user){
+      setLoggedIn(true);
+      const userEmail = user.email;
+      const q = query(collectionRef, where("email", "==", userEmail));
     try {
-      const docRef = await getDoc(db);
-      getDoc(db, "users", auth.currentUser.uid).then((doc) => {
+      
+      await getDoc(q).then((doc) => {
         setUserData(...doc.data());
         document.getElementById("admin-page").style.display = "none";
         console.log(userData);
@@ -38,7 +42,7 @@ export const NavBar = () => {
       console.log(error);
     }
   };
-
+  }
   //standard react hook to navigate to a new page
   const navigate = useNavigate();
   //objects for the navbar and their props
@@ -105,14 +109,14 @@ export const NavBar = () => {
   };
   // on loading, performs a check to see if the user is logged in
   useEffect(() => {
-    if(user){
+    if(localStorage.getItem('userToken')!== null){
       document.getElementById("login-page").style.display = "none";
     }else{
       document.getElementById("logout").style.display = "none";
     }
     onAuthStateChanged(auth,(user)=>{
       if(!user){
-        document.getElementById("login-page").style.display = "none";
+        document.getElementById("login-page").style.display = "list-item";
     }})
   },[user]);
 
