@@ -18,22 +18,16 @@ import  AccountPageDeleteProfileBox  from './DeleteAccount';
 
 export const AccountPage = () => {
   //hook to get current user
- 
- 
-  const [user, setUser] = useState({user:auth.currentUser.uid});
   const [data, setData] = useState({})
- 
   const getUserInfo = async () => { 
-    const uid = user.uid;
-    const userDoc = await getDoc(`users/${uid}`);
-    const userInfo = userDoc.data();
-    setData(JSON.stringify(userInfo));
-
+ 
+   
+  
   }
   
   useEffect(() => {
-    getUserInfo();
-  },[user,data])
+
+  },[])
 
 
 

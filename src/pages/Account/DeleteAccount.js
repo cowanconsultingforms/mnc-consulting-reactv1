@@ -32,9 +32,7 @@ const AccountPageDeleteProfileBox = () => {
   };
   //useEffect hook that will navigate back to the home page if on the account page and not logged in
   useEffect(() => {
-    if (user === null) {
-      navigate("/");
-    }
+
   })
   return (
     <div className="delete-profile-box">
