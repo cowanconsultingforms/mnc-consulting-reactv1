@@ -2,7 +2,6 @@ import Table from 'rsuite/Table';
 import React, { useState, useEffect } from 'react';
 import * as ReactDOM from 'react-dom';
 
-
 export const TableApp = () => {
     return (
       <Table

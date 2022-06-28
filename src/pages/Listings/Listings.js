@@ -6,11 +6,13 @@ import { db, auth, app } from "../../firebase";
 //import './App.css';
 //import slideIndex from 'slideIndex';
 //Both imagecarousel and tableapp make the screen white. 
-import {ImageCarousel} from "./imageCarousel"; 
-import {TableApp} from "./tables";
-
+//import {ImageCarousel} from "./imageCarousel"; 
+//import {TableApp} from "./tables";
 import { Component } from 'react'
+
 import * as ReactDOM from 'react-dom';
+
+
 import {
   query,
   getDocs,
@@ -43,7 +45,9 @@ import {
   Footer
 } from "rsuite";
 import Listing from "./Listing";
-import './styles.css';
+//import './styles.css';
+import './listingsStyles.css';
+
 // primary container for Listing Page data
 export const ListingPage = () => {
   /*const [listings] = useCollectionData(db, collection('listings'));
@@ -75,15 +79,19 @@ export const ListingPage = () => {
 
   return (
     <div style={{
-      display: 'block', width: 700, paddingLeft: 30
-      }}>
-      <h4>React Suite Sidenav Component</h4>
+      display: 'block', width: 700, paddingLeft: 30}}>
+      <h3>
+        React Suite Sidenav Component
+        </h3>
       <Sidenav defaultOpenKeys={['3', '4']} activeKey="1">
         <Sidenav.Body>
         <Nav>
           <Nav.Item eventKey="1">Status</Nav.Item>
+          <div></div>
           <Nav.Item eventKey="2">Price</Nav.Item>
+          <div></div>
           <Nav.Item eventKey="3">Bedrooom</Nav.Item>
+          <div></div>
           <Nav.Item eventKey="4">Bathroom</Nav.Item>
           <Dropdown eventKey="5" title="Advanced">
           <Dropdown.Item eventKey="4-1">Privacy</Dropdown.Item>
@@ -94,10 +102,29 @@ export const ListingPage = () => {
         </Sidenav.Body>
       </Sidenav>
       <Container>
-      <Header>MCN Development</Header>
+      <Header style ={{color: '#808080', fontSize: '20px'}}>MCN Development Listings</Header>
       <Container>
+      
         <Content>Content</Content>
-        <Sidebar>Listings</Sidebar>
+        <Table>
+        <Table.Column width={70} align="center" fixed>
+        <Table.HeaderCell>Id</Table.HeaderCell>
+        <Table.Cell dataKey="id" />
+        </Table.Column>
+        </Table>
+
+        <Sidebar>Listings
+          <Content>
+          <Carousel className="custom-slider">
+          <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=1" height="250" />
+          <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=2" height="250" />
+          <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=3" height="250" />
+          <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=4" height="250" />
+          <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=5" height="250" />
+        </Carousel>
+          </Content>
+        </Sidebar>
+
       </Container>
       <Footer>Footer</Footer>
     </Container>
