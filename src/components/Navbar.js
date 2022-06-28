@@ -1,3 +1,4 @@
+import { unstable_unsupportedProp } from "@mui/utils";
 import { onAuthStateChanged } from "firebase/auth";
 import { getDoc, collection, query, where, doc } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
@@ -109,15 +110,23 @@ export const NavBar = () => {
   };
   // on loading, performs a check to see if the user is logged in
   useEffect(() => {
-    if(localStorage.getItem('userToken')!== null){
+    if(user){
       document.getElementById("login-page").style.display = "none";
     }else{
       document.getElementById("logout").style.display = "none";
     }
-    onAuthStateChanged(auth,(user)=>{
+    const unsubscribe = async() => onAuthStateChanged(auth,(user)=>{
+      if(user){
+        setLoggedIn(true);
+        document.getElementById("logout").style.display = "flex";
+      }else{
+        setLoggedIn(false);
+      }
       if(!user){
-        document.getElementById("login-page").style.display = "list-item";
-    }})
+        document.getElementById("login-page").style.display = "flex";
+        document.getElementById('logout').style.display = "none";
+    }
+  return unsubscribe})
   },[user]);
 
   //renders the navbar, divided into 2 sections, the left side and the right side

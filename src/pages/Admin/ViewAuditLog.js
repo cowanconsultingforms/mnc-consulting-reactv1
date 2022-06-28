@@ -3,14 +3,14 @@ import { db, auth, app} from "../../firebase";
 import { query, getDocs,where,collection ,doc,addDoc,onSnapshot,orderBy} from 'firebase/firestore';
 import { useCollection, useCollectionData } from 'react-firebase-hooks/firestore';
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Container} from "rsuite";
+import { Box ,Table,TableContainer,TableCell,TableHead} from "@mui/material";
 
 
 export const ViewAuditLog = () => {
     
    
   const auditLog = collection("auditLog");
-  const placeHolder = useRef();
+  
   const q = query(auditLog,orderBy("DateTime","desc").limit(25));
   const [values] = useCollectionData(q,{ idField: "DateTime" });
   const [data, setData] = useState([values]);
@@ -19,12 +19,12 @@ export const ViewAuditLog = () => {
     return values.map(data => {
       return (
         <React.Fragment>
-          <Container className="audit-log-frame">
+          <Box className="audit-log-frame" component="div">
             <p>{data.DateTime}</p>
             <p>{data.User}</p>
             <p>{data.Action}</p>
             <p>{data.Description}</p>
-          </Container>
+          </Box>
         </React.Fragment>
       );
     })

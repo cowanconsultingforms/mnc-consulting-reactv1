@@ -1,7 +1,7 @@
 import React,{useState,useEffect,createRef} from "react";
 import {Box,TextField,FormControlLabel,Checkbox} from '@mui/material';
 import { auth,db,signIn } from "../../firebase";
-import {signInWithEmailAndPassword} from "firebase/auth";
+import {onAuthStateChanged, signInWithEmailAndPassword} from "firebase/auth";
 import { CustomButton } from "../../components/Custom/Buttons";
 import { useNavigate } from "react-router-dom";
 import {ButtonGroup,Button} from '@mui/material';
@@ -43,7 +43,16 @@ export const LoginForm = ({title}) => {
   };
 
   useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log(JSON.stringify(user));
+        sessionStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("userToken", JSON.stringify(user));
+        navigate("/");
+      }else{
 
+      }
+    })
     }
   , []);
   return (
@@ -52,7 +61,7 @@ export const LoginForm = ({title}) => {
       <Box
       className="login-form-box"
         component="form"
-        autocomplete={true}
+        autocomplete
         noValidate
         onSubmit={handleSubmit}
         sx={{ display: "flex", flexDirection: "column",marginTop:'20px',paddding:'20px' }}

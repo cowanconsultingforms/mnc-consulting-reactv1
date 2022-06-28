@@ -7,23 +7,17 @@ import {
   serverTimestamp,
   addDoc,
   collection,
-  setDoc,
+  setDoc,writeBatch
 } from "firebase/firestore";
 import {
   Container,
-  FlexboxGrid,
-  Uploader,
-  DOMHelper,
   Schema,
-  Checkbox,
   Row,
   Form,
   Button,
   RadioGroup,
   Radio,
   Input,
-  Col,
-  Panel,
 } from "rsuite";
 import { StringType } from "schema-typed";
 import {
@@ -34,7 +28,7 @@ import {
   UploadResult,
   UploadTaskSnapshot,
 } from "firebase/storage";
-import { useMemo } from "react";
+
 import { addAuditLog } from "../../hooks/addAuditLog";
 import { Textarea, TextField, RadioPicker } from "./AdminPageComponents";
 import FileUploader from "./FileUploader";

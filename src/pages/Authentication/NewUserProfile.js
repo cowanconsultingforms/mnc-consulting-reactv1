@@ -1,57 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  addDoc,
-  collection,
-  serverTimestamp,
-  doc,
-  setDoc,
-  documentId,
-  Timestamp,
-} from "firebase/firestore";
+import { addDoc, collection, writeBatch } from "firebase/firestore";
 import { LandingFooter } from "../Home/Footer";
-import { Box, TextField, Button, ButtonGroup } from "@mui/material";
+import { Box, TextField, Button } from "@mui/material";
 import { db, auth } from "../../firebase";
 import "./styles.css";
-import { Form } from "rsuite";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
-import { onAuthStateChanged } from "firebase/auth";
-
-const Field = React.forwardRef((props, ref) => {
-  const { name, message, label, accepter, error, ...rest } = props;
-  return (
-    <Form.Group
-      controlId={`${name}`}
-      ref={ref}
-      className={error ? "has-error" : ""}
-    >
-      <Form.ControlLabel>{label} </Form.ControlLabel>
-      <Form.Control
-        name={name}
-        accepter={accepter}
-        errorMessage={error}
-        {...rest}
-      />
-      <Form.HelpText>{message}</Form.HelpText>
-    </Form.Group>
-  );
-});
-
 
 export const NewUserPage = ({ title }) => {
-  const navigate=useNavigate();
-  const [user,loading,error] = useAuthState(auth);
+  const batch = writeBatch(db);
+  const navigate = useNavigate();
+  const [user] = useAuthState(auth);
   const [isSubmit, setIsSubmit] = useState(false);
   const [formErrors, setFormErrors] = useState({});
-  const [email,setEmail] = useState("");
-  const [userName,setUserName] = useState("");
-  const [portfolioMin,setPortfolioMin] = useState("");
-  const [portfolioMax,setPortfolioMax] = useState("");
+  const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
+  const [portfolioMin, setPortfolioMin] = useState("");
+  const [portfolioMax, setPortfolioMax] = useState("");
+  const [docId,setDocId]=useState("");
   const formRef = useRef();
   const onSubmit = async (e) => {
     e.preventDefault();
-    const role = "User"
-    
+    const role = "User";
+
     setIsSubmit(true);
     const newUser = {
       email,
@@ -60,19 +31,27 @@ export const NewUserPage = ({ title }) => {
       portfolioMax,
       role: "User",
     };
-   
-   
-   
-    const collRef = collection(db,"users");
+
+    const collRef = collection(db, "users");
     try {
-      await addDoc(collRef,{...newUser}).then((doc) => {
+      await addDoc(collRef, { ...newUser }).then((doc) => {
+        setDocId(doc.id)
         console.log(doc);
       });
     } catch (err) {
       console.log(err);
-    }finally{
+    } finally {
       setIsSubmit(false);
-      navigate('/');
+      const action = "New User Created";
+      const user = auth.currentUser;
+      const auditId = docId;
+      
+
+      try {
+        await addDoc(collection(db,"auditLog"))
+      } catch (error) {
+        
+      }
     }
   };
   const validate = (values) => {
@@ -81,7 +60,7 @@ export const NewUserPage = ({ title }) => {
     if (!values.username) {
       errors.userName = "Username is required!";
     }
-     if (!values.email) {
+    if (!values.email) {
       errors.email = "Email is required!";
     } else if (!regex.test(values.email)) {
       errors.email = "This is not a valid email format!";
@@ -93,16 +72,16 @@ export const NewUserPage = ({ title }) => {
       errors.portfolioMax = "Portfolio Max is required!";
     }
     return errors;
-  }
+  };
   useEffect(() => {
     console.log(formErrors);
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       console.log(formErrors);
     }
-    if(user){
+    if (user) {
       const uid = user.uid;
     }
-  }, [user,formErrors,formRef,isSubmit] );
+  }, [user, formErrors, formRef, isSubmit]);
   return (
     <React.Fragment>
       <Box
@@ -123,25 +102,25 @@ export const NewUserPage = ({ title }) => {
           name="userName"
           label="User Name"
           sx={{ m: 2, fontFamily: "Garamond", backgroundColor: "whitesmoke" }}
-          onChange={(e)=> setUserName(e.target.value)}
+          onChange={(e) => setUserName(e.target.value)}
         />
         <TextField
           name="email"
           label="Email"
           sx={{ m: 2, fontFamily: "Garamond", backgroundColor: "whitesmoke" }}
-          onChange={(e)=> setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
           name="portfolioMin"
           label="Portfolio Minimum"
           sx={{ m: 2, backgroundColor: "whitesmoke" }}
-          onChange={(e)=> setPortfolioMin(e.target.value)}
+          onChange={(e) => setPortfolioMin(e.target.value)}
         />
         <TextField
           name="portfolioMax"
           label="Portfolio Maximum"
           sx={{ m: 2, backgroundColor: "whitesmoke" }}
-          onChange={(e)=> setPortfolioMax(e.target.value)}
+          onChange={(e) => setPortfolioMax(e.target.value)}
         />
         <Button variant="contained" className="add-user-button" type="submit">
           Complete Registration
