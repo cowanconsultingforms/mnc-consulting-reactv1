@@ -1,18 +1,17 @@
 import styled from 'styled-components';
 import TextField from '../../components/Custom/TextField';
-import React,{ useState,forwardRef,useRef } from 'react';
+import React,{ useState,useRef } from 'react';
 import { useDownloadURL } from 'react-firebase-hooks/storage';
-import { Container, Button,Loader,Form} from 'rsuite';
+import { Container, Button,Divider} from 'rsuite';
 import { useNavigate } from 'react-router-dom';
 import { TextFieldLogin } from '../../components/Custom/TextField';
 import { ImageBox } from '../../components/Custom/Containers';
 import { storage } from '../../firebase';
 import { ref as reff, downloadURL } from 'firebase/storage';
-import {useForm,useController} from 'react-hook-form';
 import './styles.css';
 import {Input,Controller} from '../../components/Custom/Inputs';
-
-
+import { Box,Typography } from '@mui/material';
+import {DownloadLogo} from './DownloadLogo';
 const ContactTop = styled.div`
 background-size:cover;
 box-sizing:border-box;
@@ -55,57 +54,14 @@ const Textarea = React.forwardRef((props, ref) => (
 ));
 
 
-const Contact = () => {
-  const reference = reff(storage, "images/mncdevelopmentlogo.jpg");
-  const [value, loading, error] = useDownloadURL(reference);
 
-  const DownloadURL = () => {
-    
-      
-
-      return (
-        (
-          <React.Fragment>
-           
-            
-              { (
-                <React.Fragment>
-                {loading && <Loader size="md" content="Loading..." />}
-                    <ImageBox
-                      id="logo"
-                      src={value}
-                      alt="logo"
-                      style="justify-content:center;align-items:center;"
-                    ></ImageBox>
-      
-                </React.Fragment>
-              )}
-      
-          </React.Fragment>
-        ),
-        [value, loading, error]
-      );
-  };
-  return (
-    <Container className="contact-box">
-     
-        <img src={DownloadURL()} alt="logo" />
-    
  
-    </Container>
-  );
-}
 const ContactForm = () => {
-  const {control,register,handleSubmit} = useForm();
+  
   const [data, setData] = useState({});
   const navigate = useNavigate();
   const formRef = useRef();
-    const [formValue, setFormValue] = useState({
-      name: "",
-      email: "",
-      message: "",
-      phone: "",
-    });
+
     const sendEmail = ({name,email,message,phone}) => {
       email = data.email;
       phone = data.phone
@@ -134,33 +90,18 @@ const ContactForm = () => {
       justify="center"
       style={{ marginTop: "10%", width: "80%", justifyContent: "center" }}
     >
-      <h2>Contact Us</h2>
+    <DownloadLogo />
+  
+    <Divider />
+   
+    
+      <Typography variant="h2" sx={{marginTop:'300px',color:'black',alignItems:'center',}}>Contact Us</Typography>
 
-      <Form
-      ref={formRef}
-      onSubmit={handleSubmit(onSubmit)}>
-    <Form.Group controlId="name">
-      <Form.ControlLabel>Username</Form.ControlLabel>
-      <Form.Control name="name" />
-      <Form.HelpText>Username is required</Form.HelpText>
-    </Form.Group>
-    <Form.Group controlId="email">
-      <Form.ControlLabel>Email</Form.ControlLabel>
-      <Form.Control name="email" type="email" />
-      <Form.HelpText tooltip>Email is required</Form.HelpText>
-    </Form.Group>
-    <Form.Group controlId="phone">
-      <Form.ControlLabel>Password</Form.ControlLabel>
-      <Form.Control name="password" type="password" autoComplete="off" />
-    </Form.Group>
-    <Form.Group controlId="textarea">
-      <Form.ControlLabel>Textarea</Form.ControlLabel>
-      <Form.Control rows={5} name="textarea" accepter={Textarea} />
-    </Form.Group>
+
 <Button type="submit"></Button>
-  </Form>
+  
       <script src="https://smtpjs.com/v3/smtp.js"></script>
     </Container>
   );
 }
-export default Contact;
+export default ContactForm;

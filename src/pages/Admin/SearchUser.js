@@ -1,8 +1,6 @@
 import { collection, getDoc, query, where, querySnapshot, doc,onSnapshot } from 'firebase/firestore';
 import React,{forwardRef,useRef,useEffect,useState} from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCollection, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
-import { Button, Form, Loader, Schema, Container, Input, FlexboxGrid,ButtonToolbar} from 'rsuite';
+import { Box,TextField } from '@mui/material';
 import styled from 'styled-components';
 import { auth, db } from '../../firebase';
 import UserDataService from '../../services/crudoperations';
@@ -26,38 +24,15 @@ export const AccountPageContainer = styled.div`
   height: 100%;
 
 `;
-const { StringType, NumberType } = Schema.Types;
-
-function asyncCheckUsername(name) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      if (name === "abc") {
-        resolve(false);
-      } else {
-        resolve(true);
-      }
-    }, 500);
-  });
-}
-const model = Schema.Model({
-  name:StringType().isRequired(),
-})
-const TextField = forwardRef((props, ref) => {
-  const { name, label, accepter, ...rest } = props;
-  return (
-    <Form.Group controlId={`${name}`} ref={ref}>
-      <Form.ControlLabel>{label} </Form.ControlLabel>
-      <Form.Control name={name} accepter={accepter} {...rest} />
-    </Form.Group>
-  );
-});
-export const SearchUser = () => {
-  const formRef = React.useRef();
+export const SearchUser = (props) => {
+  
+  const initialValues = {uid:"",email:"",userName:"",role:"",phoneNumber:"",}
+  const formRef = React.useRef(initialValues);
   const [formError, setFormError] = React.useState({});
   const [user, setUser] = useState({});
   const [formValue,setFormValue] = useState({})
   const isMounted = useRef();
-
+  const [docsData, setDocsData] = useState([]);
   useEffect(() => {
     getUser();
   }, []);
@@ -67,12 +42,19 @@ export const SearchUser = () => {
     console.log(data);
     setUser(data)
   }
-  
+  const getData = () => {
+    onSnapshot(collectionRef, (data) => {
+        setDocsData(data.docs.map((doc) => {
+            return {...doc.data(), id: doc.id}
+        }))
+    })
+}
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     formRef.current.checkAsync().then((result) => {
       console.log(result);
     });
+    const q = query(collectionRef, where("email", "==", formValue.email));
     getDoc(db, "users", "email", formValue.name).then(onSnapshot(db, "users"), data => {
       data.map(doc => {
         return (
@@ -86,18 +68,19 @@ export const SearchUser = () => {
     });
   }
   useEffect(() => {
-    if (formRef.current) {
-      return;
+    if(isMounted.current){
+        return 
     }
+
     isMounted.current = true;
-    
-  })
+    getData()
+}, [])
   
 
 
     
   return (
-    <Container className="search-user-container">
+    <Box className="search-user-container">
       <SearchHeader>Search User</SearchHeader>
       <FlexboxGrid>
         <FlexboxGrid.Item colspan={18} style={{}}>
@@ -125,7 +108,7 @@ export const SearchUser = () => {
           </Form>
         </FlexboxGrid.Item>
       </FlexboxGrid>
-    </Container>
+    </Box>
   );
   }
 
@@ -144,27 +127,27 @@ export const AddUser = ({userName,role,uuid,email,portfolio}) => {
   }, []);
   return (
     <React.Fragment>
-      <h1>Add New User</h1>
-      <Form className="add-user-form"
+      <h1>Search Users</h1>
+      <Box className="add-user-form"
         ref={formRef}
         value={formData}
         onClick={handleSubmit}
         onChange={setFormData}
       onCheck={setFormError}>
         <TextField
-          accepter={Input}
+          
           label="uuid"
           name="uid" />
         <TextField
-          accepter={Input}
+       
           label="email"
           name="email" />
         <TextField
-          accepter={Input}
+      
           label="userName"
           name="userName" />
         <TextField
-          accepter={Input}
+          
           label="role"
           name="role" />
         <ButtonToolbar>
@@ -172,7 +155,7 @@ export const AddUser = ({userName,role,uuid,email,portfolio}) => {
             Submit
           </Button>
         </ButtonToolbar>
-      </Form>
+      </Box>
     </React.Fragment>
       
     )

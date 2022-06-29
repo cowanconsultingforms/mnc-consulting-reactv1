@@ -15,7 +15,9 @@ nav#rs-navbar-navbar-default{
     padding: 19px 20px;
     position:absolute;
 }
-
+.navigation-bar-right a:hover{
+  opacity:.8;
+}
   .RightNavBar a:hover{
     background-color: rgb(141, 141, 141);
     color: white;

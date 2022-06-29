@@ -54,6 +54,7 @@ export const App = () => {
           path="/create-profile"
           element={<AuthPage title="New User Profile" />}
         />
+        <Route path="/editListing/:id" element={<EditDocs database={database}/>} />
       </Routes>
     </div>
   );

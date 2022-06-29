@@ -7,23 +7,30 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 
 
-export const addAuditLog = () => { 
+export const addAuditLog = ({action}) => { 
     
-    const auditLog = collection('auditLog');
     
-   
+    const [action,setAction]=useState("");
+    const [user]=useAuthState(auth);
     const addToLog = async(e, action) => {
+        e.preventDefault();
+        if(user){
+        const user = auth.currentUser.email.split("@")[0];
         const auditLog = collection(db,'auditLog');
-       
-            e.preventDefault()
-            await addDoc(auditLog,{
-         
-                Action: action,
-                Timestamp: serverTimestamp()
+        try{
+            await addDoc(auditLog,{user,Action: action,DateTime: serverTimestamp()
             }).then((res) => {
                 console.log(res)
             });
+        }
+        catch(err){
+        }
+        
+       
+            
+            
     }
+}
 }
 
 export default addAuditLog;

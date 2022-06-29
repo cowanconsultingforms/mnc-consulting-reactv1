@@ -1,7 +1,7 @@
 import React, { forwardRef,useRef ,useState} from 'react';
 import { Form,Input ,Radio,RadioGroup} from 'rsuite';
 import { auth, db, storage } from '../../firebase';
-import { serverTimestamp, collection, setDoc } from 'firebase/firestore';
+import { serverTimestamp, collection, setDoc, onSnapshot } from 'firebase/firestore';
 
 
 
@@ -47,4 +47,5 @@ export const auditLogger = async ({ action = "Added Listing" }) => {
       console.log(JSON.stringify(docRef));
     });
   };
+
 export default TextField;

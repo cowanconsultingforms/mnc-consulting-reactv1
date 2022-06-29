@@ -2,7 +2,7 @@ import { onAuthStateChanged, updateCurrentUser } from "firebase/auth";
 import { deleteDoc, doc, getDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import {auth} from "../../firebase";
 import {
   AccGridInfo,
   AccountPageContainer,
@@ -13,21 +13,35 @@ import {
 import {AccountPageSignOutBox} from './AccountPageSignOutBox'
 import { ProfileButton } from '../../components/Custom/Buttons';
 import { auth, db, userSignOut } from "../../firebase";
-import { Container } from "rsuite";
+import { Box, TextField } from "@mui/material";
 import  AccountPageDeleteProfileBox  from './DeleteAccount';
-
+import {UserDataService} from '../../services/crudoperations';
 export const AccountPage = () => {
   //hook to get current user
   const [data, setData] = useState({})
+  const [user,loading,error] = useAuthState(auth);
   const getUserInfo = async () => { 
- 
-   
-  
+    const email = auth.currentUser.email;
+    try {
+      const docRef = await getDoc(db, "users", email).then((doc)=>{
+        setData(...doc.data())
+        console.log(data);
+        return(
+          data.map((field,idx)=>{
+            <TextField key={idx} label={field.label} value={field.value}/>
+          })
+        )
+      })
+    } catch (err) {
+      console.log(err);
+    }
+    
   }
   
   useEffect(() => {
+    async()=>getUserInfo();    
 
-  },[])
+  },[docRef,data])
 
 
 

@@ -95,11 +95,7 @@ div#rs-btn-toolbar {
   padding: 5%;
   border: rgb(73, 73, 73) 2px solid;
 }
-div#rs-container {
-  align-items: center;
-  justify-content: center;
-  margin-top: 200px;
-}
+
 
 .buy-button {
  
@@ -154,9 +150,13 @@ div#rs-container {
   text-decoration: none;
   overflow: hidden;
 }
+.navigation-bar :hover{
+  opacity:.8;
+  background-color: grey;
+}
 .navigation-bar-right {
   font-size: 20px;
-  display: block;
+  display: inline-flex;
   color: white;
   text-align: center;
   padding: 19px 20px;
