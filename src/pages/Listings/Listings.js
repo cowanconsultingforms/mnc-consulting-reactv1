@@ -9,8 +9,8 @@ import { db, auth, app } from "../../firebase";
 //import {ImageCarousel} from "./imageCarousel"; 
 //import {TableApp} from "./tables";
 import { Component } from 'react'
-
 import * as ReactDOM from 'react-dom';
+import './listingStyles.css';
 
 
 import {
