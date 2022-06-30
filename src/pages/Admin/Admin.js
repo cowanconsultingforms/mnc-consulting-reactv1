@@ -8,7 +8,7 @@ import { auth, db } from '../../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
 import { query,where,getDoc } from 'firebase/firestore';
-import { AddUser } from './AddUser';
+//import { AddUser } from './AddUser';
 import FileUploader from './FileUploader';
 import { Box, Typography } from '@mui/material';
 const Header = () => {

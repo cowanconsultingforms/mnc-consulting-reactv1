@@ -1,5 +1,6 @@
+/*
 import { onAuthStateChanged, updateCurrentUser } from "firebase/auth";
-import { deleteDoc, doc, getDoc,docRef } from "firebase/firestore";
+import { deleteDoc, doc, getDoc } from "firebase/firestore";
 import React, { useEffect, useState, Container } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -61,3 +62,4 @@ export const AccountPage = () => {
 };
 
 export default AccountPage;
+*/

@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { Container } from "rsuite";
 import "./App.css";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { query, where, EditDocs} from "firebase/firestore";
+import { query, where} from "firebase/firestore";
 
 export const App = () => {
   // const queryRef = query(collRef, query => query.where('Role', '==', 'Administrator'));
@@ -41,21 +41,7 @@ export const App = () => {
         <NavBar />
       </Container>
 
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/account" element={<AccountPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/login" element={<AuthPage title="Login" />} />
-        <Route path="/register" element={<AuthPage title="Register" />} />
-        <Route path="/listings" element={<ListingPage />} />
-        <Route
-          path="/create-profile"
-          element={<AuthPage title="New User Profile" />}
-        />
-        <Route path="/editListing/:id" element={<EditDocs database={db}/>} />
-      </Routes>
+      
     </div>
   );
 };

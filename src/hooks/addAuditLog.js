@@ -1,3 +1,4 @@
+/*
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { db, auth, app } from "../firebase";
@@ -34,3 +35,4 @@ export const addAuditLog = ({action}) => {
 }
 
 export default addAuditLog;
+*/
