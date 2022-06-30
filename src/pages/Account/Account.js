@@ -1,8 +1,9 @@
 import { onAuthStateChanged, updateCurrentUser } from "firebase/auth";
-import { deleteDoc, doc, getDoc } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import { deleteDoc, doc, getDoc,docRef } from "firebase/firestore";
+import React, { useEffect, useState, Container } from "react";
 import { useNavigate } from "react-router-dom";
-import {auth} from "../../firebase";
+
+//import {auth} from "../../firebase";
 import {
   AccGridInfo,
   AccountPageContainer,
@@ -16,6 +17,7 @@ import { auth, db, userSignOut } from "../../firebase";
 import { Box, TextField } from "@mui/material";
 import  AccountPageDeleteProfileBox  from './DeleteAccount';
 import {UserDataService} from '../../services/crudoperations';
+import { useAuthState } from "react-firebase-hooks/auth";
 export const AccountPage = () => {
   //hook to get current user
   const [data, setData] = useState({})

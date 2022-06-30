@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { Container } from "rsuite";
 import "./App.css";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { query, where } from "firebase/firestore";
+import { query, where, EditDocs} from "firebase/firestore";
 
 export const App = () => {
   // const queryRef = query(collRef, query => query.where('Role', '==', 'Administrator'));
@@ -54,7 +54,7 @@ export const App = () => {
           path="/create-profile"
           element={<AuthPage title="New User Profile" />}
         />
-        <Route path="/editListing/:id" element={<EditDocs database={database}/>} />
+        <Route path="/editListing/:id" element={<EditDocs database={db}/>} />
       </Routes>
     </div>
   );
