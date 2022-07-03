@@ -41,11 +41,13 @@ div#admin-flex-box {
   align-items: center;
   justify-content: left;
   font-family: Garamond;
-  color: rgb(46, 45, 45);
+  color: rgb(22, 22, 22);
   text-decoration-style: bold;
   height: 100%;
-  background-color: white;
+  background-color: rgb(104, 100, 100);
   margin-top: 100px;
+  background-color: whitesmoke;
+  border-style: ridge;
 }
 .admin-search-container {
   position: absolute;

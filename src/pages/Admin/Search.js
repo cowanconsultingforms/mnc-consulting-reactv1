@@ -2,29 +2,10 @@ import React,{forwardRef,useRef,useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc, onSnapshot,collection, DocumentSnapshot ,query,where, serverTimestamp,setDoc} from "firebase/firestore";
 import { db ,auth} from "../../firebase";
-import { Form,Container,Button,Schema,FlexboxGrid, ButtonToolbar ,Input} from "rsuite";
+import {Box,TextField,Button} from "@mui/material";
 import './styles.css';
-import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
-import TextField from "../../components/Custom/TextField";
-import { async } from "@firebase/util";
-
-//This Component is used to search for a user by email
-// It uses a custom text field to send the form ref to react on submission
-
-const { StringType} = Schema.Types;
-const model = Schema.Model({
-  name: StringType().isRequired(),
-});
-
-const TextFieldSearch= forwardRef((props, ref) => {
-  const { name, label, accepter, ...rest } = props;
-  return (
-    <Form.Group controlId={`${name}`} ref={ref}>
-      <Form.ControlLabel>{label} </Form.ControlLabel>
-      <Form.Control name={name} accepter={accepter} {...rest} />
-    </Form.Group>
-  );
-});
+import { useAuthState } from "react-firebase-hooks/auth";
+import { Container } from "rsuite";
 
 //code to render search user from the admin page
 export const Search = () => {
@@ -78,35 +59,10 @@ export const Search = () => {
     <Container className="admin-search-container">
       <h4>Look Up User</h4>
 
-      <Form
-        ref={formRef}
-        onChange={setFormValue}
-        onCheck={setFormError}
-        value={formValue}
-        model={model}
-        className="search-form"
-        checkTrigger={'change'}
-        onSubmit={HandleSubmit}
+      <Box 
+        component="form"
       >
-        <TextFieldSearch
-          name="email"
-          label="User Email"
-          ref={formRef}
-          accepter={Input}
-          placeholder="Search User By Email"
-          className="user-input"
-          style={{              
-                  width: " 75%",
-                  padding: "12px 20px",
-                  margin: "8px 0",
-                  fontSize: "16px",
-                  border: "1px solid #ccc",
-                  boxSizing: "border-box",
-                  color: "white",
-                  backgroundColor: "rgba(0, 0, 0, 0.2)",
-                  outline: "none",
-                }}
-        />
+      <TextField></TextField>
 
           <Button
             className="search-button"
@@ -116,7 +72,7 @@ export const Search = () => {
             Search
           </Button>
       
-      </Form>
+      </Box>
       {formValue}
     </Container>
   );

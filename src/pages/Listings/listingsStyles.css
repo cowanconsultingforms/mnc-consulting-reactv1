@@ -9,9 +9,7 @@
     cursor: pointer;
     background-color: rgb(83, 83, 83);
 }
-* {
-  box-sizing: border-box;
-}
+
 
 main{
   position: relative;

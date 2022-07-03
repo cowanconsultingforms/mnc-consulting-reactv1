@@ -5,7 +5,7 @@ import { NavBar } from "./components/Navbar";
 import { auth, db } from "./firebase";
 import AccountPage from "./pages/Account/Account";
 import ProfilePage from "./pages/Account/Profile";
-import AdminPage from "./pages/Admin/Admin";
+import AdminContainer from "./pages/Admin/AdminContainer";
 import Contact from "./pages/Contact/Contact";
 import Landing from "./pages/Home/Landing";
 import { AuthPage } from "./pages/Authentication/AuthContainer";
@@ -16,6 +16,18 @@ import { Container } from "rsuite";
 import "./App.css";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { query, where } from "firebase/firestore";
+import { createTheme } from "@mui/system";
+
+const theme = createTheme({
+  components:{
+    MuiBoxRoot:{
+      defaultProps:{
+        
+      }
+
+  }}
+})
+
 
 export const App = () => {
   // const queryRef = query(collRef, query => query.where('Role', '==', 'Administrator'));
@@ -28,6 +40,7 @@ export const App = () => {
     }
     if(!user){
       document.getElementById("login-page").style.display = "list-item";
+      document.getElementById('logout').style.display = "none";
     }
   }, []);
 
@@ -45,7 +58,7 @@ export const App = () => {
         <Route path="/" element={<Landing />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/account" element={<AccountPage />} />
-        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin" element={<AdminContainer />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/login" element={<AuthPage title="Login" />} />
         <Route path="/register" element={<AuthPage title="Register" />} />
@@ -54,12 +67,12 @@ export const App = () => {
           path="/create-profile"
           element={<AuthPage title="New User Profile" />}
         />
-        <Route path="/editListing/:id" element={<EditDocs database={database}/>} />
+      
       </Routes>
     </div>
   );
 };
-
+//  <Route path="/editListing/:id" element={<EditDocs database={database}/>} />
 export default App;
 
 export class ErrorBoundary extends React.Component {

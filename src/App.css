@@ -1,7 +1,9 @@
 * {
   font-family: "Garamond";
 }
-
+*body{
+  font-family: "Garamond";
+}
 div#rs-container {
   background-color: rgb(196, 196, 196);
   height: 60px;

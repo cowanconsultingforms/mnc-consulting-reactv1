@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import TextField from '../../components/TextField';
+import TextField from '@mui/material/TextField';
 import { ProfileButton } from '../../components/Buttons';
 import { Form, Schema, FlexboxGridbrea } from 'rsuite';
 import { sendPasswordReset ,auth} from '../../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-
+import { query,getDoc } from 'firebase/firestore';
 
 
 
@@ -25,8 +25,8 @@ export const ChangePassword = () => {
 
   const handlePWChange = (e) => {
     e.preventDefault();
- 
-    const docRef= async() => await getDoc(db,"users")
+    const q = query()
+    const docRef= async() => await getDoc(db,"users",user.displayName)
 
   }
   return (
