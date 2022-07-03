@@ -9,9 +9,8 @@ import { db, auth, app } from "../../firebase";
 //import {ImageCarousel} from "./imageCarousel"; 
 //import {TableApp} from "./tables";
 import { Component } from 'react'
-
 import * as ReactDOM from 'react-dom';
-
+import './listingsStyles.css';
 
 import {
   query,
@@ -46,11 +45,11 @@ import {
 } from "rsuite";
 import Listing from "./Listing";
 //import './styles.css';
-import './listingsStyles.css';
+//import './listingsStyles.css';
 
 // primary container for Listing Page data
 export const ListingPage = () => {
-  /*const [listings] = useCollectionData(db, collection('listings'));
+  const [listings] = useCollectionData(db, collection('listings'));
   const listingRef = collection('listings');
   const placeholder = useRef();
   const q = query(listingRef, orderBy("listed_at", "desc"));
@@ -75,7 +74,7 @@ export const ListingPage = () => {
       
     };
   }, [listings])
-  */
+  
 
   return (
     <div style={{

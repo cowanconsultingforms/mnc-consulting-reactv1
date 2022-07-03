@@ -1,8 +1,10 @@
+/*
 import { onAuthStateChanged, updateCurrentUser } from "firebase/auth";
 import { deleteDoc, doc, getDoc } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Container } from "react";
 import { useNavigate } from "react-router-dom";
-import {auth} from "../../firebase";
+
+//import {auth} from "../../firebase";
 import {
   AccGridInfo,
   AccountPageContainer,
@@ -60,3 +62,4 @@ export const AccountPage = () => {
 };
 
 export default AccountPage;
+*/
