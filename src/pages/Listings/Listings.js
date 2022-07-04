@@ -1,13 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import { db, auth, app } from "../../firebase";
-//import { Sidenav, Nav, Dropdown, Row } from 'rsuite';
-//import { Container, Header, Content, Footer, Sidebar } from 'rsuite';
-//import { Pagination } from 'rsuite';
-//import './App.css';
-//import slideIndex from 'slideIndex';
-//Both imagecarousel and tableapp make the screen white. 
-//import {ImageCarousel} from "./imageCarousel"; 
-//import {TableApp} from "./tables";
 import { Component } from 'react'
 import * as ReactDOM from 'react-dom';
 import './listingsStyles.css';
@@ -19,6 +11,9 @@ import {
   collection,
   serverTimestamp,
   orderBy,
+  onSnapshot, 
+  QuerySnapshot
+
 } from "firebase/firestore";
 import {
   useCollection,
@@ -75,6 +70,79 @@ export const ListingPage = () => {
     };
   }, [listings])
   
+  /*
+  This is JavaScript
+
+
+
+  var tbody = document.getElementByID('tbody');
+
+
+  function AddItemToTable(properties){
+    let trow = document.createElement("trow");
+    let td1 = document.createElement('td');
+    let td2 = document.createElement('td');
+    let td3 = document.createElement('td');
+    let td4 = document.createElement('td');
+    let td5 = document.createElement('td');
+    let td6 = document.createElement('td');
+    let td7 = document.createElement('td');
+    let td8 = document.createElement('td');
+
+    td1.innerHTML = bathrooms;
+    td2.innerHTML = bedrooms;
+    td3.innerHTML = city;
+    td4.innerHTML = description;
+    td5.innerHTML = price;
+    td6.innerHTML = state;
+    td7.innerHTML = street;
+    td8.innerHTML = zip;
+
+    trow.appendChild(td1);
+    trow.appendChild(td2);
+    trow.appendChild(td3);
+    trow.appendChild(td4);
+    trow.appendChild(td5);
+    trow.appendChild(td6);
+    trow.appendChild(td7);
+    trow.appendChild(td8);
+
+    tbody.apppendChild(trow);
+
+
+  }
+
+  function AddAllItemsToTable(listings){
+    tbody.innerHTML="";
+    listings.forEach(element => {
+      AddItemToTable(element.bathrooms, element.bedrooms, element)
+    });
+  }
+
+
+
+   async function GetAllDataOnce(){
+   const querySnapshot = await getDocs(collection(db, 'listings'))
+   var properties = [];
+   querySnapShot.forEach(doc => {
+    properties.push(doc.data());
+   });
+      AddAllItemsToTable(listings);
+  }
+
+  async function GetAllDataRealtime(){
+    const dbRef = collection(db, 'listings');
+
+    onSnapShot(dbRef,(querySnapshot)=>{
+      var properties
+    })
+
+
+
+  }
+
+
+  */
 
   return (
     <div style={{
@@ -101,32 +169,47 @@ export const ListingPage = () => {
         </Sidenav.Body>
       </Sidenav>
       <Container>
-      <Header style ={{color: '#808080', fontSize: '20px'}}>MCN Development Listings</Header>
-      <Container>
-      
-        <Content>Content</Content>
-        <Table>
-        <Table.Column width={70} align="center" fixed>
-        <Table.HeaderCell>Id</Table.HeaderCell>
-        <Table.Cell dataKey="id" />
-        </Table.Column>
-        </Table>
+      <Header style ={{color: '#808080', fontSize: '20px'}}>MCN Development Listings
+      </Header>
+      <Content>
+      <Carousel className="custom-slider">
+      <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=1" 
+      height="250" />
+      <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=2" 
+      height="250" />
+      <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=3" 
+      height="250" />
+      <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=4" 
+      height="250" />
+      <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=5" 
+      height="250" />
+      </Carousel>
 
-        <Sidebar>Listings
-          <Content>
-          <Carousel className="custom-slider">
-          <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=1" height="250" />
-          <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=2" height="250" />
-          <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=3" height="250" />
-          <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=4" height="250" />
-          <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=5" height="250" />
-        </Carousel>
-          </Content>
-        </Sidebar>
+      </Content>
+      <Sidebar>
+      <Table id = "tbody1">
+ <Table.Column width={70} align="center" fixed>
+ <Table.HeaderCell>Bathrooms</Table.HeaderCell>
+ <Table.Cell dataKey="bathrooms" />
+ <Table.HeaderCell>Bedrooms</Table.HeaderCell>
+ <Table.Cell dataKey="bedrooms" />
+ <Table.HeaderCell>City</Table.HeaderCell>
+ <Table.Cell dataKey="city" />
+ <Table.HeaderCell>Description</Table.HeaderCell>
+ <Table.Cell dataKey="description" />
+ <Table.HeaderCell>Price</Table.HeaderCell>
+ <Table.Cell dataKey="price" />
+ <Table.HeaderCell>State</Table.HeaderCell>
+ <Table.Cell dataKey="id" />
+ <Table.HeaderCell>Street</Table.HeaderCell>
+ <Table.Cell dataKey="id" />
+ <Table.HeaderCell>Zip</Table.HeaderCell>
+ <Table.Cell dataKey="id" />
+ </Table.Column>
+</Table>
 
+      </Sidebar>
       </Container>
-      <Footer>Footer</Footer>
-    </Container>
       </div>
   );
 };

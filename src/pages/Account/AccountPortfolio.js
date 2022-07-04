@@ -1,10 +1,10 @@
 import { AccountPagePortfolio, StyledProfileLabel, StyledInput,AccGridInfo } from  "../../components/AccountStyles";
 import { auth, db } from "../../firebase";
 import { useForm } from "react-hook-form";
-import React, { useState, forwardRef, useRef } from "react";
+import React, { useState, forwardRef, useRef, useEffect } from "react";
 import { Form } from "rsuite";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { where ,getDoc} from "firebase/firestore";
+import { where ,getDoc, collection,doc,query} from "firebase/firestore";
 const PortfolioField = forwardRef((props, ref) => {
   const { name, label, accepter, ...rest } = props;
   return (
@@ -61,11 +61,7 @@ export const AccountPagePortfolioBox = () => {
         
           <StyledProfileLabel>Maximum Budget</StyledProfileLabel>
           <StyledInput id="account-page-maximum-budget"></StyledInput>
-          <ErrorMessage id="error-msg-maximum-budget">
-            Can only contain , or numbers
-          </ErrorMessage>
-       
-          <ProfileButton onClick={handlePortfolioChange}>Save</ProfileButton>
+      
           </Form>
       </AccGridInfo>
     </div>
