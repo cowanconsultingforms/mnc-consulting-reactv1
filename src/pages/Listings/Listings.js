@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { db, auth, app } from "../../firebase";
+import { db, auth, app, dbRef} from "../../firebase";
 import { Component } from 'react'
 import * as ReactDOM from 'react-dom';
 import './listingsStyles.css';
@@ -115,11 +115,9 @@ export const ListingPage = () => {
   function AddAllItemsToTable(listings){
     tbody.innerHTML="";
     listings.forEach(element => {
-      AddItemToTable(element.bathrooms, element.bedrooms, element)
+      AddItemToTable(element.bathrooms, element.bedrooms, element.city, element.description, element.price, element.state, element.street, element.zip)
     });
   }
-
-
 
    async function GetAllDataOnce(){
    const querySnapshot = await getDocs(collection(db, 'listings'))
@@ -134,12 +132,14 @@ export const ListingPage = () => {
     const dbRef = collection(db, 'listings');
 
     onSnapShot(dbRef,(querySnapshot)=>{
-      var properties
+      var properties = [];
     })
 
-
-
-  }
+    querySnapshot.forEach(doc =>{
+      properties.push(doc.data());
+    });
+     AddAllItemsToTable(listings);
+    })
 
 
   */
@@ -200,11 +200,11 @@ export const ListingPage = () => {
  <Table.HeaderCell>Price</Table.HeaderCell>
  <Table.Cell dataKey="price" />
  <Table.HeaderCell>State</Table.HeaderCell>
- <Table.Cell dataKey="id" />
+ <Table.Cell dataKey="state" />
  <Table.HeaderCell>Street</Table.HeaderCell>
- <Table.Cell dataKey="id" />
+ <Table.Cell dataKey="street" />
  <Table.HeaderCell>Zip</Table.HeaderCell>
- <Table.Cell dataKey="id" />
+ <Table.Cell dataKey="zip" />
  </Table.Column>
 </Table>
 
