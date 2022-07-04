@@ -128,29 +128,6 @@ export const signIn = async (email, password) => {
     return { error: error.message };
   }
 };
-export const Authentication = (props)=>{
-  const authContext = useContext(AuthContext);
-  const loginHandler = ()=>{
-    signIn(props.email,props.password)
-    .then((res)=>{
-      if(!res.error){
-      const userResponse = {
-        token:auth.currentUser.getIdToken()
-      }
-    authContext.login(userResponse.token)}
-    })}
-    const logoutHandler = () =>{
-      signOut(auth).then(()=>{
-        authContext.logout();
-      })
-    }
-    return(
-      <React.Fragment>
-      {!authContext.isLoggedIn && <button className="login" onClick={loginHandler}>Login</button>}
-          {authContext.isLoggedIn && (<button className="logout" onClick={logoutHandler}>Logout</button>)}
-      </React.Fragment>
-    )
-}
 class User {
   constructor(email, userName, uid, role, created_at) {
     this.email = email;
@@ -245,20 +222,6 @@ export const getUserInfo = async () => {
     });
   }
 };
-/*const firebaseConfig2 = {
-  apiKey: "AIzaSyBgdbGeJukJQA2_cPzEmocY_HtefKb9ono",
-  authDomain: "mnc-test-server.firebaseapp.com",
-  projectId: "mnc-test-server",
-  storageBucket: "mnc-test-server.appspot.com",
-  messagingSenderId: "281255084650",
-  appId: "1:281255084650:web:56da46543f11d31742c013",
-  measurementId: "G-54G0KWXE65",
-};
-export const app2 = initializeApp(firebaseConfig2);
-export const storage2 = getStorage(app2);
-export const db2 = getFirestore(app2);
-export const auth2 = getAuth(app2);
-test server code I created that needs to be commented out
-*/
+
 
 export default app;

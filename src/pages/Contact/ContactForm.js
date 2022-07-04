@@ -9,8 +9,11 @@ export const ContactForm = () => {
     <React.Fragment>
     <Typography variant="h4">Contact Form</Typography>
     <Box className="contact-form" component="form" autocomplete noValidate ref={formRef}>
-      
-      <button onClick={() => navigate("/")}>Home</button>
+      <TextField name="name" label="Name" variant="outlined" />
+      <TextField name="email" label="Email" variant="outlined" />
+      <TextField name="message" label="Message" variant="outlined" />
+      <TextField name="phone" label="Phone" variant="outlined" />
+      <Button onClick={() => navigate("/")}>Home</Button>
     </Box>
     </React.Fragment>
   );

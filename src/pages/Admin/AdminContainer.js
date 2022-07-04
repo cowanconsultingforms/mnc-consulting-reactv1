@@ -1,21 +1,18 @@
 import React,{ useState ,useEffect} from 'react';
-
-import  Search  from './Search';
-import { Container} from 'rsuite';
 import './styles.css';
-import AddListing from './AddListing';
+import AddListingForm from './AddListing';
 import { auth, db } from '../../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
 import { query,where,getDoc } from 'firebase/firestore';
-//import { AddUser } from './AddUser';
 import FileUploader from './FileUploader';
 import { Box, Typography } from '@mui/material';
+import SearchUser from './SearchUser';
 const Header = () => {
-  return <Typography variant="h1">Administrator Dashboard</Typography>
+  return <Typography variant="h4" sx={{fontWeight:'bold',fontFamily:'Garamond'}}>Administrator Dashboard</Typography>
 }
 const HeaderTwo = () => {
-  return <Typography variant="h4">Add New Listing</Typography>
+  return <Typography variant="h4" sx={{fontWeight:'bold'}}>Add New Listing</Typography>
 }
 const AdminPage = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -29,10 +26,10 @@ const AdminPage = () => {
    })
 
   return (
-    <Box fluid="true" className="admin-container">
-   
-  
-     
+    <Box className="admin-container">
+   <Header />
+    <AddListingForm />
+     <SearchUser />
     
     </Box>
   );

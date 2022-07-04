@@ -14,7 +14,7 @@ import {
 } from "./AccountStyles";
 import {AccountPageSignOutBox} from './AccountPageSignOutBox'
 import { ProfileButton } from '../../components/Custom/Buttons';
-import { auth, db, userSignOut } from "../../firebase";
+import {db, userSignOut } from "../../firebase";
 import { Box, TextField } from "@mui/material";
 import  AccountPageDeleteProfileBox  from './DeleteAccount';
 import {UserDataService} from '../../services/crudoperations';
@@ -42,21 +42,21 @@ export const AccountPage = () => {
   }
   
   useEffect(() => {
-    async()=>getUserInfo();    
+       
 
-  },[docRef,data])
+  },[data])
 
 
 
   return (
-    <Container className="account-page-container">
+    <Box className="account-page-container">
       <h1>My Account</h1>
-     
+     {getUserInfo}
  
         <AccountPageSignOutBox />
         <AccountPageDeleteProfileBox />
      
-    </Container>
+    </Box>
   );
 
 };

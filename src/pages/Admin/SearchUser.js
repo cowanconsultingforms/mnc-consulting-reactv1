@@ -1,6 +1,6 @@
 import { collection, getDoc, query, where, querySnapshot, doc,onSnapshot } from 'firebase/firestore';
 import React,{forwardRef,useRef,useEffect,useState} from 'react';
-import { Box,TextField } from '@mui/material';
+import { Box,TextField,Button,ButtonGroup } from '@mui/material';
 import styled from 'styled-components';
 import { auth, db } from '../../firebase';
 import UserDataService from '../../services/crudoperations';
@@ -25,7 +25,7 @@ export const AccountPageContainer = styled.div`
 
 `;
 export const SearchUser = (props) => {
-  
+  const collectionRef = collection(db, 'users');
   const initialValues = {uid:"",email:"",userName:"",role:"",phoneNumber:"",}
   const formRef = React.useRef(initialValues);
   const [formError, setFormError] = React.useState({});
@@ -59,9 +59,9 @@ export const SearchUser = (props) => {
       data.map(doc => {
         return (
           <React.Fragment>
-            <Container>
-              <Input value={doc.uid} type="text"></Input>
-            </Container>
+            <Box>
+              <TextField value={doc.uid} type="text"></TextField>
+            </Box>
           </React.Fragment>
         );
       })
@@ -80,86 +80,28 @@ export const SearchUser = (props) => {
 
     
   return (
-    <Box className="search-user-container">
+    <Box className="search-user-container"
+    component="form"
+    ref={formRef}
+    onChange={setFormValue}
+    sx={{display:'flex',flexDirection:'column'}}>
       <SearchHeader>Search User</SearchHeader>
-      <FlexboxGrid>
-        <FlexboxGrid.Item colspan={18} style={{}}>
-          <Form
-            ref={formRef}
-            onChange={setFormValue}
-            onCheck={setFormError}
-            formValue={formValue}
-            model={model}
-          >
-            <Form.Group controlId="name-2">
-              <Form.ControlLabel>Username </Form.ControlLabel>
-              <Form.Control
-                checkAsync
-                name="name"
-                placeholder="Please enter abc"
-              />
-            </Form.Group>
 
-            <ButtonToolbar>
+   
+        <TextField name="search" label="Search" />
+
+            <ButtonGroup>
               <Button appearance="primary" onClick={handleSubmit}>
                 Submit
               </Button>
-            </ButtonToolbar>
-          </Form>
-        </FlexboxGrid.Item>
-      </FlexboxGrid>
+            </ButtonGroup>
+    
+
     </Box>
   );
   }
 
-export const AddUser = ({userName,role,uuid,email,portfolio}) => {
-  const formRef = useRef();
-  const [formError, setFormError] = useState({ error: false, message: "" });
-  const [user, setUser] = useState({});
-  const [formData, setFormData] = useState({ uid: "", email: "", userName: "", role: "Regular" });
-  const handleSubmit = async(e) => { 
-    e.preventDefault();
-  }
-  useEffect(() => {
-    return () => {
-      
-    };
-  }, []);
-  return (
-    <React.Fragment>
-      <h1>Search Users</h1>
-      <Box className="add-user-form"
-        ref={formRef}
-        value={formData}
-        onClick={handleSubmit}
-        onChange={setFormData}
-      onCheck={setFormError}>
-        <TextField
-          
-          label="uuid"
-          name="uid" />
-        <TextField
-       
-          label="email"
-          name="email" />
-        <TextField
-      
-          label="userName"
-          name="userName" />
-        <TextField
-          
-          label="role"
-          name="role" />
-        <ButtonToolbar>
-          <Button appearance="primary" onClick={handleSubmit}>
-            Submit
-          </Button>
-        </ButtonToolbar>
-      </Box>
-    </React.Fragment>
-      
-    )
-}
+
 
 
 
