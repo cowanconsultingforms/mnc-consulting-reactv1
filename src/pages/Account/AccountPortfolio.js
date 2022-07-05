@@ -62,11 +62,7 @@ export const AccountPagePortfolioBox = () => {
         
           <StyledProfileLabel>Maximum Budget</StyledProfileLabel>
           <StyledInput id="account-page-maximum-budget"></StyledInput>
-          <ErrorMessage id="error-msg-maximum-budget">
-            Can only contain , or numbers
-          </ErrorMessage>
-       
-          <ProfileButton onClick={handlePortfolioChange}>Save</ProfileButton>
+      
           </Form>
       </AccGridInfo>
     </div>
