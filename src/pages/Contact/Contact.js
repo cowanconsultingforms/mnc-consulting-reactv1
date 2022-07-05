@@ -1,9 +1,18 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button,Stack,styled,Paper } from "@mui/material";
 import { DownloadLogo } from "./DownloadLogo";
+import { ContactForm } from "./ContactForm";
 
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(3),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 const Contact = () => {
   const [data, setData] = useState({});
   const navigate = useNavigate();
@@ -31,28 +40,20 @@ const Contact = () => {
     navigate("/")
   };
   return (
-    <Box
+    <Stack
       className="contact-container"
-      sx={{ marginTop: "10%", width: "80%", justifyContent: "center" }}
+      component="div"
+      sx={{ marginTop: "5%",marginLeft:'10%', width: "80%", justifyContent: "center",alignItems:'center' }}
     >
-      <DownloadLogo />
-
-      <Typography
-        variant="h2"
-        sx={{
-          marginTop: "300px",
-          color: "black",
-          alignItems: "center",
-          fontFamily: "Garamond",
-        }}
-      >
-        Contact Us
-      </Typography>
-
-      <Button type="submit">Send Message</Button>
+      <Item sx={{margin:'5%'}}><DownloadLogo /></Item>
+      <Stack component="div"
+      sx={{m:'5',justifyContent:'center',alignItems:'center',maxHeight:'100%'}}>
+      <ContactForm onSubmit={onSubmit} />
+      </Stack>
+     
 
       <script src="https://smtpjs.com/v3/smtp.js"></script>
-    </Box>
+    </Stack>
   );
 };
 export default Contact;

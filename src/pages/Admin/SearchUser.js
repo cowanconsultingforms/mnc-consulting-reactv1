@@ -30,12 +30,10 @@ export const SearchUser = (props) => {
   const formRef = React.useRef(initialValues);
   const [formError, setFormError] = React.useState({});
   const [user, setUser] = useState({});
-  const [formValue,setFormValue] = useState({})
+  const [formValue,setFormValue] = useState(initialValues)
   const isMounted = useRef();
   const [docsData, setDocsData] = useState([]);
-  useEffect(() => {
-    getUser();
-  }, []);
+
 
   const getUser = async(id) => {
     const data = await UserDataService.getUser(id);
@@ -59,7 +57,7 @@ export const SearchUser = (props) => {
       data.map(doc => {
         return (
           <React.Fragment>
-            <Box>
+            <Box component="form">
               <TextField value={doc.uid} type="text"></TextField>
             </Box>
           </React.Fragment>
@@ -84,14 +82,14 @@ export const SearchUser = (props) => {
     component="form"
     ref={formRef}
     onChange={setFormValue}
-    sx={{display:'flex',flexDirection:'column'}}>
+    sx={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
       <SearchHeader>Search User</SearchHeader>
 
    
-        <TextField name="search" label="Search" />
+        <TextField name="search" label="Search" fullWidth />
 
             <ButtonGroup>
-              <Button appearance="primary" onClick={handleSubmit}>
+              <Button appearance="primary" variant="contained" onClick={handleSubmit}>
                 Submit
               </Button>
             </ButtonGroup>

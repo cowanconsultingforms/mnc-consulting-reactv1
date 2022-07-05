@@ -35,7 +35,7 @@ const handleUpload = () => {
       () => {
           // download url
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-              console.log(url);
+              setFile(url);
           });
       }
   );

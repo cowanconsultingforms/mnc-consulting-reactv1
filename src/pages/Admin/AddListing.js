@@ -146,7 +146,7 @@ export const AddListingForm = () => {
       price,
       description,
     };
-    const collRef = collection(db, 'listings');
+    const collRef = collection(db, `listings/${type}`);
     await addDoc(collRef, { ...docData }).then()
   };
 

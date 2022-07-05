@@ -9,7 +9,7 @@ import { Box ,Table,TableContainer,TableCell,TableHead} from "@mui/material";
 export const ViewAuditLog = () => {
     
    
-  const auditLog = collection("auditLog");
+  const auditLog = collection(db,"auditLog");
   
   const q = query(auditLog,orderBy("DateTime","desc").limit(25));
   const [values] = useCollectionData(q,{ idField: "DateTime" });
@@ -19,7 +19,7 @@ export const ViewAuditLog = () => {
     return values.map(data => {
       return (
         <React.Fragment>
-          <Box className="audit-log-frame" component="div">
+          <Box className="audit-log-frame" component="div" sx={{display:'inline-block',}}>
             <p>{data.DateTime}</p>
             <p>{data.User}</p>
             <p>{data.Action}</p>

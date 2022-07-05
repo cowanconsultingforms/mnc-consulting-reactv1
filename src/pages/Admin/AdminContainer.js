@@ -8,6 +8,7 @@ import { query,where,getDoc } from 'firebase/firestore';
 import FileUploader from './FileUploader';
 import { Box, Typography } from '@mui/material';
 import SearchUser from './SearchUser';
+import ViewAuditLog from './ViewAuditLog';
 const Header = () => {
   return <Typography variant="h4" sx={{fontWeight:'bold',fontFamily:'Garamond'}}>Administrator Dashboard</Typography>
 }
@@ -16,7 +17,7 @@ const HeaderTwo = () => {
 }
 const AdminPage = () => {
   const [user, loading, error] = useAuthState(auth);
-  const [data, setData] = useState({uid:"",email:"",userName:"",role:"",});
+
   const navigate = useNavigate();
   const [admin, setAdmin] = useState(false);
   const [currentUser,setCurrentuser] = useState('')
