@@ -6,7 +6,7 @@ import { db, auth } from "../../firebase";
 import "./styles.css";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
-
+import {toast} from 'react-toastify';
 export const NewUserPage = ({ title }) => {
   const batch = writeBatch(db);
   const navigate = useNavigate();
@@ -19,6 +19,31 @@ export const NewUserPage = ({ title }) => {
   const [portfolioMax, setPortfolioMax] = useState("");
   const [docId,setDocId]=useState("");
   const formRef = useRef();
+  const auditLogger = async(e)=>{
+    e.preventDefault();
+   
+    const action = "User Registered";
+    const userId = user.uid;
+    const dateTime = new Date().toLocaleString();
+    const userName = user.displayName;
+    const description = action + " " + userName + " " + dateTime;
+    const docData = {
+      action,
+      userId,
+      dateTime,
+      userName,
+      description
+    }
+    const collRef = collection(db, "auditLog");
+    try{
+      await addDoc(collRef, {...docData}).then((doc)=>{
+        console.log(doc,"Audit Log Document Added");
+      });
+    }catch(err){
+      console.log(err);
+    }
+
+  }
   const onSubmit = async (e) => {
     e.preventDefault();
     const role = "User";
@@ -48,9 +73,9 @@ export const NewUserPage = ({ title }) => {
       
 
       try {
-        await addDoc(collection(db,"auditLog"))
+        await auditLogger();
       } catch (error) {
-        
+        console.log(error);
       }
     }
   };

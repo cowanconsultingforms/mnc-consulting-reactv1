@@ -146,7 +146,7 @@ export const AddListingForm = () => {
       price,
       description,
     };
-    const collRef = collection(db, `listings/${type}`);
+    const collRef = collection(db, `listings/${type}/properties`);
     await addDoc(collRef, { ...docData }).then()
   };
 
@@ -156,7 +156,9 @@ export const AddListingForm = () => {
     console.log(type);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+      
+  }, []);
 
   return (
     <React.Fragment>
