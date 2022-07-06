@@ -50,7 +50,7 @@ const Contact = () => {
       sx={{m:'5',justifyContent:'center',alignItems:'center',maxHeight:'100%'}}>
       <ContactForm onSubmit={onSubmit} />
       </Stack>
-     
+     <Item><LandingFooter /></Item>
 
       <script src="https://smtpjs.com/v3/smtp.js"></script>
     </Stack>

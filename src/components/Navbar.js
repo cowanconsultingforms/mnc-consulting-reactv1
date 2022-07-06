@@ -27,7 +27,8 @@ export const NavBar = () => {
   const [userData, setUserData] = useState({});
   const collectionRef = collection(db, "users");
 
-  const LoginCheck = async () => {
+  const LoginCheck = async (e) => {
+    e.preventDefault();
     if(user){
       setLoggedIn(true);
       const userEmail = user.email;
@@ -90,7 +91,13 @@ export const NavBar = () => {
     },
   ];
   //function to render nav bar items (coded into the navbar object)
-  const renderNavBarItems = () => {
+  const renderNavBarItems = async(e) => {
+    e.preventDefault();
+    try{
+      LoginCheck()
+    }catch(err){
+      console.log(err);
+    }
     return (
       <React.Fragment>
         {pages.map((page, idx) => (

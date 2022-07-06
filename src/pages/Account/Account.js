@@ -15,7 +15,7 @@ import {
 import {AccountPageSignOutBox} from './AccountPageSignOutBox'
 import { ProfileButton } from '../../components/Custom/Buttons';
 import {db, userSignOut } from "../../firebase";
-import { Box, TextField } from "@mui/material";
+import { Box, TextField,Stack } from "@mui/material";
 import  AccountPageDeleteProfileBox  from './DeleteAccount';
 import {UserDataService} from '../../services/crudoperations';
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -49,14 +49,15 @@ export const AccountPage = () => {
 
 
   return (
-    <Box className="account-page-container">
+    <Stack className="account-page-container"
+    component="div">
       <h1>My Account</h1>
      {getUserInfo}
  
         <AccountPageSignOutBox />
         <AccountPageDeleteProfileBox />
      
-    </Box>
+    </Stack>
   );
 
 };

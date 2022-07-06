@@ -19,8 +19,8 @@ export const NewUserPage = ({ title }) => {
   const [portfolioMax, setPortfolioMax] = useState("");
   const [docId,setDocId]=useState("");
   const formRef = useRef();
-  const auditLogger = async(e)=>{
-    e.preventDefault();
+  const auditLogger = async()=>{
+   
    
     const action = "User Registered";
     const userId = user.uid;
@@ -71,12 +71,13 @@ export const NewUserPage = ({ title }) => {
       const user = auth.currentUser;
       const auditId = docId;
       
-
+      if(user!=null)
       try {
         await auditLogger();
       } catch (error) {
         console.log(error);
-      }
+      }finally{
+      navigate('/')}
     }
   };
   const validate = (values) => {
