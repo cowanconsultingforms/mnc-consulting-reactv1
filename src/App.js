@@ -15,18 +15,17 @@ import { useNavigate } from "react-router-dom";
 import { Container } from "rsuite";
 import "./App.css";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { query, where } from "firebase/firestore";
-import { createTheme } from "@mui/system";
+import { query, where,collection } from "firebase/firestore";
+import { createTheme,ThemeProvider } from "@mui/system";
+import { onAuthStateChanged } from "firebase/auth";
+import {Typography} from "@mui/system";
 
 const theme = createTheme({
-  components:{
-    MuiBoxRoot:{
-      defaultProps:{
-        
-      }
+  typography:{
+   fontFamily:["Garamond","sans-serif"]
+    
 
-  }}
-})
+  }})
 
 
 export const App = () => {
@@ -34,14 +33,35 @@ export const App = () => {
   //hook to check for current user
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
+  const userRef = collection(db, "users");
+  const userCheck = async(e)=>{
+    e.preventDefault();
+    try{
+      const q = await query(userRef,where("email","==",user.email));
+    }catch(error){
+      console.log(error);
+    }
+  }
   useEffect(() => {
     if (user) {
       document.getElementById("login-page").style.display = "none";
+      document.getElementById('logout').style.display = "list-item";
     }
     if(!user){
       document.getElementById("login-page").style.display = "list-item";
       document.getElementById('logout').style.display = "none";
     }
+    const unsubscribe = onAuthStateChanged(auth,(userID)=>{
+      if(user){
+        document.getElementById("login-page").style.display = "none";
+        document.getElementById('logout').style.display = "list-item";
+      }
+      else{
+        document.getElementById("login-page").style.display = "list-item";
+        document.getElementById('logout').style.display = "none";
+      }
+      return unsubscribe;
+    })
   }, []);
 
   //returns the navbar on every page, and each route corresponds to a different page
@@ -49,6 +69,7 @@ export const App = () => {
   //is signed in and whether they are an administrator
 
   return (
+   
     <div className="App">
       <Container fluid="true" classPrefix="container">
         <NavBar />
@@ -70,6 +91,7 @@ export const App = () => {
       
       </Routes>
     </div>
+  
   );
 };
 //  <Route path="/editListing/:id" element={<EditDocs database={database}/>} />
