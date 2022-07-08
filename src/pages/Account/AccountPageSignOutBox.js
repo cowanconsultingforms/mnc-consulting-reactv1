@@ -1,6 +1,6 @@
 import { StyledProfileLabel ,AccountPageSignOut} from "./AccountStyles";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import React,{ useState,useEffect } from "react";
 import { userSignOut ,db,auth,} from "../../firebase";
 import ProfileButton from "../../components/Custom/Buttons";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -19,7 +19,9 @@ export const AccountPageSignOutBox = () => {
     );
     
   };
+  useEffect(()=>{
 
+  })
   return (
     <AccountPageSignOut>
       <Container className="SignOutBox">
