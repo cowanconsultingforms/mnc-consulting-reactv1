@@ -25,7 +25,7 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 const MyFormControlLabel = (props) => {
-  const radioGroup = useRadioGroup();
+  const radioGroup = useRadioGroup()
 
   let checked = false;
 
