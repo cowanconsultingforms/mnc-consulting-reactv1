@@ -2,7 +2,7 @@ import { getDownloadURL, ref } from "firebase/storage";
 import React, { useState, useRef, useEffect } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useUploadFile } from "react-firebase-hooks/storage";
-import { db, auth, storage } from "../../firebase";
+import { db, auth, storage} from "../../firebase";
 import {
   serverTimestamp,
   addDoc,
@@ -10,6 +10,7 @@ import {
   setDoc,
   writeBatch,
 } from "firebase/firestore";
+import { auditLogger } from "./AdminPageComponents";
 import FileUploader from "./FileUploader";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -22,16 +23,7 @@ import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { useAuthState } from "react-firebase-hooks/auth";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-const listingStyles = {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  padding: "10px",
-  margin: "15%",
-  border: "1px solid black",
-  borderRadius: "5px",
-};
+import { toast } from "react-toastify";
 const MyFormControlLabel = (props) => {
   const radioGroup = useRadioGroup();
 
@@ -141,9 +133,11 @@ export const AddListingForm = () => {
       description,
     };
     const collRef = collection(db, `listings/${type}/properties`);
+    console.log(docData);
     try {
       await addDoc(collRef, { ...docData }).then((res) => {
         if (res !== null) {
+          auditLogger('Added Listing', res.id, user.uid)
         }
       });
     } catch (error) {
@@ -151,10 +145,13 @@ export const AddListingForm = () => {
     }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+
+  }, []);
 
   return (
     <React.Fragment>
+
       <Box
         className="add-listing-form"
         component="form"
@@ -173,16 +170,7 @@ export const AddListingForm = () => {
         }}
         onSubmit={handleSubmit}
       >
-        <Typography
-          variant="h4"
-          sx={{
-            justifyContent: "center",
-            fontFamily: "Garamond",
-            alignItems: "center",
-          }}
-        >
-          Add Listing
-        </Typography>
+
         <UseRadioGroup
           aria-label="listing-type"
           onChange={(e) => setType(e.target.value)}
@@ -251,8 +239,8 @@ export const AddListingForm = () => {
             fontSize: "18px",
           }}
         />
-        <FileUploader onChange={(e)=>setFiles(e.target.files)} />
-        <Button type="submit" variant="contained">
+       
+        <Button type="submit" variant="contained" onClick={handleSubmit}>
           Add Property
         </Button>
       </Box>
