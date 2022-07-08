@@ -20,7 +20,7 @@ import { createTheme } from "@mui/system";
 
 const theme = createTheme({
   components:{
-    MuiBoxRoot:{
+    nMuiBoxRoot:{
       defaultProps:{
         
       }
@@ -39,8 +39,8 @@ export const App = () => {
       document.getElementById("login-page").style.display = "none";
     }
     if(!user){
-      document.getElementById("login-page").style.display = "list-item";
       document.getElementById('logout').style.display = "none";
+      document.getElementById("login-page").style.display = "list-item"; 
     }
   }, []);
 

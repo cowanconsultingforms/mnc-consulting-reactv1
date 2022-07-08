@@ -1,8 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { db, auth, app, dbRef} from "../../firebase";
 import { Component } from 'react'
-import * as ReactDOM from 'react-dom';
+import { Carousel } from "react-bootstrap";
+//import * as ReactDOM from 'react-dom';
+import { useAuthState } from "react-firebase-hooks/auth";
 import './listingsStyles.css';
+
 
 import {
   query,
@@ -12,7 +15,8 @@ import {
   serverTimestamp,
   orderBy,
   onSnapshot, 
-  QuerySnapshot
+  QuerySnapshot,
+  addDoc
 
 } from "firebase/firestore";
 import {
@@ -23,7 +27,6 @@ import {
 import {
   Container,
   FlexboxGrid,
-  Carousel,
   Form,
   Panel,
   Uploader,
@@ -38,17 +41,28 @@ import {
   Sidebar,
   Footer
 } from "rsuite";
-import Listing from "./Listing";
-//import './styles.css';
-//import './listingsStyles.css';
 
 // primary container for Listing Page data
+
 export const ListingPage = () => {
+  const [user, loading, error] = useAuthState(auth);
+  const formRef = useRef();
+  const [type, setType] = useState("");
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zip, setZip] = useState("");
+  const [bedrooms, setBedrooms] = useState("");
+  const [bathrooms, setBathrooms] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+  
   const [listings] = useCollectionData(db, collection('listings'));
-  const listingRef = collection('listings');
+  const listingRef = collection(db, `listings`,where(type, '==',type));
   const placeholder = useRef();
   const q = query(listingRef, orderBy("listed_at", "desc"));
   const [listing] = useCollectionData(q,{ idField: "listed_at" });
+
   const getNextListing = async (e) => { 
     e.preventDefault();
     const listings = await getDocs(listingRef).then((docs) => {
@@ -69,82 +83,8 @@ export const ListingPage = () => {
       
     };
   }, [listings])
-  
-  /*
-  This is JavaScript
 
-
-
-  var tbody = document.getElementByID('tbody');
-
-
-  function AddItemToTable(properties){
-    let trow = document.createElement("trow");
-    let td1 = document.createElement('td');
-    let td2 = document.createElement('td');
-    let td3 = document.createElement('td');
-    let td4 = document.createElement('td');
-    let td5 = document.createElement('td');
-    let td6 = document.createElement('td');
-    let td7 = document.createElement('td');
-    let td8 = document.createElement('td');
-
-    td1.innerHTML = bathrooms;
-    td2.innerHTML = bedrooms;
-    td3.innerHTML = city;
-    td4.innerHTML = description;
-    td5.innerHTML = price;
-    td6.innerHTML = state;
-    td7.innerHTML = street;
-    td8.innerHTML = zip;
-
-    trow.appendChild(td1);
-    trow.appendChild(td2);
-    trow.appendChild(td3);
-    trow.appendChild(td4);
-    trow.appendChild(td5);
-    trow.appendChild(td6);
-    trow.appendChild(td7);
-    trow.appendChild(td8);
-
-    tbody.apppendChild(trow);
-
-
-  }
-
-  function AddAllItemsToTable(listings){
-    tbody.innerHTML="";
-    listings.forEach(element => {
-      AddItemToTable(element.bathrooms, element.bedrooms, element.city, element.description, element.price, element.state, element.street, element.zip)
-    });
-  }
-
-   async function GetAllDataOnce(){
-   const querySnapshot = await getDocs(collection(db, 'listings'))
-   var properties = [];
-   querySnapShot.forEach(doc => {
-    properties.push(doc.data());
-   });
-      AddAllItemsToTable(listings);
-  }
-
-  async function GetAllDataRealtime(){
-    const dbRef = collection(db, 'listings');
-
-    onSnapShot(dbRef,(querySnapshot)=>{
-      var properties = [];
-    })
-
-    querySnapshot.forEach(doc =>{
-      properties.push(doc.data());
-    });
-     AddAllItemsToTable(listings);
-    })
-
-
-  */
-
-  return (
+return(
     <div style={{
       display: 'block', width: 700, paddingLeft: 30}}>
       <h3>
@@ -172,19 +112,32 @@ export const ListingPage = () => {
       <Header style ={{color: '#808080', fontSize: '20px'}}>MCN Development Listings
       </Header>
       <Content>
-      <Carousel className="custom-slider">
-      <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=1" 
-      height="250" />
-      <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=2" 
-      height="250" />
-      <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=3" 
-      height="250" />
-      <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=4" 
-      height="250" />
-      <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=5" 
-      height="250" />
-      </Carousel>
-
+      <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=1" class="d-block w-100" alt="..."/>
+    </div>
+    <div class="carousel-item">
+      <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=2" class="d-block w-100" alt="..."/>
+    </div>
+    <div class="carousel-item">
+      <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=3" class="d-block w-100" alt="..."/>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
       </Content>
       <Sidebar>
       <Table id = "tbody1">
@@ -211,8 +164,8 @@ export const ListingPage = () => {
       </Sidebar>
       </Container>
       </div>
-  );
-};
+      );
+
 
 const fileList = [
   {
@@ -233,5 +186,5 @@ const instance = (
     action="//jsonplaceholder.typicode.com/posts/"
   ></Uploader>
 );
-
+}
 export default ListingPage;
