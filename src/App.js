@@ -20,13 +20,6 @@ import { createTheme,ThemeProvider } from "@mui/system";
 import { onAuthStateChanged } from "firebase/auth";
 import {Typography} from "@mui/system";
 
-const theme = createTheme({
-  typography:{
-   fontFamily:["Garamond","sans-serif"]
-    
-
-  }})
-
 
 export const App = () => {
   // const queryRef = query(collRef, query => query.where('Role', '==', 'Administrator'));
@@ -48,8 +41,8 @@ export const App = () => {
       document.getElementById('logout').style.display = "list-item";
     }
     if(!user){
-      document.getElementById("login-page").style.display = "list-item";
       document.getElementById('logout').style.display = "none";
+      document.getElementById("login-page").style.display = "list-item"; 
     }
     const unsubscribe = onAuthStateChanged(auth,(userID)=>{
       if(user){

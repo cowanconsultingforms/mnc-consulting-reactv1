@@ -45,6 +45,7 @@ const Listing = () => {
     listed_at,
     listed_by,
     price,
+    db,
     images,
     id,
     accepter,
@@ -72,39 +73,7 @@ const Listing = () => {
       </div>
     )
 }
-/*
-class ListingClass extends React.Component  {
-  super(props){
-  constructor(props) {
-    this.props = props;
-    this.state = {
-      type: '',
-      docId: '',
-      street: '',
-      city: '',
-      state: '',
-      zip: '',
-      description: '',
-      listed_at: '',
-      listed_by: '',
-      price: '',
-      images: [],
-      id: '',
-    };
-  }
-  }
-  async loadListing(type) {
-    const q = query(db, `listings/${type}/${type}/`, orderBy('created_at', 'desc'));
-    await getDoc(q).then((doc) => {
-      this.listingRef = doc.data();
-    }
-    ).catch((error) => {
-      console.log(error);
-    }
-    );
-    this.listingRef.current = this.listing;
-  }
-}*/
+
 ForSaleListing.propTypes = {
   type: PropTypes.string.isRequired,
   docId: PropTypes.string.isRequired,
