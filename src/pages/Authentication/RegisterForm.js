@@ -9,7 +9,7 @@ import {
 } from "firebase/auth";
 import "./styles.css";
 import { useAuthState } from "react-firebase-hooks/auth";
-
+import { LandingFooter } from "../Home/Footer";
 export const RegisterForm = ({ title }) => {
   const [user] = useAuthState(auth);
   const [email, setEmail] = useState("");
@@ -123,6 +123,7 @@ export const RegisterForm = ({ title }) => {
           <Button onClick={resetPassword}>Forgot Password?</Button>
         </ButtonGroup>
       </Box>
+      <LandingFooter />
     </div>
   );
 };

@@ -4,7 +4,7 @@ import "./styles.css";
 import { Box, Typography, Button,Stack,styled,Paper } from "@mui/material";
 import { DownloadLogo } from "./DownloadLogo";
 import { ContactForm } from "./ContactForm";
-
+import { LandingFooter } from "../Home/Footer";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -45,12 +45,12 @@ const Contact = () => {
       component="div"
       sx={{ marginTop: "5%",marginLeft:'10%', width: "80%", justifyContent: "center",alignItems:'center' }}
     >
-      <Item sx={{margin:'5%'}}><DownloadLogo /></Item>
+      <Item ><DownloadLogo /></Item>
       <Stack component="div"
       sx={{m:'5',justifyContent:'center',alignItems:'center',maxHeight:'100%'}}>
       <ContactForm onSubmit={onSubmit} />
       </Stack>
-     
+     <Item><LandingFooter /></Item>
 
       <script src="https://smtpjs.com/v3/smtp.js"></script>
     </Stack>

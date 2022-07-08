@@ -10,6 +10,7 @@ import {
   setDoc,
   writeBatch,
 } from "firebase/firestore";
+import FileUploader from "./FileUploader";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -20,6 +21,7 @@ import { useRadioGroup } from "@mui/material/RadioGroup";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { useAuthState } from "react-firebase-hooks/auth";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 const listingStyles = {
   display: "flex",
   flexDirection: "column",
@@ -47,7 +49,7 @@ MyFormControlLabel.propTypes = {
    * The value of the component.
    */
   value: PropTypes.string,
-  onChange:PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 export const UseRadioGroup = ({ onChange }) => {
@@ -56,25 +58,25 @@ export const UseRadioGroup = ({ onChange }) => {
       name="listing-type-group"
       defaultValue="null"
       onChange={onChange}
-      sx={{fontFamily:'Garamond'}}
+      sx={{ fontFamily: "Garamond" }}
     >
       <MyFormControlLabel
         value="forSale"
         control={<Radio />}
         label="List For Sale"
-        sx={{fontFamily:'Garamond'}}
+        sx={{ fontFamily: "Garamond" }}
       />
       <MyFormControlLabel
         value="forRent"
         control={<Radio />}
         label="List For Rent"
-        sx={{fontFamily:'Garamond'}}
+        sx={{ fontFamily: "Garamond" }}
       />
       <MyFormControlLabel
         value="sold"
         control={<Radio />}
         label="Sold"
-        sx={{fontFamily:'Garamond'}}
+        sx={{ fontFamily: "Garamond" }}
       />
     </RadioGroup>
   );
@@ -88,36 +90,30 @@ export const RadioButtonsGroup = ({ onChange }) => {
         defaultValue="forSale"
         name="listing-group"
         onChange={onChange}
-        sx={{fontFamily:'Garamond'}}
+        sx={{ fontFamily: "Garamond" }}
       >
         <FormControlLabel
           value="forSale"
           control={<Radio />}
           label="List For Sale"
-          sx={{fontFamily:'Garamond'}}
+          sx={{ fontFamily: "Garamond" }}
         />
         <FormControlLabel
           value="forRent"
           control={<Radio />}
           label="List For Rent"
-          sx={{fontFamily:'Garamond'}}
+          sx={{ fontFamily: "Garamond" }}
         />
         <FormControlLabel
           value="sold"
           control={<Radio />}
           label="Sold Listings"
-          sx={{fontFamily:'Garamond'}}
+          sx={{ fontFamily: "Garamond" }}
         />
       </RadioGroup>
     </FormControl>
   );
 };
-
-
-const ListingType= ({onChange})=>{
-  const [type,setType]=useState(type)
-
-}
 
 export const AddListingForm = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -131,12 +127,10 @@ export const AddListingForm = () => {
   const [bathrooms, setBathrooms] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  
-
+  const [files,setFiles] = useState([]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const docData = {
-      type,
       street,
       city,
       state,
@@ -147,6 +141,7 @@ export const AddListingForm = () => {
       description,
     };
     const collRef = collection(db, `listings/${type}/properties`);
+<<<<<<< HEAD
     await addDoc(collRef, { ...docData }).then()
   };
 
@@ -154,6 +149,16 @@ export const AddListingForm = () => {
     e.preventDefault();
     setType(e.target.value);
     console.log(type);
+=======
+    try {
+      await addDoc(collRef, { ...docData }).then((res) => {
+        if (res !== null) {
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+>>>>>>> 59fb0a8cdca524c8d06e966e118e5c6e58091e0f
   };
 
   useEffect(() => {}, []);
@@ -174,7 +179,7 @@ export const AddListingForm = () => {
           border: "2px solid black",
           borderRadius: "5px",
           width: "75%",
-          fontFamily:'Garamond'
+          fontFamily: "Garamond",
         }}
         onSubmit={handleSubmit}
       >
@@ -189,19 +194,18 @@ export const AddListingForm = () => {
           Add Listing
         </Typography>
         <UseRadioGroup
-        aria-label="listing-type"
-          onChange={handleSwitch}
+          aria-label="listing-type"
+          onChange={(e) => setType(e.target.value)}
           name="type"
           sx={{
             justifyContent: "center",
             fontFamily: "Garamond",
             alignItems: "center",
-            fontSize:'20px'
-            
+            fontSize: "20px",
           }}
         />
         <TextField
-        aria-label="street"
+          aria-label="street"
           name="street"
           label="Street Address"
           onChange={(e) => setStreet(e.target.value)}
@@ -241,7 +245,7 @@ export const AddListingForm = () => {
           name="price"
           label="Listing Price"
           onChange={(e) => setPrice(e.target.value)}
-          sx={{ fontFamily: "Garamond", width: "80%",fontSize:'18px' }}
+          sx={{ fontFamily: "Garamond", width: "80%", fontSize: "18px" }}
         />
         <TextareaAutosize
           placeholder="Property Details"
@@ -250,8 +254,14 @@ export const AddListingForm = () => {
           name="description"
           label="Property Description"
           onChange={(e) => setDescription(e.target.value)}
-          style={{ fontFamily: "Garamond", width: "80%",justifyContent:'left',fontSize:'18px' }}
+          style={{
+            fontFamily: "Garamond",
+            width: "80%",
+            justifyContent: "left",
+            fontSize: "18px",
+          }}
         />
+        <FileUploader onChange={(e)=>setFiles(e.target.files)} />
         <Button type="submit" variant="contained">
           Add Property
         </Button>

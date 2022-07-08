@@ -4,7 +4,7 @@ import React, {useState,useRef,forwardRef,useEffect } from "react";
 import { useUploadFile } from "react-firebase-hooks/storage";
 import { storage } from "../../firebase";
 
-export const FileUploader = () => {
+export const FileUploader = ({onChange}) => {
   const [file, setFile] = useState("");
   const [percent, setPercent] = useState(0);
   const handleChange= (event)=> {
