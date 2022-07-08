@@ -20,21 +20,6 @@ import { createTheme,ThemeProvider } from "@mui/system";
 import { onAuthStateChanged } from "firebase/auth";
 import {Typography} from "@mui/system";
 
-const theme = createTheme({
-<<<<<<< HEAD
-  components:{
-    nMuiBoxRoot:{
-      defaultProps:{
-        
-      }
-=======
-  typography:{
-   fontFamily:["Garamond","sans-serif"]
-    
->>>>>>> 59fb0a8cdca524c8d06e966e118e5c6e58091e0f
-
-  }})
-
 
 export const App = () => {
   // const queryRef = query(collRef, query => query.where('Role', '==', 'Administrator'));
