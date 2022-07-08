@@ -3,7 +3,6 @@ import React,{forwardRef,useRef,useEffect,useState} from 'react';
 import { Box,TextField,Button,ButtonGroup } from '@mui/material';
 import styled from 'styled-components';
 import { auth, db } from '../../firebase';
-import UserDataService from '../../services/crudoperations';
 const SearchUserBox = styled.div`
   position: relative;
   text-align: center;
@@ -35,11 +34,7 @@ export const SearchUser = (props) => {
   const [docsData, setDocsData] = useState([]);
 
 
-  const getUser = async(id) => {
-    const data = await UserDataService.getUser(id);
-    console.log(data);
-    setUser(data)
-  }
+
   const getData = () => {
     onSnapshot(collectionRef, (data) => {
         setDocsData(data.docs.map((doc) => {

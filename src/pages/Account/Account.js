@@ -17,7 +17,6 @@ import { ProfileButton } from '../../components/Custom/Buttons';
 import {db, userSignOut } from "../../firebase";
 import { Box, TextField,Stack } from "@mui/material";
 import  AccountPageDeleteProfileBox  from './DeleteAccount';
-import {UserDataService} from '../../services/crudoperations';
 import { useAuthState } from "react-firebase-hooks/auth";
 export const AccountPage = () => {
   //hook to get current user

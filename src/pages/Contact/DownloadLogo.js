@@ -3,7 +3,6 @@ import { useDownloadURL } from "react-firebase-hooks/storage";
 import { ref as reff } from "firebase/storage";
 import { storage } from "../../firebase";
 import { ImageBox } from "../../components/Custom/Containers";
-import { Container } from "rsuite";
 
 const style = {
     justifyContent: 'center',
