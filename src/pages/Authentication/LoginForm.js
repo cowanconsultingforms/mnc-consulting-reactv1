@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import {ButtonGroup,Button} from '@mui/material';
 import './styles.css';
 import {LandingFooter} from '../Home/Footer';
+import { setPersistence ,browserLocalPersistence} from "firebase/auth";
 
 
 
@@ -26,7 +27,8 @@ export const LoginForm = ({title}) => {
     try {
       await signInWithEmailAndPassword(auth,email, password).then((res) => {
         if (res) {
-          const user = auth.currentUser.uid;
+          const user = auth.currentUser.email;
+          setPersistence(auth,browserLocalPersistence);
           console.log(JSON.stringify(user));
           sessionStorage.setItem("user", JSON.stringify(user));
           localStorage.setItem("userToken", JSON.stringify(user));

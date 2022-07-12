@@ -6,7 +6,7 @@ import {Box,TextField,Button} from "@mui/material";
 import './styles.css';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Container } from "rsuite";
-
+import {Box,TextField,Button} from "@mui/material";
 //code to render search user from the admin page
 export const Search = () => {
   const collectionRef = collection(db, "users");
@@ -56,7 +56,7 @@ export const Search = () => {
 
 
   return (
-    <Container className="admin-search-container">
+    <React.Fragment>
       <h4>Look Up User</h4>
 
       <Box 
@@ -74,7 +74,7 @@ export const Search = () => {
       
       </Box>
       {formValue}
-    </Container>
+    </React.Fragment>
   );
 }
 

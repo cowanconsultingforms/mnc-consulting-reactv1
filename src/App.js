@@ -15,46 +15,49 @@ import { useNavigate } from "react-router-dom";
 import { Container } from "rsuite";
 import "./App.css";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { query, where,collection } from "firebase/firestore";
-import { createTheme,ThemeProvider } from "@mui/system";
+import { query, where, collection,onSnapshot,getDoc } from "firebase/firestore";
+import { createTheme, ThemeProvider } from "@mui/system";
 import { onAuthStateChanged } from "firebase/auth";
-import {Typography} from "@mui/system";
-
-
+import { Typography } from "@mui/system";
+import { setPersistence } from "firebase/auth";
+import {setLocalPersistence} from './firebase.js';
 export const App = () => {
   // const queryRef = query(collRef, query => query.where('Role', '==', 'Administrator'));
   //hook to check for current user
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
   const userRef = collection(db, "users");
-  const userCheck = async(e)=>{
-    e.preventDefault();
-    try{
-      const q = await query(userRef,where("email","==",user.email));
-    }catch(error){
+  const [currentUser, setCurrentUser] = useState(null);
+  const [userInfo,setUserInfo] = useState({})
+  const getUserInfo = async () => {
+  
+    try {
+      if(currentUser){
+      const q = await query(userRef, where("email", "==", currentUser.email));
+      const querySnapshot = await getDoc(q);
+      querySnapshot.forEach((doc)=>{
+        setUserInfo(...doc.data())
+        console.log(userInfo);
+      })}
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
   useEffect(() => {
-    if (user) {
-      document.getElementById("login-page").style.display = "none";
-      document.getElementById('logout').style.display = "list-item";
-    }
-    if(!user){
-      document.getElementById('logout').style.display = "none";
-      document.getElementById("login-page").style.display = "list-item"; 
-    }
-    const unsubscribe = onAuthStateChanged(auth,(userID)=>{
-      if(user){
+    
+    onAuthStateChanged(auth, (userChanged) => {
+      if(userChanged){
+        setCurrentUser(userChanged.email);
+        getUserInfo();
+        console.log(currentUser);   
         document.getElementById("login-page").style.display = "none";
-        document.getElementById('logout').style.display = "list-item";
-      }
-      else{
+        document.getElementById("logout").style.display = "list-item";
+      }else{
+        setCurrentUser(null);
+        document.getElementById("logout").style.display = "none";
         document.getElementById("login-page").style.display = "list-item";
-        document.getElementById('logout').style.display = "none";
       }
-      return unsubscribe;
-    })
+    });
   }, []);
 
   //returns the navbar on every page, and each route corresponds to a different page
@@ -62,7 +65,6 @@ export const App = () => {
   //is signed in and whether they are an administrator
 
   return (
-   
     <div className="App">
       <Container fluid="true" classPrefix="container">
         <NavBar />
@@ -76,15 +78,13 @@ export const App = () => {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/login" element={<AuthPage title="Login" />} />
         <Route path="/register" element={<AuthPage title="Register" />} />
-        <Route path="/listings/rentals" element={<ListingPage type="rentals" />} />
+        <Route path="/listings" element={<ListingPage />} />
         <Route
           path="/create-profile"
           element={<AuthPage title="New User Profile" />}
         />
-      
       </Routes>
     </div>
-  
   );
 };
 //  <Route path="/editListing/:id" element={<EditDocs database={database}/>} />

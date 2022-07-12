@@ -46,10 +46,10 @@ const Contact = () => {
       sx={{ marginTop: "5%",marginLeft:'10%', width: "80%", justifyContent: "center",alignItems:'center' }}
     >
       <Item ><DownloadLogo /></Item>
-      <Stack component="div"
-      sx={{m:'5',justifyContent:'center',alignItems:'center',maxHeight:'100%'}}>
+     
+    <Item>
       <ContactForm onSubmit={onSubmit} />
-      </Stack>
+     </Item>
      <Item><LandingFooter /></Item>
 
       <script src="https://smtpjs.com/v3/smtp.js"></script>
