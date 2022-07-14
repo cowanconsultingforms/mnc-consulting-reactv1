@@ -33,15 +33,14 @@ const AdminPage = ({ role }) => {
   const navigate = useNavigate();
   const [admin, setAdmin] = useState(false);
   const [currentUser, setCurrentuser] = useState(null);
-  const checkAdmin = (e) => {
-    e.preventDefault();
+  const checkAdmin = async(e) => {
     try {
       const user = auth.currentUser;
       const userRef = collection(db,"users");
       const q = query(userRef,where("email","==",user.email));
       getDoc(userRef)
         .then((doc) => {
-          if (doc.data().role === "admin") {
+          if (doc.data().role === "Administrator") {
             setAdmin(true);
             setCurrentuser(user);
           }
@@ -55,7 +54,8 @@ const AdminPage = ({ role }) => {
     if (user.email === "") {
     }
   };
-  useEffect(() => {});
+  useEffect(
+    () => {});
 
   return (
     <Box className="admin-container"

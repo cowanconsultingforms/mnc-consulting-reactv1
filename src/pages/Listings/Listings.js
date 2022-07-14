@@ -43,11 +43,10 @@ import {
   Content,
   Table,
   Sidebar,
-  Footer
+  Footer,
 } from "rsuite";
 
 // primary container for Listing Page data
-
 export const ListingPage = () => {
   const [user, loading, error] = useAuthState(auth);
   const formRef = useRef();
@@ -64,11 +63,34 @@ export const ListingPage = () => {
   const [images, setImages] = useState(""); 
   const [description, setDescription] = useState("");
   
-  
+
 return(
-    <div style={{
-      display: 'block', width: 700}}>
-      <h3>MCN Development Listings</h3>
+    <div
+      style={{
+        display: "block",
+        width: 700,
+        paddingLeft: 30,
+      }}
+    >
+      <h3>React Suite Sidenav Component</h3>
+      <Sidenav defaultOpenKeys={["3", "4"]} activeKey="1">
+        <Sidenav.Body>
+          <Nav>
+            <Nav.Item eventKey="1">Status</Nav.Item>
+            <div></div>
+            <Nav.Item eventKey="2">Price</Nav.Item>
+            <div></div>
+            <Nav.Item eventKey="3">Bedrooom</Nav.Item>
+            <div></div>
+            <Nav.Item eventKey="4">Bathroom</Nav.Item>
+            <Dropdown eventKey="5" title="Advanced">
+              <Dropdown.Item eventKey="4-1">Privacy</Dropdown.Item>
+              <Dropdown.Item eventKey="4-2">About</Dropdown.Item>
+              <Dropdown.Item eventKey="4-3">Terms</Dropdown.Item>
+            </Dropdown>
+          </Nav>
+        </Sidenav.Body>
+      </Sidenav>
       <Container>
       <Header style ={{color: '#808080', fontSize: '20px'}}>MCN Development Listings
       </Header>
@@ -121,8 +143,7 @@ return(
      
       </Container>
       </div>
-      );
-
-
-};
+      )};
+      
 export default ListingPage;
+
