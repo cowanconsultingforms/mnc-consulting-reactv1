@@ -76,7 +76,7 @@ export const App = () => {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/login" element={<AuthPage title="Login" />} />
         <Route path="/register" element={<AuthPage title="Register" />} />
-        <Route path="/listings/rentals" element={<ListingPage title="rentals" />} />
+        <Route path="/listings" element={<ListingPage/>} />
         <Route
           path="/create-profile"
           element={<AuthPage title="New User Profile" />}

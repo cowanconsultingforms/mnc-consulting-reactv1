@@ -141,15 +141,6 @@ export const AddListingForm = () => {
       description,
     };
     const collRef = collection(db, `listings/${type}/properties`);
-<<<<<<< HEAD
-    await addDoc(collRef, { ...docData }).then()
-  };
-
-  const handleSwitch = (e) => {
-    e.preventDefault();
-    setType(e.target.value);
-    console.log(type);
-=======
     try {
       await addDoc(collRef, { ...docData }).then((res) => {
         if (res !== null) {
@@ -158,7 +149,6 @@ export const AddListingForm = () => {
     } catch (error) {
       console.log(error);
     }
->>>>>>> 59fb0a8cdca524c8d06e966e118e5c6e58091e0f
   };
 
   useEffect(() => {}, []);

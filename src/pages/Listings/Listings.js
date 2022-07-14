@@ -2,9 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import { db, auth, app, dbRef} from "../../firebase";
 import { Component } from 'react'
 import { Carousel } from "react-bootstrap";
-//import * as ReactDOM from 'react-dom';
+import ReactBootstrapCarousel from "react-bootstrap-carousel";
+import "bootstrap/dist/css/bootstrap.css";
+import "react-bootstrap-carousel/dist/react-bootstrap-carousel.css";
+import * as ReactDOM from 'react-dom';
 import { useAuthState } from "react-firebase-hooks/auth";
 import './listingsStyles.css';
+import BasicTable from "./Table";
 
 
 import {
@@ -55,136 +59,70 @@ export const ListingPage = () => {
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
   const [price, setPrice] = useState("");
+  const [listed_at, setListedAt] = useState("");
+  const [listed_by, setListedBy] = useState("");
+  const [images, setImages] = useState(""); 
   const [description, setDescription] = useState("");
   
-  const [listings] = useCollectionData(db, collection('listings'));
-  const listingRef = collection(db, `listings`,where(type, '==',type));
-  const placeholder = useRef();
-  const q = query(listingRef, orderBy("listed_at", "desc"));
-  const [listing] = useCollectionData(q,{ idField: "listed_at" });
-
-  const getNextListing = async (e) => { 
-    e.preventDefault();
-    const listings = await getDocs(listingRef).then((docs) => {
-      return docs.map((doc) => {
-        return listings = {
-          id: doc.id,
-          ...doc.data()
-        }
-      })
-    })
-  }
-  const getPrevListing = async (e) => {
-    e.preventDefault();
-    
-  }
-  useEffect(() => {
-    return () => {
-      
-    };
-  }, [listings])
-
+  
 return(
     <div style={{
-      display: 'block', width: 700, paddingLeft: 30}}>
-      <h3>
-        React Suite Sidenav Component
-        </h3>
-      <Sidenav defaultOpenKeys={['3', '4']} activeKey="1">
-        <Sidenav.Body>
-        <Nav>
-          <Nav.Item eventKey="1">Status</Nav.Item>
-          <div></div>
-          <Nav.Item eventKey="2">Price</Nav.Item>
-          <div></div>
-          <Nav.Item eventKey="3">Bedrooom</Nav.Item>
-          <div></div>
-          <Nav.Item eventKey="4">Bathroom</Nav.Item>
-          <Dropdown eventKey="5" title="Advanced">
-          <Dropdown.Item eventKey="4-1">Privacy</Dropdown.Item>
-          <Dropdown.Item eventKey="4-2">About</Dropdown.Item>
-          <Dropdown.Item eventKey="4-3">Terms</Dropdown.Item>
-          </Dropdown>
-        </Nav>
-        </Sidenav.Body>
-      </Sidenav>
+      display: 'block', width: 700}}>
+      <h3>MCN Development Listings</h3>
       <Container>
       <Header style ={{color: '#808080', fontSize: '20px'}}>MCN Development Listings
       </Header>
       <Content>
-      <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-  <div class="carousel-indicators">
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-  </div>
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=1" class="d-block w-100" alt="..."/>
-    </div>
-    <div class="carousel-item">
-      <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=2" class="d-block w-100" alt="..."/>
-    </div>
-    <div class="carousel-item">
-      <img src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=3" class="d-block w-100" alt="..."/>
-    </div>
-  </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
-      </Content>
-      <Sidebar>
-      <Table id = "tbody1">
- <Table.Column width={70} align="center" fixed>
- <Table.HeaderCell>Bathrooms</Table.HeaderCell>
- <Table.Cell dataKey="bathrooms" />
- <Table.HeaderCell>Bedrooms</Table.HeaderCell>
- <Table.Cell dataKey="bedrooms" />
- <Table.HeaderCell>City</Table.HeaderCell>
- <Table.Cell dataKey="city" />
- <Table.HeaderCell>Description</Table.HeaderCell>
- <Table.Cell dataKey="description" />
- <Table.HeaderCell>Price</Table.HeaderCell>
- <Table.Cell dataKey="price" />
- <Table.HeaderCell>State</Table.HeaderCell>
- <Table.Cell dataKey="state" />
- <Table.HeaderCell>Street</Table.HeaderCell>
- <Table.Cell dataKey="street" />
- <Table.HeaderCell>Zip</Table.HeaderCell>
- <Table.Cell dataKey="zip" />
- </Table.Column>
-</Table>
+      <Carousel>
+  <Carousel.Item>
+    <img
+      className="d-block w-100"
+      src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=3"
+      alt="First slide"
+    />
+    <Carousel.Caption>
+      <h3>First slide label</h3>
+      <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+    </Carousel.Caption>
+  </Carousel.Item>
+  <Carousel.Item>
+    <img
+      className="d-block w-100"
+      src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=1"
+      alt="Second slide"
+    />
 
-      </Sidebar>
+    <Carousel.Caption>
+      <h3>Second slide label</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </Carousel.Caption>
+  </Carousel.Item>
+  <Carousel.Item>
+    <img
+      className="d-block w-100"
+      src="https://via.placeholder.com/600x250/8f8e94/FFFFFF?text=2"
+      alt="Third slide"
+    />
+
+    <Carousel.Caption>
+      <h3>Third slide label</h3>
+      <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+    </Carousel.Caption>
+  </Carousel.Item>
+</Carousel>
+
+<BasicTable></BasicTable>
+
+   </Content>
+ <Footer></Footer>
+
+     
+      
+     
       </Container>
       </div>
       );
 
 
-const fileList = [
-  {
-    name: "a.png",
-    fileKey: 1,
-    url: "https://user-images.githubusercontent.com/1203827/47638792-92414e00-db9a-11e8-89c2-f8f430a23cd3.png",
-  },
-  {
-    name: "b.png",
-    fileKey: 2,
-    url: "https://user-images.githubusercontent.com/1203827/47638807-9d947980-db9a-11e8-9ee5-e0cc9cd7e8ad.png",
-  },
-];
-const instance = (
-  <Uploader
-    listType="picture-text"
-    defaultFileList={fileList}
-    action="//jsonplaceholder.typicode.com/posts/"
-  ></Uploader>
-);
-}
+};
 export default ListingPage;
