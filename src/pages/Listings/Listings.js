@@ -63,6 +63,28 @@ export const ListingPage = () => {
   const [images, setImages] = useState(""); 
   const [description, setDescription] = useState("");
   
+  const [listings] = useCollectionData(db, collection("listings"));
+const listingRef = collection(db, "listings", where(type, "==", type));
+const placeholder = useRef();
+const q = query(listingRef, orderBy("listed_at", "desc"));
+const [listing] = useCollectionData(q, { idField: "listed_at" });
+const getNextListing = async (e) => {
+  e.preventDefault();
+  const listings = await getDocs(listingRef).then((docs) => {
+    return docs.map((doc) => {
+      return (listings = {
+        id: doc.id,
+        ...doc.data(),
+      });
+    });
+  });
+};
+const getPrevListing = async (e) => {
+  e.preventDefault();
+};
+useEffect(() => {
+  return () => {};
+}, [listings]);
 
 return(
     <div
@@ -144,6 +166,6 @@ return(
       </Container>
       </div>
       )};
-      
+
 export default ListingPage;
 
