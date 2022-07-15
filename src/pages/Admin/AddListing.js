@@ -79,9 +79,6 @@ export const AddListingForm = () => {
       images:[...imageURL],
     };
     const collRef = collection(db, `listings/${type}/properties`);
-
-    console.log(docData);
-
     try {
       await addDoc(collRef, { ...docData }).then((res) => {
         if (res !== null) {
