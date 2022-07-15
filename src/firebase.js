@@ -95,7 +95,7 @@ export const createUser = async(email,userName)=>{
   const AuthToken = auth.currentUser.getIdToken();
   localStorage.setItem(JSON.stringify('user', AuthToken));
   const docRef = doc(db, "users");
-  await addDoc(collection(db, "users"), {
+  await addDoc(docRef, {
     uuid: auth.currentUser.uid,
     email: email,
     userName: email.split("@")[0],

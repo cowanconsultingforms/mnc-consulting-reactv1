@@ -11,13 +11,13 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import { auditLogger } from "./AdminPageComponents";
-import FileUploader from "./FileUploader";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { Box, TextField, Button, Typography } from "@mui/material";
+import { Box, TextField, Button, Typography,Paper } from "@mui/material";
+import { Input } from '@mui/base';
 import { useRadioGroup } from "@mui/material/RadioGroup";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -119,9 +119,11 @@ export const AddListingForm = () => {
   const [bathrooms, setBathrooms] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [files,setFiles] = useState([]);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if( user) {
+      let listed_by = user.displayName;
+    }
     const docData = {
       street,
       city,
@@ -131,6 +133,8 @@ export const AddListingForm = () => {
       bathrooms,
       price,
       description,
+      listed_by: user.displayName,
+      listed_at: serverTimestamp(),
     };
     const collRef = collection(db, `listings/${type}/properties`);
 
@@ -139,7 +143,10 @@ export const AddListingForm = () => {
     try {
       await addDoc(collRef, { ...docData }).then((res) => {
         if (res !== null) {
-          auditLogger('Added Listing', res.id, user.uid)
+          const listingId = res.id;
+          auditLogger('Added Listing', res.id, user.uid).then(() => {
+            
+          })
         }
       });
     } catch (error) {
@@ -153,7 +160,7 @@ export const AddListingForm = () => {
   }, []);
 
   return (
-    <React.Fragment>
+    <Paper>
 
       <Box
         className="add-listing-form"
@@ -247,7 +254,7 @@ export const AddListingForm = () => {
           Add Property
         </Button>
       </Box>
-    </React.Fragment>
+    </Paper>
   );
 };
 

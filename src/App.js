@@ -14,27 +14,44 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container } from "rsuite";
 import "./App.css";
+import { Box, Stack } from '@mui/material';
 import { useAuthState } from "react-firebase-hooks/auth";
-import { query, where,collection } from "firebase/firestore";
+import { query, where,collection,getDoc } from "firebase/firestore";
 import { createTheme,ThemeProvider } from "@mui/system";
 import { onAuthStateChanged } from "firebase/auth";
 import {Typography} from "@mui/system";
-
+import UploadImages from "./pages/Admin/UploadImages";
 
 export const App = () => {
   // const queryRef = query(collRef, query => query.where('Role', '==', 'Administrator'));
   //hook to check for current user
-  const [user, loading, error] = useAuthState(auth);
+  const [ user, loading, error ] = useAuthState(auth);
   const navigate = useNavigate();
   const userRef = collection(db, "users");
-  const userCheck = async(e)=>{
-    e.preventDefault();
-    try{
-      const q = await query(userRef,where("email","==",user.email));
-    }catch(error){
-      console.log(error);
+  const [ logggedInUser, setLoggedInUser ] = useState('');
+  const childToParent = () => {
+    
+  }
+  const userCheck = async (auth) => {
+    if (auth.currentUser !== null) {
+      const user = auth.currentUser;
+      const userRef = collection(db, "users");
+      const q = query(userRef, where("email", "==", user.email));
+      try {
+        getDoc(q)
+          .then((doc) => {
+            if (doc.data().role === "Administrator") {
+              setLoggedInUser(user);
+            }
+          })
+      }
+      catch (err) {
+        console.log(err)
+      }
+ 
     }
   }
+
   useEffect(() => {
     if (user) {
       document.getElementById("login-page").style.display = "none";
@@ -64,15 +81,19 @@ export const App = () => {
   return (
    
     <div className="App">
-      <Container fluid="true" classPrefix="container">
+      <Box
+        component="div"
+        sx={{
+          display:'flex',fontFamily:'Garamond'}}>
         <NavBar />
-      </Container>
+      </Box>
 
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/admin" element={<AdminContainer />} />
+        <Route path="/admin/add-images" element={<UploadImages />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/login" element={<AuthPage title="Login" />} />
         <Route path="/register" element={<AuthPage title="Register" />} />

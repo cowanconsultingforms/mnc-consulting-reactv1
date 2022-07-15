@@ -125,12 +125,13 @@ export const NavBar = () => {
     const unsubscribe = async() => onAuthStateChanged(auth,(user)=>{
       if(user){
         setLoggedIn(true);
-        document.getElementById("logout").style.display = "flex";
+        document.getElementById("logout").style.display = "list-item";
+        document.getElementById("login-page").style.display = "none";
       }else{
         setLoggedIn(false);
       }
       if(!user){
-        document.getElementById("login-page").style.display = "flex";
+        document.getElementById("login-page").style.display = "list-item";
         document.getElementById('logout').style.display = "none";
     }
   return unsubscribe})

@@ -46,9 +46,15 @@ export const AuthPage = ({title}) => {
     })}
 
   useEffect(() => {
+    if (loading) {
+      return;
+    }
+    if (authState) {
+      navigate('/account');
+    }
       DownloadURL();
     
-  }, [authState, navigate, reference]);
+  }, [loading,authState, navigate, reference]);
 
   return (
     <Container className="auth-page" style={{display:'flex',flexDirection:'column',width:'100%',mt:8}}>

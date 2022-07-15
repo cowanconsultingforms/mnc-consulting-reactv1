@@ -5,11 +5,11 @@ import { auth, db } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { query, where, getDoc,collection } from "firebase/firestore";
-import FileUploader from "./FileUploader";
-import { Box, Typography } from "@mui/material";
+import FileUploader from "./UploadImages";
+import { Box, Typography,Button,Divider,Stack } from "@mui/material";
 import SearchUser from "./SearchUser";
 import ViewAuditLog from "./ViewAuditLog";
-import { createChainedFunction } from "rsuite/esm/utils";
+import {Item} from "./AdminPageComponents";
 const Header = () => {
   return (
     <Typography
@@ -29,11 +29,11 @@ const HeaderTwo = () => {
 };
 const AdminPage = ({ role }) => {
   const [user, loading, error] = useAuthState(auth);
-
+  
   const navigate = useNavigate();
   const [admin, setAdmin] = useState(false);
   const [currentUser, setCurrentuser] = useState(null);
-  const checkAdmin = async(e) => {
+  const checkAdmin = async() => {
     try {
       const user = auth.currentUser;
       const userRef = collection(db,"users");
@@ -58,12 +58,14 @@ const AdminPage = ({ role }) => {
     () => {});
 
   return (
-    <Box className="admin-container"
-    component="div">
-      <Header />
+    <Stack  className="admin-container"
+    direction="column"
+    sx={{display:'flex',flexDirection:'column',margin:'5%',fontFamily:'Garamond'}}>
+     <Item> <Header /></Item>
+     <Item> <Divider /></Item>
       <AddListingForm />
       <SearchUser />
-    </Box>
+    </Stack>
   );
 };
 

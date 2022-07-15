@@ -54,7 +54,7 @@ export const LoginForm = ({title}) => {
       }
     })
     }
-  , []);
+  , [navigate]);
   return (
     <div className="login-form">
     <h1>{title} Form</h1>
