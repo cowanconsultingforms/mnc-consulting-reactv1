@@ -1,8 +1,6 @@
 import { getDownloadURL, ref } from "firebase/storage";
 import React, { useState, useRef, useEffect } from "react";
-import { useCollection } from "react-firebase-hooks/firestore";
-import { useUploadFile } from "react-firebase-hooks/storage";
-import { db, auth, storage} from "../../firebase";
+import { db, auth, storage } from "../../firebase";
 import {
   serverTimestamp,
   addDoc,
@@ -19,96 +17,19 @@ import FormLabel from "@mui/material/FormLabel";
 import { Box, TextField, Button, Typography,Paper } from "@mui/material";
 import { Input } from '@mui/base';
 import { useRadioGroup } from "@mui/material/RadioGroup";
+import { uploadBytesResumable } from "firebase/storage";
+import {UseRadioGroup } from "./AdminPageComponents";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
-import { useAuthState } from "react-firebase-hooks/auth";
-import PropTypes from "prop-types";
+import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-const MyFormControlLabel = (props) => {
-  const radioGroup = useRadioGroup()
+import { onAuthStateChanged } from "firebase/auth";
+import IconButton from "@mui/material/IconButton";
+import './styles.css';
 
-  let checked = false;
-
-  if (radioGroup) {
-    checked = radioGroup.value === props.value;
-  }
-
-  return <FormControlLabel checked={checked} {...props} />;
-};
-
-MyFormControlLabel.propTypes = {
-  /**
-   * The value of the component.
-   */
-  value: PropTypes.string,
-  onChange: PropTypes.func,
-};
-
-export const UseRadioGroup = ({ onChange }) => {
-  return (
-    <RadioGroup
-      name="listing-type-group"
-      defaultValue="null"
-      onChange={onChange}
-      sx={{ fontFamily: "Garamond" }}
-    >
-      <MyFormControlLabel
-        value="forSale"
-        control={<Radio />}
-        label="List For Sale"
-        sx={{ fontFamily: "Garamond" }}
-      />
-      <MyFormControlLabel
-        value="forRent"
-        control={<Radio />}
-        label="List For Rent"
-        sx={{ fontFamily: "Garamond" }}
-      />
-      <MyFormControlLabel
-        value="sold"
-        control={<Radio />}
-        label="Sold"
-        sx={{ fontFamily: "Garamond" }}
-      />
-    </RadioGroup>
-  );
-};
-export const RadioButtonsGroup = ({ onChange }) => {
-  return (
-    <FormControl>
-      <FormLabel id="listing-type">Select Listing Type</FormLabel>
-      <RadioGroup
-        aria-labelledby="listing-type"
-        defaultValue="forSale"
-        name="listing-group"
-        onChange={onChange}
-        sx={{ fontFamily: "Garamond" }}
-      >
-        <FormControlLabel
-          value="forSale"
-          control={<Radio />}
-          label="List For Sale"
-          sx={{ fontFamily: "Garamond" }}
-        />
-        <FormControlLabel
-          value="forRent"
-          control={<Radio />}
-          label="List For Rent"
-          sx={{ fontFamily: "Garamond" }}
-        />
-        <FormControlLabel
-          value="sold"
-          control={<Radio />}
-          label="Sold Listings"
-          sx={{ fontFamily: "Garamond" }}
-        />
-      </RadioGroup>
-    </FormControl>
-  );
-};
 
 export const AddListingForm = () => {
-  const [user, loading, error] = useAuthState(auth);
+  const navigate = useNavigate();
+  const [user,setUser] = useState("")
   const formRef = useRef();
   const [type, setType] = useState("");
   const [street, setStreet] = useState("");
@@ -121,42 +42,77 @@ export const AddListingForm = () => {
   const [description, setDescription] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if( user) {
+    if (user) {
       let listed_by = user.displayName;
     }
-    const docData = {
-      street,
-      city,
-      state,
-      zip,
-      bedrooms,
-      bathrooms,
-      price,
-      description,
-      listed_by: user.displayName,
-      listed_at: serverTimestamp(),
-    };
-    const collRef = collection(db, `listings/${type}/properties`);
+    //const [ imageURL, setImageUrl ] = useState([]);
+   // const [ progress, setProgress ] = useState(0);
+    //const uploadHandler = (e) => {
+      e.preventDefault();
+      const file = e.target[ 0 ].files[ 0 ];
+      //uploadFiles(file);
+   // };
+  /*  const uploadFiles = (file) => {
+      //
+      if (!file) return;
+      const storageRef = ref(storage, `pictures/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
 
-    console.log(docData);
-
-    try {
-      await addDoc(collRef, { ...docData }).then((res) => {
-        if (res !== null) {
-          const listingId = res.id;
-          auditLogger('Added Listing', res.id, user.uid).then(() => {
-            
-          })
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const prog = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setProgress(prog);
+        },
+        (error) => console.log(error),
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setImageUrl(...imageURL, downloadURL);
+          });
         }
-      });
-    } catch (error) {
-      console.log(error);
-    }
-
-  };
-
+      );
+    }; */
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      const listed_at = serverTimestamp();
+      const listed_by = user.displayName;
+      const docData = {
+        street,
+        city,
+        state,
+        zip,
+        bedrooms,
+        bathrooms,
+        price,
+        description,
+        listed_by: user.displayName,
+        listed_at: serverTimestamp(),
+      };
+      const collRef = collection(db, `listings/${type}/properties`);
+      try {
+        await addDoc(collRef, { ...docData }).then((res) => {
+          if (res !== null) {
+            auditLogger("Added Listing", res.id, auth.currentUser.uid);
+            <Alert severity="success">Listing Added</Alert>;
+            setTimeout(() => { }, 1000);
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  }
   useEffect(() => {
-
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      }
+    });
+    if(user){
+      setUser(user);
+    }
   }, []);
 
   return (
@@ -180,8 +136,7 @@ export const AddListingForm = () => {
         }}
         onSubmit={handleSubmit}
       >
-
-        <UseRadioGroup
+       <UseRadioGroup
           aria-label="listing-type"
           onChange={(e) => setType(e.target.value)}
           name="type"
@@ -190,14 +145,16 @@ export const AddListingForm = () => {
             fontFamily: "Garamond",
             alignItems: "center",
             fontSize: "20px",
+            
           }}
         />
+          
         <TextField
           aria-label="street"
           name="street"
           label="Street Address"
           onChange={(e) => setStreet(e.target.value)}
-          sx={{ fontFamily: "Garamond", width: "80%" }}
+          sx={{ fontFamily: "Garamond", width: "80%",backgroundColor: "white" }}
         />
         <TextField
           name="city"
@@ -235,7 +192,8 @@ export const AddListingForm = () => {
           onChange={(e) => setPrice(e.target.value)}
           sx={{ fontFamily: "Garamond", width: "80%", fontSize: "18px" }}
         />
-        <TextareaAutosize
+        <Input 
+          component="textarea"
           placeholder="Property Details"
           minRows={8}
           maxRows={12}
@@ -249,13 +207,14 @@ export const AddListingForm = () => {
             fontSize: "18px",
           }}
         />
-       
+        <Input id="contained-button-file" multiple type="file" accept="/image/*"></Input>
+        <Button variant="contained"  sx={{padding:'10px'}}>Upload</Button>
         <Button type="submit" variant="contained" onClick={handleSubmit}>
           Add Property
         </Button>
       </Box>
     </Paper>
-  );
+)  
 };
 
 export default AddListingForm;

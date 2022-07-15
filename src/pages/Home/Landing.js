@@ -65,9 +65,7 @@ export const Landing = () => {
     },
   ];
   const searchRef = useRef();
-  const [value, loading, error] = useDownloadURL(
-    referenced(storage, "images/mncdevelopmentlogo.jpg")
-  );
+
 
   const DownloadURL = () => {
     const reference = referenced(storage, "images/mncdevelopmentlogo.jpg");
@@ -97,12 +95,12 @@ export const Landing = () => {
     );
   };
   const handleSearch = async () => {
-    const collRef = collection(db, type);
+    const collRef = collection(db, `listings/${type}/properties`);
     const q = query(collRef, where(searchQuery, "==", "zip"));
     await getDocs(q).then(async (doc) => {
       if (doc.exists) {
         console.log(doc.data());
-        navigate(`/${type}/${doc.data().id}`);
+        
       } else {
         console.log("No such document!");
       }

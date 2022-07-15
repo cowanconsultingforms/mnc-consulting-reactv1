@@ -4,20 +4,11 @@ import app, { storage, db } from "../../firebase";
 import { getDoc ,onSnapshot,query,orderBy,doc,getDocs} from "firebase/firestore";
 import { async } from "@firebase/util";
 import { useCollectionData,useDocument ,useCollection, useCollectionOnce} from "react-firebase-hooks/firestore";
-import { Container,Form ,Table} from "rsuite";
+import {Box,TextField} from '@mui/material';
 import { useDownloadURL } from "react-firebase-hooks/storage";
 import PropTypes from "prop-types";
 
 
-  const TextField = forwardRef((props, ref) => {
-  const { name, label, accepter, ...rest } = props;
-  return (
-    <Form.Group controlId={`${name}-4`} ref={ref}>
-      <Form.ControlLabel>{label} </Form.ControlLabel>
-      <Form.Control name={name} accepter={accepter} {...rest} />
-    </Form.Group>
-  );
-  });
 const ForSaleListing = ({ type , docId, street, city, state, zip, description, listed_at, listed_by, price, images, id }) => {
 
   const q = query(db,`${type}`)

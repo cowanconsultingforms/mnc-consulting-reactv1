@@ -16,12 +16,14 @@ import { Container } from "rsuite";
 import "./App.css";
 import { Box, Stack } from '@mui/material';
 import { useAuthState } from "react-firebase-hooks/auth";
-import { query, where,collection,getDoc } from "firebase/firestore";
 import { createTheme,ThemeProvider } from "@mui/system";
 import { onAuthStateChanged } from "firebase/auth";
 import {Typography} from "@mui/system";
 import UploadImages from "./pages/Admin/UploadImages";
 
+import { query, where, collection,onSnapshot,getDoc } from "firebase/firestore";
+import { setPersistence } from "firebase/auth";
+import {setLocalPersistence} from './firebase.js';
 export const App = () => {
   // const queryRef = query(collRef, query => query.where('Role', '==', 'Administrator'));
   //hook to check for current user
@@ -52,34 +54,28 @@ export const App = () => {
     }
   }
 
-  useEffect(() => {
-    if (user) {
-      document.getElementById("login-page").style.display = "none";
-      document.getElementById('logout').style.display = "list-item";
-    }
-    if(!user){
-      document.getElementById('logout').style.display = "none";
-      document.getElementById("login-page").style.display = "list-item"; 
-    }
-    const unsubscribe = onAuthStateChanged(auth,(userID)=>{
-      if(user){
+  /*useEffect(() => {
+    
+    onAuthStateChanged(auth, (userChanged) => {
+      if(userChanged){
+        setCurrentUser(userChanged.email);
+        getUserInfo();
+        console.log(currentUser);   
         document.getElementById("login-page").style.display = "none";
-        document.getElementById('logout').style.display = "list-item";
-      }
-      else{
+        document.getElementById("logout").style.display = "list-item";
+      }else{
+        setCurrentUser(null);
+        document.getElementById("logout").style.display = "none";
         document.getElementById("login-page").style.display = "list-item";
-        document.getElementById('logout').style.display = "none";
       }
-      return unsubscribe;
-    })
-  }, []);
+    });
+  }, []); */
 
   //returns the navbar on every page, and each route corresponds to a different page
   //the navbar is maintained in the NavBar component ,and is designed to show different options depending on whether the user
   //is signed in and whether they are an administrator
 
   return (
-   
     <div className="App">
       <Box
         component="div"
@@ -97,15 +93,17 @@ export const App = () => {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/login" element={<AuthPage title="Login" />} />
         <Route path="/register" element={<AuthPage title="Register" />} />
+
+
+        <Route path="/listings" element={<ListingPage/>} />
         <Route path="/listings/rentals" element={<ListingPage type="rentals" />} />
+
         <Route
           path="/create-profile"
           element={<AuthPage title="New User Profile" />}
         />
-      
       </Routes>
     </div>
-  
   );
 };
 //  <Route path="/editListing/:id" element={<EditDocs database={database}/>} />

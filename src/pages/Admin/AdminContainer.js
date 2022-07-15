@@ -5,28 +5,12 @@ import { auth, db } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { query, where, getDoc,collection } from "firebase/firestore";
-import FileUploader from "./UploadImages";
-import { Box, Typography,Button,Divider,Stack } from "@mui/material";
+import { Box, Typography ,Stack} from "@mui/material";
 import SearchUser from "./SearchUser";
 import ViewAuditLog from "./ViewAuditLog";
-import {Item} from "./AdminPageComponents";
-const Header = () => {
-  return (
-    <Typography
-      variant="h4"
-      sx={{ fontWeight: "bold", fontFamily: "Garamond" }}
-    >
-      Administrator Dashboard
-    </Typography>
-  );
-};
-const HeaderTwo = () => {
-  return (
-    <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-      Add New Listing
-    </Typography>
-  );
-};
+
+
+
 const AdminPage = ({ role }) => {
   const [user, loading, error] = useAuthState(auth);
   
@@ -58,11 +42,13 @@ const AdminPage = ({ role }) => {
     () => {});
 
   return (
-    <Stack  className="admin-container"
-    direction="column"
-    sx={{display:'flex',flexDirection:'column',margin:'5%',fontFamily:'Garamond'}}>
-     <Item> <Header /></Item>
-     <Item> <Divider /></Item>
+    <Stack className="admin-container" component="div">
+      <Typography
+        variant="h5"
+        sx={{ fontWeight: "bold", fontFamily: "Garamond", marginTop: "5%",fontSize:'30px' }}
+      >
+        Administrator Dashboard
+      </Typography>
       <AddListingForm />
       <SearchUser />
     </Stack>

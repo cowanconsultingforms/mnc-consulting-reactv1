@@ -85,7 +85,6 @@ div#admin-flex-box {
 }
 .search-user-container {
   display: flex;
-  position: absolute;
   text-align: center;
   background-color: #eeeeee;
   color: rgb(128, 128, 128);

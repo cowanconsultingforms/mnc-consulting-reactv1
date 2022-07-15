@@ -1,5 +1,23 @@
-/*
+import { db, auth, app, dbRef,} from "../../firebase"
+import { useAuthState } from "react-firebase-hooks/auth";
+import { Link} from "react-router-dom";
 
+import {
+  query,
+  getDocs,
+  where,
+  collection,
+  serverTimestamp,
+  orderBy,
+  onSnapshot, 
+  addDoc,
+  doc, 
+} from "firebase/firestore";
+import {
+  useCollection,
+  useCollectionData,
+  useDocumentData
+} from "react-firebase-hooks/firestore";
 import * as React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,16 +27,51 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-/* function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
+const Datatable = () =>{
+  
+  const [user, loading, error] = useAuthState(auth);
+  const [data, setData] = React.useState("");
+  const formRef = React.useRef();
+  const [type, setType] = React.useState("");
+  const [street, setStreet] = React.useState("");
+  const [city, setCity] = React.useState("");
+  const [state, setState] = React.useState("");
+  const [zip, setZip] = React.useState("");
+  const [bedrooms, setBedrooms] = React.useState("");
+  const [bathrooms, setBathrooms] = React.useStateuseState("");
+  const [price, setPrice] = React.useState("");
+  const [listed_at, setListedAt] = React.useState("");
+  const [listed_by, setListedBy] = React.useState("");
+  const [images, setImages] = React.useState(""); 
+  const [description, setDescription] = React.useState("");
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      let list = [];
+      try {
+        const querySnapshot = await getDocs(collection(db,"listings"));
+        querySnapshot.forEach((doc) => {
+        list.push({id: doc.id, ...doc.data()}); 
+        });
+        setData(list);
+        console.log(list)
+    } catch (err)
+    {
+      console.log(err);
+    }
+   
+    fetchData()
+  };
+},[]);
+  console.log(data)
+};
+
+
+
+
+function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
-*/
 
 const rows = [
   createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
@@ -61,4 +114,4 @@ export default function BasicTable() {
     </TableContainer>
   );
 }
-*/
+

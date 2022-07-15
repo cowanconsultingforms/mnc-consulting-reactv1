@@ -1,22 +1,13 @@
 import { AccountPagePortfolio, StyledProfileLabel, StyledInput,AccGridInfo } from  "../../components/AccountStyles";
 import { auth, db } from "../../firebase";
 import React, { useState, forwardRef, useRef } from "react";
-import { Form } from "rsuite";
+import {Box,TextField} from '@mui/material'
 import { useAuthState } from "react-firebase-hooks/auth";
 import { where ,getDoc} from "firebase/firestore";
+import accountAuditLogger from './AccountPageComponents';
 
 
-const PortfolioField = forwardRef((props, ref) => {
-  const { name, label, accepter, ...rest } = props;
-  return (
-    <Form.Group controlId={`${name}`} ref={ref}>
-      <Form.ControlLabel>{label} </Form.ControlLabel>
-      <Form.Control name={name} accepter={accepter} {...rest} />
-    </Form.Group>
-  );
-});
-export const AccountPagePortfolioBox = () => {
-  const user = auth.currentUser;
+export const ProfileEdit = () => {
   const [formValue, setFormValue] = useState({
     min: "",
     max:""})
@@ -40,31 +31,12 @@ export const AccountPagePortfolioBox = () => {
     }
   };
   useEffect(() => {
-    if (user) {
-      setFormValue({
-        uid: user.uid,
 
-      })
-    }
   })
   
   return (
     <div className="account-page-portfolio">
-      <AccGridInfo>
-        <h4 style="padding-bottom:15px; position:relative;">Portfolio</h4>
-        <Form ref={formRef}
-          onChange={setFormValue}
-        value={formValue}>
-          <PortfolioField
-            name="minimum"
-          label="Minimum Budget">
-        </PortfolioField>
-        
-          <StyledProfileLabel>Maximum Budget</StyledProfileLabel>
-          <StyledInput id="account-page-maximum-budget"></StyledInput>
-      
-          </Form>
-      </AccGridInfo>
+
     </div>
   );
 };
