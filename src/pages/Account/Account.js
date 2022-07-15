@@ -25,21 +25,23 @@ export const AccountPage = () => {
     const email = auth.currentUser.email;
     const q = query(db,"users",where("email","==",email));
     try {
-    const docRef = await getDoc(db, "users", email).then((doc) => {
+      const docRef = await getDoc(db, "users", email).then((doc) => {
         setData(...doc.data());
 
-      const docRef = await getDoc(q).then((doc)=>{
-        setData(...doc.data())
+        const docRef = await getDoc(q).then((doc) => {
+          setData(...doc.data())
 
-        console.log(data);
-        return data.map((field, idx) => {
-          <TextField key={idx} label={field.label} value={field.value} />;
+          console.log(data);
+          return data.map((field, idx) => {
+            <TextField key={idx} label={field.label} value={field.value} />;
+          });
         });
-      });
+      })
     } catch (err) {
       console.log(err);
     }
-  };
+    };
+    
 
   useEffect(() => {}, [data]);
 
