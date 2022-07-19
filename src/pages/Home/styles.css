@@ -11,11 +11,7 @@ button#login-page {
  button#login-page :hover{
     opacity: 0.8;
  }
- div#rs-btn-toolbar{
-   justify-content: center;
-   align-items: center;
-   width:60%;
- }
+
  .input{
      width:50%;
      color:white;

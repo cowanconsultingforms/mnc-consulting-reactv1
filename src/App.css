@@ -217,3 +217,18 @@ div#rs-btn-toolbar {
 .btn :hover {
   opacity: 0.8;
 }
+.MuiOutlinedInput-root{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+#root > div > div.home-page.MuiBox-root.css-0 > div.search-box > form > div{
+  width: 100%;
+  background: rgb(238, 237, 237);
+}
+#root > div > div.home-page.MuiBox-root.css-0 > div.search-box > form > button{
+  background-color: black;
+  color: white;
+}
