@@ -1,29 +1,33 @@
-import AccountPage from "../../components/Account/Account";
-import SignOutBox from "../../components/Account/SignOutBox";
+import { onAuthStateChanged, updateCurrentUser } from "firebase/auth";
+import { deleteDoc, doc, getDoc, where, query } from "firebase/firestore";
+import React, { useEffect, useState, Container } from "react";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../../firebase";
+import { db, userSignOut } from "../../firebase";
+import { Box, TextField, Stack,Grid } from "@mui/material";
+import { useAuth } from "../../context/AuthContext";
+export const AccountPage = () => {
+  //hook to get current user
 
-export const AccountProfile = () => {
+  const getUserInfo = async () => {
+    const email = auth.currentUser.email;
+    const q = query(db, "users", where("email", "==", email));
+    try {
+      const docRef = await getDoc(db, "users", email).then((doc) => {
+        setData(...doc.data());
 
-    const accountAuditLogger = async ({ action }) => {
-      if (action === "Delete Account") {
-        const actionLogged = "Deleted Account";
-      }
-      try {
-        const user = auth.currentUser;
-        const userName = user.displayName;
-        const uid = user.uid;
-        const timestamp = serverTimestamp();
-        const collectionRef = collection(db, "auditLogs");
-        await addDoc(collectionRef, { action, userName, uid, timestamp })
-          .then((docRef) => {
-            console.log("Audit Log Created");
-            console.log(JSON.stringify(docRef));
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-}
-export default AccountProfile;
+        console.log(data);
+        return data.map((field, idx) => {
+          <TextField key={idx} label={field.label} value={field.value} />;
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  return <Stack className="account-page-container" component="div">
+  </Stack>;
+};
+
+export default AccountPage;

@@ -4,7 +4,7 @@ import React, { useState, forwardRef, useRef } from "react";
 import {Box,TextField} from '@mui/material'
 import { useAuthState } from "react-firebase-hooks/auth";
 import { where ,getDoc} from "firebase/firestore";
-import accountAuditLogger from './AccountPageComponents';
+import accountAuditLogger from './AccountAuditLogger';
 
 
 export const ProfileEdit = () => {

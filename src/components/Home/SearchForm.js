@@ -1,7 +1,8 @@
 import { Box, TextField, IconButton } from "@mui/material";
 import SearchTwoToneIcon from "@mui/icons-material/SearchTwoTone";
-
-export const SearchForm = () => {
+import React,{useState} from "react";
+import {collection,where,getDocs,query} from 'firebase/firestore';
+export const SearchForm = (props) => {
   const formRef = useRef();
   const [searchQuery, setSearchQuery] = useState("");
   

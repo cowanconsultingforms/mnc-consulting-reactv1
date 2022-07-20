@@ -15,27 +15,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <BrowserRouter>
-   <AuthProvider>
-     <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/account" element={<AccountPage />} />
-        <Route path="/admin" element={<AdminContainer />} />
-        <Route path="/admin/add-images" element={<UploadImages />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/login" element={<AuthPage title="Login" />} />
-        <Route path="/register" element={<AuthPage title="Register" />} />
 
-        <Route path="/listings" element={<ListingPage />} />
-   
-
-        <Route
-          path="/create-profile"
-          element={<AuthPage title="New User Profile" />}
-        />
-      </Routes>
-      </AuthProvider>
-   
+   <App />
     
   </BrowserRouter>
 );
