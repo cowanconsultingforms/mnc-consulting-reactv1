@@ -7,6 +7,8 @@ import {
   signOut,
   signInWithPopup,
   sendPasswordResetEmail,
+  setPersistence,
+  browserLocalPersistence,
 } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 import {
@@ -17,13 +19,11 @@ import {
   query,
   serverTimestamp,
   where,
-  setDoc,
   doc,
 } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { Input } from "rsuite";
-import { AuthContext } from './hooks/AuthContext';
-import React, { useContext } from "react";
+import React from "react";
+import { TextField } from "@mui/material";
 //Contains all the firebase configuration
 export const auditLogger = async ({
   action = "Created Account",
@@ -68,7 +68,12 @@ export const provider = new GoogleAuthProvider();
 export const storage = getStorage(app);
 
 export const database = getDatabase(app);
+export const setLocalPersistance = ()=>{
+setPersistence(auth,browserLocalPersistence);
+}
+export const passwordUpdate = async (auth, password) => {
 
+}
 export const signUp = async (email, password) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(
@@ -91,18 +96,18 @@ export const signUp = async (email, password) => {
     return { error: error.message };
   }
 };
-export const createUser = async(email,userName)=>{
+export const createUser = async (email, userName) => {
   const AuthToken = auth.currentUser.getIdToken();
-  localStorage.setItem(JSON.stringify('user', AuthToken));
+  localStorage.setItem(JSON.stringify("user", AuthToken));
   const docRef = doc(db, "users");
-  await addDoc(collection(db, "users"), {
+  await addDoc(docRef, {
     uuid: auth.currentUser.uid,
     email: email,
     userName: email.split("@")[0],
     AccountType: "Regular",
     CreatedOn: serverTimestamp,
   });
-}
+};
 export const signIn = async (email, password) => {
   try {
     const userCredential = await signInWithEmailAndPassword(
@@ -172,22 +177,19 @@ export const userSignOut = async () => {
 export const googleProvider = new GoogleAuthProvider();
 export const signInWithGoogle = async () => {
   try {
-    const res =  signInWithPopup(auth, googleProvider).then((res)=>{
+    const res = signInWithPopup(auth, googleProvider).then((res) => {
       const user = res.user;
       const q = query(collection(db, "users"), where("uid", "==", user.uid));
       const docs = getDocs(q);
-    if (docs.docs.length === 0) {
-       addDoc(collection(db, "users"), {
-        uid: user.uid,
-        name: user.displayName,
-        authProvider: "google",
-        email: user.email,
-      });
-    }
-    })
-    
-   
-   
+      if (docs.docs.length === 0) {
+        addDoc(collection(db, "users"), {
+          uid: user.uid,
+          name: user.displayName,
+          authProvider: "google",
+          email: user.email,
+        });
+      }
+    });
   } catch (err) {
     console.error(err);
     alert(err.message);
@@ -204,7 +206,7 @@ export const sendPasswordReset = async (email) => {
   }
 };
 export const getUserInfo = async () => {
-  const user = auth.currentUser;
+  const user = auth.currentUser.toString();
   if (user !== null) {
     user.providerData.forEach((profile) => {
       console.log("Sign-in provider: " + profile.providerId);
@@ -214,14 +216,13 @@ export const getUserInfo = async () => {
       console.log("  Photo URL: " + profile.photoURL);
       return (
         <div>
-          <Input value={profile.displayName} />
-          <Input value={profile.email} />
-          <Input value={profile.uid} />
+          <TextField value={profile.displayName} />
+          <TextField value={profile.email} />
+          <TextField value={profile.uid} />
         </div>
       );
     });
   }
 };
-
 
 export default app;

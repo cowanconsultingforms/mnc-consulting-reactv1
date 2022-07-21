@@ -4,25 +4,6 @@ import {useController,useForm,useWatch} from 'react-hook-form';
 import {useState,useEffect} from 'react';
 import { Form } from "rsuite";
 
-const Field = React.forwardRef((props, ref) => {
-  const { name, message, label, accepter, error, ...rest } = props;
-  return (
-    <Form.Group
-      controlId={`${name}`}
-      ref={ref}
-      className={error ? "has-error" : ""}
-    >
-      <Form.ControlLabel>{label} </Form.ControlLabel>
-      <Form.Control
-        name={name}
-        accepter={accepter}
-        errorMessage={error}
-        {...rest}
-      />
-      <Form.HelpText>{message}</Form.HelpText>
-    </Form.Group>
-  );
-});
 
 export const Controller = ({control,register,name,rules,render} )=>{
   const value= useWatch({control,name})
