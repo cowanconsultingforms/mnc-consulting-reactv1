@@ -1,11 +1,11 @@
 import React from 'react';
-import LandingFooter from '../../components/Constants/Footer';
+import Footer from '../../components/Constants/Footer';
 import Landing from '../../components/Home/Landing';
-import AuthContext from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import propTypes from "prop-types";
 
 export const HomePage = () => {
-    
+  const { user,userData } = useAuth();
     return (
         <React.Fragment>
             <div className="home-page-top">
@@ -13,10 +13,14 @@ export const HomePage = () => {
             </div>
        
         <div className="landing-bottom">
-          <LandingFooter className="footer" />
+          <Footer className="footer" />
         </div>
       </React.Fragment>
     );
 }
 
 export default HomePage;
+
+HomePage.propTypes = {
+
+}

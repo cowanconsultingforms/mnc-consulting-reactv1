@@ -1,9 +1,10 @@
 import React from "react";
 import Contact from "../../components/Contact/Contact";
 import ContactForm from "../../components/ContactForm";
-import { DownloadLogo } from "../../components/Contact/DownloadLogo";
+import { DownloadLogo } from "../../components/constants/DownloadLogo";
+import { Footer } from "../../components/constants/Footer";
 import Email from "../../components/Contact/Email";
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 
 const ContactPage = (props) => {
