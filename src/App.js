@@ -16,14 +16,11 @@ import {
   onSnapshot,
   getDoc,
 } from "firebase/firestore";
-import { setPersistence } from "firebase/auth";
-import { setLocalPersistence } from "./firebase.js";
-import { useAuth } from "./context/AuthContext";
+import { setLocalPersistance } from "./firebase.js";
 import AccountPage from "./pages/Account/index";
 import Contact from "./pages/Contact/index";
 import HomePage from "./pages/Home/index";
 import AdminDashboard from "./pages/Admin";
-import { AuthProvider } from "./context/AuthContext";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { onAuthStateChanged } from "@firebase/auth";
 export const App = () => {
@@ -41,7 +38,7 @@ export const App = () => {
 
 useEffect(() => {
   const unsubscribe = onAuthStateChanged(auth, (user) => {
-    setLocalPersistence();
+    setLocalPersistance();
     if (!loading && !error) {
       const loadUser = async () => {
         if (user) {

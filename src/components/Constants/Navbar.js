@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { auth, db } from "../../firebase";
 import { Divider } from "@mui/material";
-import { useAuth } from '../../context/AuthContext';
 import {propTypes} from "prop-types";
 const NavBarItem = styled.button`
   border: none;

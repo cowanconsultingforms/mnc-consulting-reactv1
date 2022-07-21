@@ -14,7 +14,7 @@ import {
   signInWithCredential,
   EmailAuthProvider,
 } from "firebase/auth";
-import React from "react";
+import React,{useState,useEffect} from "react";
 
 export const ChangePassword = () => {
   const [updatePassword, updating, error] = useUpdatePassword(auth);
@@ -30,7 +30,7 @@ export const ChangePassword = () => {
       const credential = EmailAuthProvider.credential(user, oldPassword);
       await reauthenticateWithCredential(user, credential).then(() => {
         if (newPassword === confirmPassword) {
-          const pwChange = useUpdatePassword(auth);
+          
         }
       });
     } catch (error) {
@@ -42,9 +42,9 @@ export const ChangePassword = () => {
 
   useEffect(() => {
     return () => {
-      effect;
+     
     };
-  }, [input]);
+  }, []);
 
   return (
     <React.Fragment>

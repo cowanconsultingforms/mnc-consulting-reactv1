@@ -1,5 +1,4 @@
 import React, { useEffect,useState} from "react";
-import { Container,Panel ,PlaceholderParagraphProps} from "rsuite";
 import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../../firebase";
 import { ImageBox } from "../Custom/Containers";
@@ -57,9 +56,9 @@ export const Footer = () => {
   },[]);
   
   return (
-    <React.Fragment>
+    <Box component="div">
       <Grid spacing={2}
-        container="true"
+        container
         component="div"
         sx={{
           display: "flex",
@@ -109,11 +108,12 @@ export const Footer = () => {
         }
         </Grid>
         </Grid>
-      <div>
+        <Divider />
         {" "}
-        <Panel className="footer-bottom">
-          <Container
-            style={{
+        <div className="footer-bottom">
+          <Box
+          component="span"
+            sx={{
               margin: "0in",
               marginBottom: ".0001pt",
               textAlign: "center",
@@ -122,21 +122,24 @@ export const Footer = () => {
             }}
           >
             Copyright © MNC Development, Inc. 2008-present. All rights reserved.
-            <Container
-              style={{
+            </Box>
+            <Box
+            component="span"
+              sx={{
                 margin: "0in",
                 marginBottom: ".0001pt",
                 textAlign: "center",
                 fontSize: "10.0pt",
                 lineHeight: "2",
               }}
-            ></Container>
+            ></Box><Box>
             31 Buffalo Avenue, Brooklyn, New York 11233|Phone:1-718-771-5811 or
             1-877-732-3492|Fax: 1-877-760-2763 or 1-718-771-5900
              <Link to={'/contact'}>   info@mncdevelopment.com</Link>
-          </Container>
-          <Container
-            style={{
+         </Box>
+          <Box
+          component="span"
+            sx={{
               margin: "0in",
               marginBottom: ".0001pt",
               textAlign: "center",
@@ -146,9 +149,10 @@ export const Footer = () => {
           >
             MNC Development and the MNC Development logos are trademarks of MNC
             Development, Inc.
-          </Container>
-          <Container
-            style={{
+          </Box>
+          <Box
+            component="span"
+            sx={{
               margin: "0in",
               marginBottom: ".0001pt",
               textAlign: "center",
@@ -160,10 +164,11 @@ export const Footer = () => {
             supports the principles of the Fair Housing Act and the Equal
             Opportunity Act. Listing information is deemed reliable, but is not
             guaranteed
-          </Container>
-        </Panel>
+          </Box>
+       
       </div>
-    </React.Fragment>
+      </Box>
+          
   );
 }
 export default Footer;

@@ -8,8 +8,6 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 
-import { useAuth } from '../Constants/constants';
-
 export const RegisterForm = ({ title }) => {
 
   const [email, setEmail] = useState("");

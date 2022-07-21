@@ -1,5 +1,4 @@
 import React, { useEffect,useState } from "react";
-import { useDownloadURL } from "react-firebase-hooks/storage";
 import { useNavigate } from "react-router-dom";
 import {Box} from '@mui/material'
 import { auth, db,storage } from "../../firebase";
@@ -9,22 +8,14 @@ import {NewUserProfile} from "../../components/Authentication/NewUserProfile";
 import { ref } from "firebase/storage";
 import  {ImageBox} from "../../components/Custom/Containers";
 import './styles.css';
-import {useAuth} from "../../context/AuthContext";
 import PropTypes from "prop-types";
 import MNCLogo from "../../components/Constants/MNCLogo";
 
 
 export const AuthPage = (props) => {
   const navigate = useNavigate();
-  const { user,logout } = useAuth();
-  if((props.user && props.title)=== 'Login' || (!user && props.title)=== 'Register'){
-    navigate('/');
-  }else if(user && props.title=== 'Logout'){
 
-  }
-  const [reference, loading, error] = useDownloadURL(
-    ref(storage, "images/mncdevelopmentlogo.jpg")
-  );
+
   const [image,setImage] = useState('');
   
   const handleFormRender = (title)=>{
@@ -40,10 +31,14 @@ export const AuthPage = (props) => {
   }
 
   useEffect(() => {
-    if (props.user) {
-      navigate('/account');
-    }
-  }, [navigate, reference,props.user]);
+      if (
+        (props.user && props.title) === "Login" ||
+        (props.user && props.title) === "Register"
+      ) {
+        navigate("/");
+      } else if (props.user && props.title === "Logout") {
+      }
+  }, [navigate,props.user,props.title]);
 
   return (
     <Box className="auth-page" style={{display:'flex',flexDirection:'column',width:'100%',mt:8}}>

@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 import { db, userSignOut } from "../../firebase";
 import { Box, TextField, Stack,Grid } from "@mui/material";
-import { useAuth } from "../../context/AuthContext";
 
 export const AccountPage = () => {
   //hook to get current user

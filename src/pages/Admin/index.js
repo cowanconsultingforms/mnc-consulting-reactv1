@@ -1,11 +1,10 @@
-import propTypes from "prop-types";
+import PropTypes from "prop-types";
 import React,{useEffect,useState} from "react";
 import AddListingForm from "../../components/Admin/AddListing";
 import AddListing from "../../components/Admin/AddListing";
 import SearchUser from "../../components/Admin/SearchUser";
 import UploadImages from "../../components/Admin/UploadImages";
 import { Box, Divider, Stack } from "@mui/material";
-import { useAuth } from "../../context/AuthContext";
 import { db } from '../../firebase';
 import { where, getDoc, query,collection } from 'firebase/firestore';
 import { useNavigate } from "react-router-dom";
@@ -14,7 +13,7 @@ import ViewAuditLog from "../../components/Admin/ViewAuditLog";
 
 
 const AdminPage = (props) => {
-  const { user } = useAuth();
+  
   
   const navigate = useNavigate();
   const [admin, setAdmin] = useState(false);
@@ -28,7 +27,7 @@ const AdminPage = (props) => {
         .then((doc) => {
           if (doc.data().role === "Administrator") {
             setAdmin(true);
-            setCurrentuser(user);
+            setCurrentuser(props.user);
           }
         })
         .catch((err) => {
@@ -37,7 +36,7 @@ const AdminPage = (props) => {
     } catch (error) {
       console.log(error);
     }
-    if (user.email === "") {
+    if (props.user.email === "") {
     }
   };
   useEffect(
@@ -50,4 +49,9 @@ const AdminPage = (props) => {
   );
 };
 
+AdminPage.propTypes = {
+  currentUser: PropTypes.object,
+  
+
+}
 export default AdminPage;

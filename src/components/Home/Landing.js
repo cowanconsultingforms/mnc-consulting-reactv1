@@ -25,6 +25,8 @@ import {
 import { ColorTabs } from "./ColorTabs";
 import { useEffect } from "react";
 import MNCLogo from "../Constants/MNCLogo";
+import{ SearchForm} from './SearchForm';
+import { propTypes } from "react-bootstrap/esm/Image";
 
 const inputProps = {
   type: "search",
@@ -60,6 +62,11 @@ export const Landing = () => {
 
   const searchRef = useRef();
 
+  useEffect(() => {
+    const loadLogo = () => {
+      return;
+    }
+  })
 
 
   return (
@@ -73,74 +80,78 @@ export const Landing = () => {
         flexDirection: "column",
       }}
     >
-        {<MNCLogo />}
-        <Divider />
-        <Grid
-          container
-          spacing={0}
-          justifyContent="center"
-          alignItems="bottom"
+      {<MNCLogo />}
+      <Divider />
+      <Grid
+        container
+        spacing={0}
+        justifyContent="center"
+        alignItems="bottom"
         className="search-button-grid"
-        >
-          <Grid item colSpan={4} order={1}>
-            <Button
-              ref={searchRef}
-              className="buy-button"
-              value={type}
-              style={{
-                fontSize: "16px",
-                color: "white",
-                backgroundColor: "black",
-                fontWeight: "bold",
-                padding: "15px",
-                fontFamily: "Garamond",
-              }}
-              onClick={() => setType("forSale")}
-            >
-              Buy
-            </Button>
-          </Grid>
-
-          <Grid item colSpan={4} order={2}>
-            <Button
-              ref={searchRef}
-              className="rent-button"
-              style={{
-                fontWeight: "bold",
-                padding: "15px",
-                fontSize: "16px",
-                color: "white",
-                backgroundColor: "#858181",
-                fontFamily: "Garamond",
-              }}
-              value={type}
-              onClick={() => setType("forRent")}
-            >
-              Rent
-            </Button>
-          </Grid>
-          <Divider />
-          <Grid item colSpan={4} order={3}>
-            <Button
-              ref={searchRef}
-              value={type}
-              className="sold-button"
-              style={{
-                borderBox: "solid 1px black",
-                textAlign: "center",
-                padding: "15px",
-                fontSize: "16px",
-                width: "90px",
-                fontFamily: "Garamond",
-                backgroundColor: "lightgrey",
-              }}
-              onClick={() => setType("sold")}
-            >
-              Sold
-            </Button>
-          </Grid>
+      >
+        <Grid item colSpan={4} order={1}>
+          <Button
+            ref={searchRef}
+            className="buy-button"
+            value={type}
+            style={{
+              fontSize: "16px",
+              color: "white",
+              backgroundColor: "black",
+              fontWeight: "bold",
+              padding: "15px",
+              fontFamily: "Garamond",
+            }}
+            onClick={() => setType("forSale")}
+          >
+            Buy
+          </Button>
         </Grid>
+
+        <Grid item colSpan={4} order={2}>
+          <Button
+            ref={searchRef}
+            className="rent-button"
+            style={{
+              fontWeight: "bold",
+              padding: "15px",
+              fontSize: "16px",
+              color: "white",
+              backgroundColor: "#858181",
+              fontFamily: "Garamond",
+            }}
+            value={type}
+            onClick={() => setType("forRent")}
+          >
+            Rent
+          </Button>
+        </Grid>
+        <Divider />
+        <Grid item colSpan={4} order={3}>
+          <Button
+            ref={searchRef}
+            value={type}
+            className="sold-button"
+            style={{
+              borderBox: "solid 1px black",
+              textAlign: "center",
+              padding: "15px",
+              fontSize: "16px",
+              width: "90px",
+              fontFamily: "Garamond",
+              backgroundColor: "lightgrey",
+            }}
+            onClick={() => setType("sold")}
+          >
+            Sold
+          </Button>
+        </Grid>
+        <SearchForm type={type} />
+      </Grid>
     </Box>
   );
 };
+Landing.propTypes = {
+  type:propTypes.string
+}
 export default Landing;

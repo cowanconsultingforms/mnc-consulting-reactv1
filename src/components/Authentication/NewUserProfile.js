@@ -3,13 +3,12 @@ import { addDoc, collection, writeBatch } from "firebase/firestore";
 import { Footer } from "../Constants/Footer";
 import { Box, TextField, Button } from "@mui/material";
 import { db, auth } from "../../firebase";
-import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-
+import { useAuthState } from "react-firebase-hooks/auth";
 
 
 export const NewUserProfile = ({ title}) => {
-  const { user } = useAuth();
+  const [ user ] = useAuthState(auth);
   const batch = writeBatch(db);
   const navigate = useNavigate();
   const [isSubmit, setIsSubmit] = useState(false);

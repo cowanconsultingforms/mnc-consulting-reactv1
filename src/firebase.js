@@ -24,7 +24,6 @@ import {
 import { getStorage } from "firebase/storage";
 import React from "react";
 import { TextField } from "@mui/material";
-import { initializeApp as initializeAdmin } from 'firebase-admin/app';
 //Contains all the firebase configuration
 export const auditLogger = async ({
   action = "Created Account",
@@ -226,4 +225,4 @@ export const getUserInfo = async () => {
   }
 };
 
-export default{ app,sendPasswordReset,signInWithGoogle,createUser,signIn,setLocalPersistance,db,auth,};
+export default app;
