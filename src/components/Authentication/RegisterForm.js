@@ -9,9 +9,10 @@ import {
 } from "firebase/auth";
 import "./styles.css";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Footer } from "../Home/Footer";
+import { useAuth } from '../Constants/constants';
+
 export const RegisterForm = ({ title }) => {
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -123,7 +124,7 @@ export const RegisterForm = ({ title }) => {
           <Button onClick={resetPassword}>Forgot Password?</Button>
         </ButtonGroup>
       </Box>
-      <LandingFooter />
+     
     </div>
   );
 };
