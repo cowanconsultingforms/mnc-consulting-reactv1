@@ -36,8 +36,15 @@ export const ContactForm = (props) => {
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   return (
-    <Stack className="contact-form" component="div">
-      <Item><Typography variant="h4" sx={{fontFamily:'Garamond',alignItems:'center',justifyContent:'center'}}>Contact Form</Typography></Item>
+    <Stack
+      className="contact-form"
+      component="div"
+    >
+      <Item>
+        <Typography variant="h4" sx={{ fontFamily: 'Garamond', alignItems: 'center', justifyContent: 'center' }}>
+          Contact Form
+        </Typography>
+      </Item>
       <Item
         className="contact-form"
         component="form"
@@ -89,3 +96,5 @@ export const ContactForm = (props) => {
     </Stack>
   );
 };
+
+export default ContactForm;

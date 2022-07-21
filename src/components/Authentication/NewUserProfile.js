@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { addDoc, collection, writeBatch } from "firebase/firestore";
-import { LandingFooter } from "../Home/Footer";
+import { Footer } from "../Constants/Footer";
 import { Box, TextField, Button } from "@mui/material";
 import { db, auth } from "../../firebase";
-import "./styles.css";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-export const NewUserProfile = ({ title }) => {
+
+
+
+export const NewUserProfile = ({ title}) => {
+  const { user } = useAuth();
   const batch = writeBatch(db);
   const navigate = useNavigate();
-  const [user] = useAuthState(auth);
   const [isSubmit, setIsSubmit] = useState(false);
   const [formErrors, setFormErrors] = useState({});
   const [email, setEmail] = useState("");
@@ -151,9 +153,9 @@ export const NewUserProfile = ({ title }) => {
           Complete Registration
         </Button>
       </Box>
-      <LandingFooter />
+      <Footer />
     </React.Fragment>
   );
 };
 
-export default NewUserPage;
+export default NewUserProfile;

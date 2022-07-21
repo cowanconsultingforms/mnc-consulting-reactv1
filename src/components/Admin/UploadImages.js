@@ -10,7 +10,11 @@ import { db, storage } from "../../firebase";
 import { v4 } from "uuid";
 import { Box,Button, Typography } from '@mui/material';
 import {InputUnstyled} from '@mui/base';
-import {updateDoc,writeBatch,doc} from "firebase/firestore";
+import { updateDoc, writeBatch, doc } from "firebase/firestore";
+
+
+//component to upload images with listings
+
 export const UploadImages =({listingId}) => {
   const [imageUpload, setImageUpload] = useState(null);
   const [imageUrls, setImageUrls] = useState([]);

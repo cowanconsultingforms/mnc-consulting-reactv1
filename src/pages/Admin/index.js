@@ -1,35 +1,53 @@
 import propTypes from "prop-types";
-import React from "react";
+import React,{useEffect,useState} from "react";
 import AddListingForm from "../../components/Admin/AddListing";
-import AdminPage from "../../components/Admin/AdminContainer";
 import AddListing from "../../components/Admin/AddListing";
 import SearchUser from "../../components/Admin/SearchUser";
 import UploadImages from "../../components/Admin/UploadImages";
 import { Box, Divider, Stack } from "@mui/material";
 import { useAuth } from "../../context/AuthContext";
 import { db } from '../../firebase';
-import { where, getDoc,query } from 'firebase/firestore';
-export const AdminDashboard = (props) => {
+import { where, getDoc, query,collection } from 'firebase/firestore';
+import { useNavigate } from "react-router-dom";
+import ViewAuditLog from "../../components/Admin/ViewAuditLog";
+
+
+
+const AdminPage = (props) => {
   const { user } = useAuth();
+  
   const navigate = useNavigate();
   const [admin, setAdmin] = useState(false);
-  const userCollRef = collection(db, "users");
-  
-  const checkAdmin = async () => {
-    const email = props.user.email;
+  const [currentUser, setCurrentuser] = useState(null);
+  const checkAdmin = async() => {
     try {
-      const q = query(userCollRef, where("email", "===", props.user.email));
       
+      const userRef = collection(db,"users");
+      const q = query(userRef,where("email","==",props.user.email));
+      await getDoc(userRef)
+        .then((doc) => {
+          if (doc.data().role === "Administrator") {
+            setAdmin(true);
+            setCurrentuser(user);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (error) {
-      
+      console.log(error);
     }
-
+    if (user.email === "") {
+    }
   };
-  useEffect(() => {});
-  return <Stack className="admin-home-page" component="div" flexDirection="column">
-    <SearchUser />
-    <Divider />
-    <AddListing />
-  </Stack>;
+  useEffect(
+    () => {});
+
+  return (
+    <Stack className="admin-container" component="div">
+
+    </Stack>
+  );
 };
-export default AdminDashboard;
+
+export default AdminPage;

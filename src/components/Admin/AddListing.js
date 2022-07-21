@@ -24,7 +24,6 @@ import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import IconButton from "@mui/material/IconButton";
-import './styles.css';
 
 
 export const AddListingForm = () => {

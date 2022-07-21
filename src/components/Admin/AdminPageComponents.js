@@ -5,30 +5,11 @@ import { Paper } from '@mui/material';
 import * as React from 'react';
 import { Typography,Radio,FormControlLabel,RadioGroup,useRadioGroup,FormControl,FormLabel } from '@mui/material';
 import { useEffect, useState, useRef } from 'react';
-import propTypes from 'prop-types';
-
+import PropTypes from 'prop-types';
 
 export const Item = styled(Paper)({
-  
-
-
 })
-export const AdminHeader = (props) => {
-  
-  return (
-    <Typography
-      variant="h5"
-      sx={{
-        fontWeight: "bold",
-        fontFamily: "Garamond",
-        marginTop: "5%",
-        fontSize: "30px",
-      }}
-    >
-      Administrator Dashboard
-    </Typography>
-  );
-}
+
 
 
 export const auditLogger = async ({ action = "Added Listing",user }) => {
@@ -47,13 +28,7 @@ export const auditLogger = async ({ action = "Added Listing",user }) => {
     console.log(err);
   }
 }
-export const HeaderTwo = () => {
-  return (
-    <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-      Add New Listing
-    </Typography>
-  );
-};
+
 export const RadioButtonsGroup = ({ onChange }) => {
   return (
     <FormControl>

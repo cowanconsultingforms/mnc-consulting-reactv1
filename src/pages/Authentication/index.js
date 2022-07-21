@@ -5,13 +5,13 @@ import {Box} from '@mui/material'
 import { auth, db,storage } from "../../firebase";
 import { LoginForm } from "../../components/Authentication/LoginForm";
 import {RegisterForm} from "../../components/Authentication/RegisterForm";
-import {NewUserPage} from "../../components/Authentication/NewUserProfile";
+import {NewUserProfile} from "../../components/Authentication/NewUserProfile";
 import { ref } from "firebase/storage";
 import  {ImageBox} from "../../components/Custom/Containers";
-import { getDownloadURL } from "firebase/storage";
 import './styles.css';
 import {useAuth} from "../../context/AuthContext";
 import PropTypes from "prop-types";
+import MNCLogo from "../../components/Constants/MNCLogo";
 
 
 export const AuthPage = (props) => {
@@ -35,7 +35,7 @@ export const AuthPage = (props) => {
       return <RegisterForm title={props.title} />
     }
     if(props.title === 'New User Profile'){
-      return <NewUserPage title={props.title} />
+      return <NewUserProfile title={props.title} />
     }
   }
 
@@ -47,7 +47,7 @@ export const AuthPage = (props) => {
 
   return (
     <Box className="auth-page" style={{display:'flex',flexDirection:'column',width:'100%',mt:8}}>
-      <ImageBox src={image} id="logo" alt="logo" />
+      <MNCLogo />
       {handleFormRender(props.title)}
     </Box>
   );

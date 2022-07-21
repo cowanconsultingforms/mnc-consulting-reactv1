@@ -19,46 +19,12 @@ const NavBarItem = styled.button`
   text-align: left;
 `;
 
-NavBar.propTypes = propTypes;
-export const NavBar = (props) => {
 
-  //custom hook to read the user's auth state
-  const { user } = useContext(AuthContext);
-  const [loggedIn, setLoggedIn] = useState(null);
-  const [userData, setUserData] = useState({user});
+export const NavBar = () => {
+
+
   const collectionRef = collection(db, "users");
-
-    const hideButtons = async () => {
-      if (loggedIn && admin) {
-        document.getElementById('admin-page').style.display = "list-item";
-        document.getElementById("login-page").style.display = "none";
-        document.getElementById("logout").style.display = "list-item";
-      } else if (loggedIn) {
-        document.getElementById("login-page").style.display = "none";
-        document.getElementById("logout").style.display = "list-item";
-        document.getElementById("admin-page").style.display = "none";
-      } else {
-        document.getElementById("login-page").style.display = "list-item";
-        document.getElementById("logout").style.display = "none";
-        document.getElementById("admin-page").style.display = "none";
-      }
-  };
-  
-  const getUserInfo = async ({ user }) => {
-    if (user) {
-      try {
-        const userEmail = user.email;
-        const q = query(collectionRef, where("email", "==", userEmail));
-        await getDoc(q).then((doc) => {
-          setUserData(...doc.data());
-          document.getElementById("admin-page").style.display = "none";
-          console.log(userData);
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
+  const [ admin, setAdmin ] = useState('');
   //standard react hook to navigate to a new page
   const navigate = useNavigate();
   //objects for the navbar and their props
@@ -124,5 +90,7 @@ export const NavBar = (props) => {
     </div>
   );
 };
+NavBar.propTypes = {
 
+}
 export default NavBar;

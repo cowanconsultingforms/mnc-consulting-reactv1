@@ -1,9 +1,9 @@
 import { AccountPagePortfolio, StyledProfileLabel, StyledInput,AccGridInfo } from  "../../components/AccountStyles";
 import { auth, db } from "../../firebase";
-import React, { useState, forwardRef, useRef } from "react";
+import React, { useState, forwardRef, useRef,useEffect } from "react";
 import {Box,TextField} from '@mui/material'
 import { useAuthState } from "react-firebase-hooks/auth";
-import { where ,getDoc} from "firebase/firestore";
+import { where ,getDoc,doc,collection,query} from "firebase/firestore";
 import accountAuditLogger from './AccountAuditLogger';
 
 
@@ -41,4 +41,4 @@ export const ProfileEdit = () => {
   );
 };
 
-export default AccountPagePortfolioBox;
+export default ProfileEdit;

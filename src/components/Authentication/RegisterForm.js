@@ -7,12 +7,11 @@ import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
-import "./styles.css";
-import { useAuthState } from "react-firebase-hooks/auth";
+
 import { useAuth } from '../Constants/constants';
 
 export const RegisterForm = ({ title }) => {
-  const { user } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -58,11 +57,6 @@ export const RegisterForm = ({ title }) => {
     return isValid;
   };
 
-  useEffect(() => {
-    if(user){
-
-    }
-  }, [user,formRef,email,password,confirmPassword]);
   return (
     <div className="register-form">
       <Box

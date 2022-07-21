@@ -9,7 +9,7 @@ import {
   IconButton,
   Box,
   Grid,
-  TextField
+  TextField,
 } from "@mui/material";
 import { ImageBox } from "../Custom/Containers";
 import { storage, db, auth } from "../../firebase";
@@ -22,29 +22,27 @@ import {
   orderBy,
   getDocs,
 } from "firebase/firestore";
-import "./styles.css";
-import { ColorTabs } from './ColorTabs';
+import { ColorTabs } from "./ColorTabs";
 import { useEffect } from "react";
-//this is the home page
+import MNCLogo from "../Constants/MNCLogo";
 
 const inputProps = {
   type: "search",
-  fullWidth:true
-}
+  fullWidth: true,
+};
 
 export const Landing = () => {
   //react hooks, navigate to a new page,
+
   const navigate = useNavigate();
+
   //hooks to manage state of the searchbar
 
   //state manager to select type of query
+
   const [type, setType] = useState("");
-  const [user] = useAuthState(auth);
- 
-  const handleLogout = () => {
-    sessionStorage.removeItem("Auth Token");
-    navigate("/login");
-  };
+
+
   const images = [
     {
       id: "1",
@@ -59,52 +57,30 @@ export const Landing = () => {
       reference: referenced(storage, "images/mncthumbnail3.jpg"),
     },
   ];
+
   const searchRef = useRef();
 
 
-  const DownloadURL = () => {
-    const reference = referenced(storage, "images/mncdevelopmentlogo.jpg");
-
-    const [value, loading, error] = useDownloadURL(reference);
-    return (
-      (
-        <React.Fragment>
-          {
-            <React.Fragment>
-              
-              <ImageBox
-                id="logo"
-                src={value}
-                alt="logo"
-                style={{
-                  justifyContent: "center",
-                  height: "100px",
-                  width: "69px",
-                }}
-              ></ImageBox>
-            </React.Fragment>
-          }
-        </React.Fragment>
-      ),
-      [value, loading, error]
-    );
-  };
 
   return (
     <Box
       component="div"
-      className="home-page"
-      style={{ height: "100%", marginTop: "100px", display: 'flex', flexDirection: 'column' }}
+      className="search-box"
+      style={{
+        height: "100%",
+        marginTop: "100px",
+        display: "flex",
+        flexDirection: "column",
+      }}
     >
-      <div className="search-box">
-        {<ImageBox src={DownloadURL()} alt="logo" />}
+        {<MNCLogo />}
         <Divider />
         <Grid
           container
           spacing={0}
           justifyContent="center"
           alignItems="bottom"
-          className="search-button-grid"
+        className="search-button-grid"
         >
           <Grid item colSpan={4} order={1}>
             <Button
@@ -116,8 +92,8 @@ export const Landing = () => {
                 color: "white",
                 backgroundColor: "black",
                 fontWeight: "bold",
-                padding:'15px',
-                fontFamily:'Garamond'
+                padding: "15px",
+                fontFamily: "Garamond",
               }}
               onClick={() => setType("forSale")}
             >
@@ -135,7 +111,7 @@ export const Landing = () => {
                 fontSize: "16px",
                 color: "white",
                 backgroundColor: "#858181",
-                fontFamily:'Garamond'
+                fontFamily: "Garamond",
               }}
               value={type}
               onClick={() => setType("forRent")}
@@ -155,8 +131,8 @@ export const Landing = () => {
                 padding: "15px",
                 fontSize: "16px",
                 width: "90px",
-                fontFamily:'Garamond',
-                backgroundColor:'lightgrey'
+                fontFamily: "Garamond",
+                backgroundColor: "lightgrey",
               }}
               onClick={() => setType("sold")}
             >
@@ -164,11 +140,6 @@ export const Landing = () => {
             </Button>
           </Grid>
         </Grid>
-        
-
-        
-      </div>
-
     </Box>
   );
 };

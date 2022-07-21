@@ -6,11 +6,14 @@ import {
   querySnapshot,
   doc,
   onSnapshot,
+  serverTimestamp,
+  setDoc
 } from "firebase/firestore";
 import React, { forwardRef, useRef, useEffect, useState } from "react";
 import { Box, TextField, Button, ButtonGroup, Typography } from "@mui/material";
 import styled from "styled-components";
 import { auth, db } from "../../firebase";
+
 const SearchUserBox = styled.div`
   position: relative;
   text-align: center;
@@ -34,11 +37,7 @@ export const AccountPageContainer = styled.div`
 export const SearchUser = () => {
   const collectionRef = collection(db, "users");
   const initialValues = {
-    uid: "",
     email: "",
-    userName: "",
-    role: "",
-   
   };
   const formRef = useRef(initialValues);
   const [formError, setFormError] = useState({});
@@ -46,7 +45,17 @@ export const SearchUser = () => {
   const [formValue, setFormValue] = useState(initialValues);
   const isMounted = useRef();
   const [docsData, setDocsData] = useState([]);
-
+    const auditLogger = async ({ action = "Modified User Account" }) => {
+      const user = auth.currentUser;
+      const userName = user.displayName;
+      const uid = user.uid;
+      const timestamp = serverTimestamp();
+      const docRef = collection("auditLogs");
+      await setDoc(docRef, { action, userName, uid, timestamp }).then(() => {
+        console.log("Audit Log Created");
+        console.log(JSON.stringify(docRef));
+      });
+    };
 
 
   const handleSubmit = async (e) => {
@@ -81,7 +90,7 @@ export const SearchUser = () => {
       className="search-user-container"
       component="form"
       ref={formRef}
-      onChange={setFormValue}
+      onChange={setUser((e)=>e.target.value)}
       sx={{
         display: "flex",
         flexDirection: "column",

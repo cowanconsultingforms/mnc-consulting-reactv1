@@ -9,7 +9,7 @@ const style = {
   alignItems: "center",
   padding: "100px",
 };
-export const DownloadLogo = () => {
+export const MNCLogo = () => {
   const reference = reff(storage, "images/mncdevelopmentlogo.jpg");
   const [value, loading, error] = useDownloadURL(reference);
 
@@ -30,8 +30,4 @@ export const DownloadLogo = () => {
     </React.Fragment>
   );
 };
-<<<<<<<< HEAD:src/components/Constants/MNCLogo.js
-========
-
->>>>>>>> 715867b625559e92d1e0857e131dffeb22f622b4:src/components/Constants/DownloadLogo.js
-export default DownloadLogo;
+export default MNCLogo;

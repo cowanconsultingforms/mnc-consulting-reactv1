@@ -5,7 +5,7 @@ import { useCollection, useCollectionData } from 'react-firebase-hooks/firestore
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Box ,Table,TableContainer,TableCell,TableHead} from "@mui/material";
 
-
+// need to display firestore data in a table upon pressing a button;
 export const ViewAuditLog = () => {
     
    
