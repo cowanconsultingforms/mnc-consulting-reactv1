@@ -43,7 +43,6 @@ export const AccountPage = () => {
   
   useEffect(() => {
        
-
   },[data])
 
 

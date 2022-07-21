@@ -1,13 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, Component } from "react";
 import { db, auth, app, dbRef} from "../../firebase";
-import { Component } from 'react'
 import { Carousel } from "react-bootstrap";
 import ReactBootstrapCarousel from "react-bootstrap-carousel";
 import "bootstrap/dist/css/bootstrap.css";
 import "react-bootstrap-carousel/dist/react-bootstrap-carousel.css";
-import * as ReactDOM from 'react-dom';
 import { useAuthState } from "react-firebase-hooks/auth";
 import './listingsStyles.css';
+import * as ReactDOM from 'react-dom';
 import BasicTable from "./Table";
 
 
@@ -19,7 +18,6 @@ import {
   serverTimestamp,
   orderBy,
   onSnapshot, 
-  QuerySnapshot,
   addDoc
 
 } from "firebase/firestore";
@@ -62,14 +60,17 @@ export const ListingPage = () => {
   const [listed_by, setListedBy] = useState("");
   const [images, setImages] = useState(""); 
   const [description, setDescription] = useState("");
-  
+  const [id, setID] = useState("");
   const [listings] = useCollectionData(db, collection("listings"));
-const listingRef = collection(db, "listings", where(type, "==", type));
-const placeholder = useRef();
-const q = query(listingRef, orderBy("listed_at", "desc"));
-const [listing] = useCollectionData(q, { idField: "listed_at" });
-const getNextListing = async (e) => {
+  const listingRef = collection(db, "listings", where(type, "==", type));
+  const placeholder = useRef();
+  const q = query(listingRef, orderBy("listed_at", "desc"));
+  const [listing] = useCollectionData(q, { idField: "listed_at" });
+  
+
+  const getNextListing = async (e) => {
   e.preventDefault();
+
   const listings = await getDocs(listingRef).then((docs) => {
     return docs.map((doc) => {
       return (listings = {
@@ -83,7 +84,8 @@ const getPrevListing = async (e) => {
   e.preventDefault();
 };
 useEffect(() => {
-  return () => {};
+  return () => {
+  };
 }, [listings]);
 
 return(
@@ -165,7 +167,8 @@ return(
      
       </Container>
       </div>
-      )};
+      )
+    };
 
 export default ListingPage;
 
