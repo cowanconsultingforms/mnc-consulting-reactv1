@@ -1,11 +1,11 @@
 import React, { useEffect,useState} from "react";
-import { Container,Panel ,PlaceholderParagraphProps,Divider,Footer} from "rsuite";
+import { Container,Panel ,PlaceholderParagraphProps} from "rsuite";
 import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../../firebase";
 import { ImageBox } from "../Custom/Containers";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import {Box,Grid,Stack,Divider} from '@mui/material'
-
+import { Link,  useNavigate } from "react-router-dom";
+import {Box,Grid,Stack,Divider,Paper} from '@mui/material'
+import {styled} from '@mui/material/styles'
 
 
 
@@ -58,9 +58,10 @@ export const Footer = () => {
   
   return (
     <React.Fragment>
-      <Box
-      component="div"
-        style={{
+      <Grid spacing={2}
+        container="true"
+        component="div"
+        sx={{
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
@@ -69,6 +70,7 @@ export const Footer = () => {
         }}
         className="home-footer"
       >
+        <Grid item>
         {
           <ImageBox
             src={url1}
@@ -78,8 +80,10 @@ export const Footer = () => {
             border="1px"
             style={{ padding: "10px" }}
           />
-        }
+          }
+          </Grid>
         <Divider />
+        <Grid item>
         {
           <ImageBox
             src={url2}
@@ -89,7 +93,9 @@ export const Footer = () => {
             border="1px"
             style={{ padding: "10px" }}
           />
-        }
+          }
+          </Grid>
+        <Grid item>
         {
           <ImageBox
             src={url3}
@@ -99,8 +105,10 @@ export const Footer = () => {
             border="1px"
             style={{ padding: "10px" }}
           />
+          
         }
-      </Box>
+        </Grid>
+        </Grid>
       <div>
         {" "}
         <Panel className="footer-bottom">

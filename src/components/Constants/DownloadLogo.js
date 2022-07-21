@@ -13,7 +13,8 @@ export const DownloadLogo = () => {
   const reference = reff(storage, "images/mncdevelopmentlogo.jpg");
   const [value, loading, error] = useDownloadURL(reference);
 
-  const DownloadURL = () => {
+  const DownloadURL = async () => {
+    if(!loading && !error)
     return (
       (<React.Fragment>
             
@@ -35,3 +36,5 @@ export const DownloadLogo = () => {
     </React.Fragment>
   );
 };
+
+export default DownloadLogo;

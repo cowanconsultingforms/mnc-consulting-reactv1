@@ -1,4 +1,6 @@
-﻿/* SmtpJS.com - v3.0.0 */
+﻿/* eslint-disable no-undef */
+/* eslint-disable no-unused-expressions */
+/* SmtpJS.com - v3.0.0 */
 export const Email = {
   send: function (a) {
     return new Promise(function (n, e) {

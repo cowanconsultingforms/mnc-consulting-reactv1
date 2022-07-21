@@ -1,7 +1,12 @@
 import { Box, TextField, IconButton } from "@mui/material";
 import SearchTwoToneIcon from "@mui/icons-material/SearchTwoTone";
+import { query, collection,getDocs,where } from 'firebase/firestore';
+import React, { useRef, useState } from 'react';
+import { db } from '../../firebase';
+import { PropTypes } from "prop-types";
+import { InputProps } from "@mui/material";
 
-export const SearchForm = () => {
+export const SearchForm = ({type}) => {
   const formRef = useRef();
   const [searchQuery, setSearchQuery] = useState("");
   
@@ -20,7 +25,7 @@ export const SearchForm = () => {
     <Box
       component="form"
       ref={formRef}
-      value={[type, searchQuery]}
+      value={ searchQuery}
       sx={{
         display: "flex",
         flexDirection: "row",
@@ -35,7 +40,6 @@ export const SearchForm = () => {
         onChange={setSearchQuery}
         placeholder="Enter an address, city, or zip code"
         type="search"
-        inputProps={inputProps}
         sx={{
           width: "fit-content",
           fontSize: "16px",
