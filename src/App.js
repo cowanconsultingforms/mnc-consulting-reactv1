@@ -28,10 +28,6 @@ export const App = () => {
   const [admin,setAdmin] = useState(false);
   const [userData,setUserData] = useState({});
 
-
-
-
-
   //returns the navbar on every page, and each route corresponds to a different page
   //the navbar is maintained in the NavBar component ,and is designed to show different options depending on whether the user
   //is signed in and whether they are an administrator

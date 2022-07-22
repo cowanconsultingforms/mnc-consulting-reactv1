@@ -5,7 +5,7 @@ import {onAuthStateChanged, signInWithEmailAndPassword} from "firebase/auth";
 import { CustomButton } from "../../components/Custom/Buttons";
 import { useNavigate } from "react-router-dom";
 import {ButtonGroup,Button} from '@mui/material';
-import './styles.css';
+//import './styles.css';
 import {LandingFooter} from '../Constants/Footer';
 import { setPersistence ,browserLocalPersistence} from "firebase/auth";
 

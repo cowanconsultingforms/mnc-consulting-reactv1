@@ -1,11 +1,14 @@
 import { Box, TextField, IconButton } from "@mui/material";
 import SearchTwoToneIcon from "@mui/icons-material/SearchTwoTone";
-
+import { useEffect, useState, useRef } from "react";
+import { where, getDocs,query, collection } from 'firebase/firestore';
+import { db } from '../../firebase';
 export const SearchForm = () => {
   const formRef = useRef();
   const [searchQuery, setSearchQuery] = useState("");
-  
+  const[type] = useState("");
   const handleSearch = async () => {
+   
     const collRef = collection(db, `listings/${type}/properties`);
     const q = query(collRef, where(searchQuery, "==", "zip"));
     await getDocs(q).then(async (doc) => {

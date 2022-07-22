@@ -1,6 +1,6 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { getDoc, collection, query, where, doc, onSnapshot } from "firebase/firestore";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FaHome } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";

@@ -128,5 +128,6 @@ flex-direction:row;
 
 export default {
   AccountInput, AccountLabel, AccountPageSignOut, AccountPageContainer,
-  AccountPageHeader, AccountPagePortfolio, AccGridInfo, ProfileNoEdit, ProfileButton, ErrorMessage, AccountPwContainer, StyledProfileLabel, StyledInput
+  AccountPageHeader, AccountPagePortfolio, AccGridInfo, ProfileNoEdit, ProfileButton, ErrorMessage, 
+  AccountPwContainer, StyledProfileLabel, StyledInput
 };

@@ -4,7 +4,7 @@ import "./styles.css";
 import { Box, Typography, Button,Stack,styled,Paper } from "@mui/material";
 import { DownloadLogo } from "./DownloadLogo";
 import { ContactForm } from "./ContactForm";
-import { LandingFooter } from "../Home/Footer";
+import LandingFooter from "../Constants/Footer";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',

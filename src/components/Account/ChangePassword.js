@@ -2,8 +2,9 @@ import TextField from "@mui/material/TextField";
 import { ProfileButton } from "../../components/Buttons";
 import { Box, Button, Typography } from "@mui/material";
 import { auth } from "../../firebase";
-import { useAuthState, useUpdatePassword } from "react-firebase-hooks/auth";
+import { useAuthState, useUpdateEmail } from "react-firebase-hooks/auth";
 import { query, getDoc } from "firebase/firestore";
+import { useState, useEffect } from "react";
 import {
   sendPasswordResetEmail,
   verifyPasswordResetCode,
@@ -12,11 +13,12 @@ import {
   updatePassword,
   reauthenticateWithCredential,
   signInWithCredential,
-  EmailAuthProvider,
+  EmailAuthProvider
 } from "firebase/auth";
 import React from "react";
 
 export const ChangePassword = () => {
+  //const [useUpdatePassword] = useState("");
   const [updatePassword, updating, error] = useUpdatePassword(auth);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -28,8 +30,10 @@ export const ChangePassword = () => {
     try {
       const user = auth.currentUser.email;
       const credential = EmailAuthProvider.credential(user, oldPassword);
+      
       await reauthenticateWithCredential(user, credential).then(() => {
         if (newPassword === confirmPassword) {
+          
           const pwChange = useUpdatePassword(auth);
         }
       });

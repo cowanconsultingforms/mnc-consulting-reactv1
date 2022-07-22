@@ -6,4 +6,4 @@ import { useNavigate } from 'react-router-dom'
 import { query, where, getDoc, collection } from 'firebase/firestore'
 import propTypes from 'prop-types';
 
-AdminDashBoard.propTypes
+//AdminDashBoard.propTypes

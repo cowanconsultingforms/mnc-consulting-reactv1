@@ -7,9 +7,10 @@ import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
-import "./styles.css";
+//import "./styles.css";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Footer } from "../Home/Footer";
+//import { Footer } from "../Home/Footer";
+import LandingFooter from "../Constants/Footer";
 export const RegisterForm = ({ title }) => {
   const [user] = useAuthState(auth);
   const [email, setEmail] = useState("");
@@ -123,7 +124,7 @@ export const RegisterForm = ({ title }) => {
           <Button onClick={resetPassword}>Forgot Password?</Button>
         </ButtonGroup>
       </Box>
-      <LandingFooter />
+      <LandingFooter/>
     </div>
   );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM,{createRoot} from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from "./AuthProvider";
 import {useAuth} from './context/AuthContext';
 import AccountPage from "./components/Account/Account";
@@ -11,6 +11,9 @@ import AdminContainer from "./components/Admin/AdminContainer";
 import Contact from "./components/Contact/Contact";
 import HomePage from "./pages/Home/index";
 import AuthPage from './pages/Authentication/index';
+import ListingPage from './pages/Listings';
+import UploadImages from './components/Admin/UploadImages';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -26,7 +29,7 @@ root.render(
         <Route path="/login" element={<AuthPage title="Login" />} />
         <Route path="/register" element={<AuthPage title="Register" />} />
 
-        <Route path="/listings" element={<ListingPage />} />
+        <Route path="/listings" element={<ListingPage/>} />
    
 
         <Route

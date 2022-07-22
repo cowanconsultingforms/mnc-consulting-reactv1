@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { addDoc, collection, writeBatch } from "firebase/firestore";
-import { LandingFooter } from "../Home/Footer";
+//import { LandingFooter } from "../Home/Footer";
+import LandingFooter from "../Constants/Footer";
 import { Box, TextField, Button } from "@mui/material";
 import { db, auth } from "../../firebase";
-import "./styles.css";
+import { useAuthState } from "react-firebase-hooks/auth";
+//import "./styles.css";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 export const NewUserProfile = ({ title }) => {
@@ -156,4 +158,4 @@ export const NewUserProfile = ({ title }) => {
   );
 };
 
-export default NewUserPage;
+export default NewUserProfile;

@@ -5,7 +5,7 @@ import {Box} from '@mui/material'
 import { auth, db,storage } from "../../firebase";
 import { LoginForm } from "../../components/Authentication/LoginForm";
 import {RegisterForm} from "../../components/Authentication/RegisterForm";
-import {NewUserPage} from "../../components/Authentication/NewUserProfile";
+import {NewUserProfile} from "../../components/Authentication/NewUserProfile";
 import { ref } from "firebase/storage";
 import  {ImageBox} from "../../components/Custom/Containers";
 import { getDownloadURL } from "firebase/storage";
@@ -13,6 +13,8 @@ import './styles.css';
 import { useContext } from "react";
 import {useAuth} from "../../context/AuthContext";
 import PropTypes from "prop-types";
+
+
 
 AuthPage.propTypes = {
   title: PropTypes.string,
@@ -25,9 +27,9 @@ AuthPage.defaultProps = {
 export const AuthPage = (props) => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
-  if(user && title=== 'Login' || title=== 'Register'){
+  if(user && title === 'Login' || title === 'Register'){
     navigate('/');
-  }else if(user && title=== 'Logout'){
+  }else if(user && title === 'Logout'){
 
   }
   const [reference, loading, error] = useDownloadURL(

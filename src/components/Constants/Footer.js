@@ -1,15 +1,20 @@
 import React, { useEffect,useState} from "react";
-import { Container,Panel ,PlaceholderParagraphProps,Divider,Footer} from "rsuite";
+import { Container, Panel ,PlaceholderParagraphProps, Divider} from "rsuite";
+//import { Container, Panel ,PlaceholderParagraphProps, Divider,Footer} from "rsuite";
 import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../../firebase";
 import { ImageBox } from "../Custom/Containers";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import {Box,Grid,Stack,Divider} from '@mui/material'
+import {Box,Grid, Stack} from '@mui/material'
+//import {Box,Grid, Stack , Divider} from '@mui/material'
+//There are two dividers and can't differentaiate which it is. 
+//So I looked at rsuite and mui and I think that the divider you are using is rsuite,
+//I am going to remove the Divider for mui
 
 
 
 
-export const Footer = () => {
+export const LandingFooter = () => {
   const navigate = useNavigate();
   const [url1, setUrl1] = useState('');
   const [url2, setUrl2] = useState('');
@@ -158,4 +163,4 @@ export const Footer = () => {
     </React.Fragment>
   );
 }
-export default Footer;
+export default LandingFooter;

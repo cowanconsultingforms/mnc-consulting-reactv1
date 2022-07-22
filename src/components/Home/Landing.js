@@ -22,7 +22,7 @@ import {
   orderBy,
   getDocs,
 } from "firebase/firestore";
-import "./styles.css";
+//import "./styles.css";
 import { ColorTabs } from './ColorTabs';
 import { useEffect } from "react";
 //this is the home page

@@ -5,8 +5,8 @@ import { Paper } from '@mui/material';
 import * as React from 'react';
 import { Typography,Radio,FormControlLabel,RadioGroup,useRadioGroup,FormControl,FormLabel } from '@mui/material';
 import { useEffect, useState, useRef } from 'react';
-import propTypes from 'prop-types';
 
+import {PropTypes} from "prop-types";
 
 export const Item = styled(Paper)({
   
